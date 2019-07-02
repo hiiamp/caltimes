@@ -148,7 +148,7 @@
                 <input type="hidden" id="todoid" class="form-control" name="todoid" value="<?php echo e($list->id); ?>">
                 <input type="hidden" id="link" class="form-control" name="link" value="<?php echo e($list->link); ?>">
                 <input type="hidden" id="status" class="form-control" name="status" value="1">
-                <input type="hidden" id="position" class="form-control" name="position" value="1">
+                <input type="hidden" id="position" class="form-control" name="position" value="0">
                 <input id="name" type="name" class="form-control" name="name" required autofocus placeholder="Your task title">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">

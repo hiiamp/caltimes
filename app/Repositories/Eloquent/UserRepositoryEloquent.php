@@ -78,4 +78,9 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     {
         return User::where('id', '>', 0);
     }
+
+    public function searchUser($search)
+    {
+        return User::where('name', 'like', '%' . $search . '%')->get();
+    }
 }

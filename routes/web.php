@@ -57,9 +57,9 @@ Route::get('searchList', 'Client\TodoListsController@searchList')->name('searchL
 
 Route::get('searchTask', 'Client\TasksController@searchTask')->name('searchTask');
 
-Route::post('edit_task', 'Client\TasksController@editTask')->name('edit.task');
+Route::post('edit_task', 'Client\TasksController@editTask')->name('edit.task')->middleware('private.list');
 
-Route::post('delete_task', 'Client\TasksController@deleteTask')->name('delete.task');
+Route::post('delete_task', 'Client\TasksController@deleteTask')->name('delete.task')->middleware('private.list');
 
 Route::post('delete_user', 'Client\UsersController@deleteUser')->name('delete.user');
 
@@ -73,3 +73,5 @@ Route::group(['prefix' => 'admin'], function () {
 Route::get('auth/facebook', 'Auth\LoginController@redirectToProvider')->name('facebook.login') ;
 
 Route::get('auth/facebook/callback', 'Auth\LoginController@handleProviderCallback');
+
+Route::get('searchUser', 'Client\UsersController@searchUser')->name('searchUser');

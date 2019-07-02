@@ -106,6 +106,24 @@
     });
 </script>
 
-@include('admin.layouts.script')
+<script type="text/javascript">
+    $('#search').on('keyup',function(){
+        let search = $('#search').val();
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url : '{{ route('searchList') }}',
+            dataType: 'json',
+            data:{'search':search},
+            success:function(data){
+                $('tbody').html(data.table_data);
+                console.log(data);
+                console.log(data.total_data);
+            }
+        });
+    })
+</script>
+
 </body>
 </html>

@@ -21,4 +21,6 @@ interface UserRepository extends RepositoryInterface
     public function findCoWorker($id);
 
     public function allBuilder($columns = ['*']);
+
+    public function searchUser($search);
 }

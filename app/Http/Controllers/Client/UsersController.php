@@ -280,4 +280,50 @@ class UsersController extends Controller
         $this->repository->delete($user_id);
         return redirect()->back()->with('notif', 'Delete user '.$name.' success!');
     }
+
+    public function searchUser(Request $request)
+    {
+        if ($request->ajax()) {
+            $output = '';
+            $a = '';
+            $search = $request->search;
+            if ($search != '') {
+                $data = $this->repository->searchUser($search);
+            } else {
+                $data = $this->repository->allBuilder()->paginate(5);
+            }
+            $total_row = $data->count();
+            if ($total_row > 0) {
+                foreach ($data as $user) {
+                    if($user->level == 2) $a = 'Admin';
+                    else if($user->level == 1) $a = 'User';
+                    else $a = 'Not validate';
+                    $output .= '
+                        <tr>
+                            <td>
+                                '.$user->name.'
+                            </td>
+                            <td>
+                                '.$user->email.'
+                            </td>
+                            <td>
+                                '.$a.'
+                            </td>
+                            <td>
+                                <a href="'.route('admin.list').'?user_id='.$user->id.'" class="btn btn-sm btn-primary" style="color: whitesmoke"> List joined </a>
+                                <a data-index="'.$user->id.'" class="btn btn-sm btn-primary delete_u" style="color: whitesmoke"> Delete </a>
+                            </td>
+                        </tr>
+                        ';
+                }
+            } else {
+                $output = '<h2>No Data Found</h2>';
+            }
+            $data = array(
+                'table_data' => $output,
+                'total_data' => $total_row
+            );
+            echo json_encode($data);
+        }
+    }
 }

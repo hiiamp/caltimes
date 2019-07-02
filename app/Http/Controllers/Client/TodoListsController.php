@@ -319,18 +319,25 @@ class TodoListsController extends Controller
             if ($search != '') {
                 $data = $this->repository->searchList($search);
             } else {
-                $data = $this->repository->findListCanView(Auth::user()->id)->paginate(6);
+                if(Auth::user()->level == 1) {
+                    $data = $this->repository->findListCanView(Auth::user()->id)->paginate(6);
+                }
+                else {
+                    $data = $this->repository->allBuider()->paginate(5);
+                }
             }
             $total_row = $data->count();
-            if ($total_row > 0) {
-                foreach ($data as $list) {
-                    $list->owner = $this->userRepo->find($list->owner_id);
-                    if ($list->is_public == 1) {
-                        $is_public = '<p><span><i class="icon-globe"></i></span> Public <br></p>';
-                    } else {
-                        $is_public = '<p><span><i class="icon-globe"></i></span> Private <br></p>';
-                    }
-                    $output .= '
+            if(Auth::user()->level == 1)
+            {
+                if ($total_row > 0) {
+                    foreach ($data as $list) {
+                        $list->owner = $this->userRepo->find($list->owner_id);
+                        if ($list->is_public == 1) {
+                            $is_public = '<p><span><i class="icon-globe"></i></span> Public <br></p>';
+                        } else {
+                            $is_public = '<p><span><i class="icon-globe"></i></span> Private <br></p>';
+                        }
+                        $output .= '
                     <div class="col-md-2 col-sm-3 col-xs-6 text-center">
                         <div class="product-entry">
                             <div class="product-img">
@@ -345,9 +352,42 @@ class TodoListsController extends Controller
                         </div>
                     </div>
                     ';
+                    }
+                } else {
+                    $output = '<h2>No Data Found</h2>';
                 }
-            } else {
-                $output = '<h2>No Data Found</h2>';
+            }
+            else
+            {
+                if ($total_row > 0) {
+
+                    foreach ($data as $list) {
+                        $output .= '
+                            <tr>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" href="'.route('link.board',['code'=>$list->link]).'">'.$list->link.'</a>
+                                </td>
+                                <td>
+                                    '.$list->name.'
+                                </td>
+                                <td>
+                                    '.$list->created_at.'
+                                </td>
+                                <td>
+                                    '.$list->owner.'
+                                </td>
+                                <td>
+                                    <a href="'.route('admin.user').'?list_id='.$list->id.'" class="btn btn-sm btn-primary" style="color: whitesmoke"> Worker </a>
+                                    <a data-index="'.$list->id.'" id="Delete'.$list->id.'" class="btn btn-sm btn-primary delete_l" style="color: whitesmoke"> Delete </a>;
+                                </td>
+                            </tr>
+                        ';
+                    }
+                }
+                else
+                {
+                    $output = '<h2>No Data Found</h2>';
+                }
             }
             $data = array(
                 'table_data' => $output,

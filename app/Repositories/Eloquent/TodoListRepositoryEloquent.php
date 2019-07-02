@@ -82,7 +82,7 @@ class TodoListRepositoryEloquent extends BaseRepository implements TodoListRepos
     }
     public function findUserShared($id_list)
     {
-        $users = User::select('users.id', 'name', 'email')->join('access', 'users.id', '=', 'user_id')->where('todo_list_id', $id_list);
+        $users = User::select('users.id', 'name', 'email', 'level')->join('access', 'users.id', '=', 'user_id')->where('todo_list_id', $id_list);
         return $users;
     }
 
