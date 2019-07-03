@@ -59,15 +59,15 @@ Route::get('searchTask', 'Client\TasksController@searchTask')->name('searchTask'
 
 Route::post('edit_task', 'Client\TasksController@editTask')->name('edit.task')->middleware('private.list');
 
-Route::post('delete_task', 'Client\TasksController@deleteTask')->name('delete.task')->middleware('private.list');
+Route::post('delete_task', 'Client\TasksController@deleteTask')->name('delete.task');
 
-Route::post('delete_user', 'Client\UsersController@deleteUser')->name('delete.user');
+Route::post('delete_user', 'Client\UsersController@deleteUser')->name('delete.user')->middleware('admin');
 
-Route::get('profile', 'Client\UsersController@profileUser')->name('profile');
+Route::get('profile', 'Client\UsersController@profileUser')->name('profile')->middleware('auth');
 
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('list', 'Client\TodoListsController@manageList')->name('admin.list');
-    Route::get('user', 'Client\UsersController@manageUser')->name('admin.user');
+    Route::get('list', 'Client\TodoListsController@manageList')->name('admin.list')->middleware('admin');
+    Route::get('user', 'Client\UsersController@manageUser')->name('admin.user')->middleware('admin');
 });
 
 Route::get('auth/facebook', 'Auth\LoginController@redirectToProvider')->name('facebook.login') ;

@@ -215,6 +215,10 @@ class UsersController extends Controller
         return redirect()->back()->with('message', 'User deleted.');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function manageUser(Request $request)
     {
         if(Auth::user()->level==2){
@@ -240,6 +244,9 @@ class UsersController extends Controller
         return redirect()->route('home');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function profileUser()
     {
         if(Auth::user()->level>0){
@@ -265,6 +272,10 @@ class UsersController extends Controller
         return redirect()->route('home');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function deleteUser(Request $request)
     {
         $user_id = $request['user_id'];
@@ -281,6 +292,9 @@ class UsersController extends Controller
         return redirect()->back()->with('notif', 'Delete user '.$name.' success!');
     }
 
+    /**
+     * @param Request $request
+     */
     public function searchUser(Request $request)
     {
         if ($request->ajax()) {

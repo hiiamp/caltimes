@@ -4,7 +4,7 @@
             <input id="list_id1" type="hidden" value="<?php echo e($task->todo_list_id); ?>">
             <?php break; ?>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        <div class="row displayTask">
+        <div class="row displayTask" id="Task123">
             <div class="col-md-4 animate-box">
                 <article class="model">
                     <h2>To do</h2>
@@ -16,7 +16,6 @@
                                         <a style="color: black;" ><?php echo e($task->name); ?></a>
                                     </p>
                                 </li>
-                                <!--<span data-index="<?php echo e($task->id); ?>" class="delete_task"><i class="icon-delete" style="color: green"></i></span>-->
                             <?php endif; ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </ul>
@@ -72,6 +71,7 @@
                             <div class="contact-info-wrap-flex">
                                 <div class="con-info">
                                     <p><span><i class="icon-location-2"></i></span> Assign </p>
+                                    <input type="hidden" class="form-control" name="todo_list_id" value="<?php echo e($list->id); ?>">
                                     <input hidden="hidden" value="" id="task_edit_id" name="task_id" >
                                     <select class="btn" name="assign" class="custom-select" id="assign">
                                         <?php $__currentLoopData = $tasks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -130,6 +130,7 @@
             <div class="col-md-12">
                 <p>You really want to delete this task?</p>
                 <input id="delete_task_id" type="hidden" class="form-control" name="task_id" value="">
+                <input type="hidden" class="form-control" name="todo_list_id" value="<?php echo e($list->id); ?>">
             </div>
         </div>
         <div class="form-group">

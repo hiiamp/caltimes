@@ -70,9 +70,7 @@
                                                     <th scope="col">Name</th>
                                                     <th scope="col">Email</th>
                                                     <th scope="col">On list</th>
-                                                    @if(\Illuminate\Support\Facades\Auth::user()->level == 2)
-                                                        <th scope="col">Level</th>
-                                                    @endif
+                                                    <th scope="col">Level</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -87,12 +85,12 @@
                                                         <td>
                                                             {{$user->list_name}}
                                                         </td>
-                                                            <td>
-                                                                @if($user->level == 2) Admin
-                                                                @elseif($user->level == 1) User
-                                                                @else Not validate
-                                                                @endif
-                                                            </td>
+                                                        <td>
+                                                            @if($user->level == 2) Admin
+                                                            @elseif($user->level == 1) User
+                                                            @else Not validate
+                                                            @endif
+                                                        </td>
                                                     </tr>
                                                 @endforeach
                                                 </tbody>

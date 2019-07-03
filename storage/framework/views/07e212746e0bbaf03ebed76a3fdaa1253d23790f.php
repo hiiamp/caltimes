@@ -3,60 +3,62 @@
 </script>
 
 <script type="text/javascript">
-    $( function function1(temp = '') {
-        $( "#sortable1, #sortable2, #sortable3" ).sortable({
-            connectWith: ".connectedSortable",
-            update: function(event,ui){
-                var status_task = $(this).attr('id')
-                $(this).children().each(function (index) {
-                    if ($(this).attr('data-position') != (index+1)) {
-                        $(this).attr('data-position',(index+1)).addClass('updated')
+    $( function function1() {
+        function temp(){
+            $( "#sortable1, #sortable2, #sortable3" ).sortable({
+                connectWith: ".connectedSortable",
+                update: function(event,ui){
+                    var status_task = $(this).attr('id')
+                    $(this).children().each(function (index) {
+                        if ($(this).attr('data-position') != (index+1)) {
+                            $(this).attr('data-position',(index+1)).addClass('updated')
+                        }
+                        $(this).addClass('updated');
+                    })
+                    saveNewPositions(status_task)
+                }
+            }).disableSelection();
+            function saveNewPositions(status_task)
+            {
+                var positions = [];
+                var status_id;
+                $('.updated').each(function () {
+                    if (status_task == 'sortable1') {
+                        status_id=1;
                     }
-                    $(this).addClass('updated');
-                })
-                saveNewPositions(status_task)
-            }
-        }).disableSelection();
-        function saveNewPositions(status_task)
-        {
-            var positions = [];
-            var status_id;
-            $('.updated').each(function () {
-                if (status_task == 'sortable1') {
-                    status_id=1;
-                }
-                else if (status_task == 'sortable2') {
-                    status_id=2;
-                }
-                else if (status_task == 'sortable3') {
-                    status_id=3;
-                }
-                positions.push([$(this).attr('data-index'), $(this).attr('data-position'), status_id]);
-                console.log(positions);
-                $(this).removeClass('updated');
-            });
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: '<?php echo e(route('content_swapPosition')); ?>',
-                method: 'POST',
-                dataType: 'text',
-                data: {
-                    update: 1,
-                    positions: positions,
-                    status_id: status_id
-                }, success: function (response) {
-                    console.log(response);
+                    else if (status_task == 'sortable2') {
+                        status_id=2;
+                    }
+                    else if (status_task == 'sortable3') {
+                        status_id=3;
+                    }
+                    positions.push([$(this).attr('data-index'), $(this).attr('data-position'), status_id]);
                     console.log(positions);
-                    console.log(status_id);
-                }
-            });
+                    $(this).removeClass('updated');
+                });
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '<?php echo e(route('content_swapPosition')); ?>',
+                    method: 'POST',
+                    dataType: 'text',
+                    data: {
+                        update: 1,
+                        positions: positions,
+                        status_id: status_id
+                    }, success: function (response) {
+                        console.log(response);
+                        console.log(positions);
+                        console.log(status_id);
+                    }
+                });
+            }
         }
+        temp();
         $('#search').on('keyup',function(){
             var search = $('#search').val();
             var todo_list_id = $('#list_id1').attr('value');
-            if(search == temp) return;
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -66,9 +68,10 @@
                 data:{'todo_list_id': todo_list_id,
                     'search':search},
                 success:function(data){
+                    //console.log(temp.outerHTML);
                     $('.displayTask').html(data.table_data);
-                    console.log(data);
-                    function1(search);
+                    console.log(search);
+                    temp();
                 }
             });
         });

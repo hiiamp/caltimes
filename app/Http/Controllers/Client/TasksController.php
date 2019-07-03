@@ -221,6 +221,11 @@ class TasksController extends Controller
 
         return redirect()->back()->with('message', 'Tasks deleted.');
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function createTask(Request $request)
     {
         $name = $request['name'];
@@ -241,13 +246,16 @@ class TasksController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function editTask(Request $request)
     {
         $task = $this->repository->find($request['task_id']);
         $name = $request['name'];
         if($name=='') $name=$task->name;
         $content = $request['content'];
-        if($content=='') $content=$task->content;
         $assign = $request['assign'];
         if($assign=='') $assign=$task->user_id;
         $data = [
@@ -261,6 +269,10 @@ class TasksController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function deleteTask(Request $request)
     {
         $id = $request['task_id'];
@@ -270,6 +282,9 @@ class TasksController extends Controller
         return redirect()->back()->with('notif', 'Delete task: \''.$name.'\' success!');
     }
 
+    /**
+     * @param Request $request
+     */
     public function swapPosition(Request $request)
     {
         if(isset($request['update'])){
@@ -285,10 +300,14 @@ class TasksController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     */
     public function searchTask(Request $request)
     {
         if($request->ajax())
         {
+            $error = 'No data found';
             $output = '';
             $todo = '';
             $inprocess = '';
@@ -361,7 +380,33 @@ class TasksController extends Controller
             }
             else
             {
-                $output = '<h2>No Data Found</h2>';
+                $output .= '
+                    <div class="col-md-4">
+                        <article class="model">
+                            <h2>To do</h2>
+                            <ul id="sortable1" class="connectedSortable detail-task1">
+                                '.$error.'
+                            </ul>
+                            <button id="add-task" type="submit" class="btn btn-primary">Add task</button>
+                        </article>
+                    </div>
+                    <div class="col-md-4">
+                        <article class="model">
+                            <h2>In process</h2>
+                            <ul id="sortable2" class="connectedSortable detail-task2">
+                                '.$error.'
+                            </ul>
+                        </article>
+                    </div>
+                    <div class="col-md-4">
+                        <article class="model">
+                            <h2>Done</h2>
+                            <ul id="sortable3" class="connectedSortable detail-task3">
+                                '.$error.'
+                            </ul>
+                        </article>
+                    </div>
+                    ';
             }
             $data1 = array(
                 'table_data'  => $output,

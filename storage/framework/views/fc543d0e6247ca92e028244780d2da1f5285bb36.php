@@ -20,6 +20,7 @@
                                     <p><span><i class="icon-globe"></i></span> Private <br></p>
                                 <?php endif; ?>
                                 <p><span><i class="icon-location-2"></i></span> Created By: <?php echo e($list->owner->name); ?> <br></p>
+                                <p><span><i class="icon-eye2"></i></span> Member: <?php echo e($list->member); ?> <br></p>
                                 <p><a href="<?php echo e(route('link.board', ['code' => $list->link])); ?>" class="btn btn-primary btn-outline with-arrow">See more</a></p>
                                 <!--<div class="cart">
                                     <p class="breadcrumbs" style="font-size: small">
@@ -96,4 +97,5 @@
             }
         });
     })
-</script><?php /**PATH /home/truongphi/internPHP/bigproject/todo-list/resources/views/user/home/layouts/content.blade.php ENDPATH**/ ?>
+</script>
+<?php /**PATH /home/truongphi/internPHP/bigproject/todo-list/resources/views/user/home/layouts/content.blade.php ENDPATH**/ ?>

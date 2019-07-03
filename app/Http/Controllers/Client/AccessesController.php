@@ -203,6 +203,10 @@ class AccessesController extends Controller
         return redirect()->back()->with('message', 'Access deleted.');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function createShare(Request $request)
     {
         $email = $request['email'];
@@ -226,6 +230,4 @@ class AccessesController extends Controller
         ]);
         return redirect()->back()->with('message1', 'This todo list is shared with '.$name);
     }
-
-
 }

@@ -64,6 +64,7 @@ class Kernel extends HttpKernel
         //added
         'private.list' => \App\Http\Middleware\PrivateToDoList::class,
         'check.login' => \App\Http\Middleware\CheckLogin::class,
+        'admin' => \App\Http\Middleware\CheckAdmin::class,
     ];
 
     /**

@@ -11,7 +11,16 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface TasksRepository extends RepositoryInterface
 {
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getTaskByIdList($id);
 
+    /**
+     * @param $search
+     * @param $todo_list_id
+     * @return mixed
+     */
     public function searchTask($search,$todo_list_id);
 }

@@ -227,12 +227,20 @@ class TodoListsController extends Controller
         return redirect()->back()->with('message', 'TodoList deleted.');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function createList(Request $request)
     {
         $name = $request['name'];
         $is_public = $request['is_public'];
         $user_id = Auth::user()->id;
         $link = str_random(8);
+        while($this->repository->findByField('link', $link)->first())
+        {
+            $link = str_random(8);
+        }
         $tdLists = $this->repository->findByField('name', $name);
         foreach ($tdLists as $tdList)
         {
@@ -269,6 +277,10 @@ class TodoListsController extends Controller
         ]);
     }
 
+    /**
+     * @param $code
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function viewList($code)
     {
         $todoList = $this->repository->findByField('link',$code)->first();
@@ -296,12 +308,16 @@ class TodoListsController extends Controller
         ]);
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function viewAllLists()
     {
         $lists = $this->repository->findListCanView(Auth::user()->id)->paginate(6);
         foreach ($lists as $list)
         {
             $list->owner = $this->userRepo->find($list->owner_id);
+            $list->member = $this->accessRepo->findByField('todo_list_id', $list->id)->count();
         }
         return view('user.home.index',[
             'lists' => $lists
@@ -309,6 +325,7 @@ class TodoListsController extends Controller
     }
 
     /**
+     * ajax
      * @param Request $request
      */
     public function searchList(Request $request)
@@ -396,6 +413,11 @@ class TodoListsController extends Controller
             echo json_encode($data);
         }
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function deleteList(Request $request)
     {
         $admin = '';
@@ -414,6 +436,10 @@ class TodoListsController extends Controller
         return redirect()->route('home')->with('deleted_list', 'Deleted '.$name.' success!');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function manageList(Request $request)
     {
         if(Auth::user()->level == 2){
@@ -445,6 +471,10 @@ class TodoListsController extends Controller
         return redirect()->route('home');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function changeIsPublicList(Request $request)
     {
         $id = $request['list_id'];

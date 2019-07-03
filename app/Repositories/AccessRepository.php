@@ -11,10 +11,22 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface AccessRepository extends RepositoryInterface
 {
-    //
+    /**
+     * @param $email
+     * @return mixed
+     */
     public function findUserByEmail($email);
 
+    /**
+     * @param array $data
+     * @return mixed
+     */
     public function create(array $data);
 
+    /**
+     * @param $id
+     * @param $idlist
+     * @return mixed
+     */
     public function checkAcsExist($id, $idlist);
 }
