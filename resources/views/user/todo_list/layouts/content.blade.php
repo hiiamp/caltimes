@@ -7,13 +7,22 @@
         <div class="row displayTask" id="Task123">
             <div class="col-md-4 animate-box">
                 <article class="model">
-                    <h2>To do</h2>
+                    <h2 class="art-h2">To do</h2>
                     <ul id="sortable1" type="status1" class="connectedSortable detail-task1">
                         @foreach($tasks as $task)
                             @if($task->status_id==1)
                                 <li data-index="{{$task->id}}" data-position="{{$task->position}}" data-status="{{$task->todo_list_id}} " class="has-dropdown">
                                     <p>
                                         <a style="color: black;" >{{$task->name}}</a>
+                                    </p>
+                                    <p class="badges">
+                                        <span class="js-badges">
+                                            <p class="badge js-due-date-badge is-due-past" title="This card is past due.">
+                                                <span class="badge-icon icon-sm icon-clock"></span>
+                                                <span class="badge-text js-due-date-text">{{$task->created_at}}</span>
+                                                <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
+                                            </p>
+                                        </span>
                                     </p>
                                 </li>
                             @endif
@@ -24,13 +33,22 @@
             </div>
             <div class="col-md-4 animate-box">
                 <article class="model">
-                    <h2>In process</h2>
+                    <h2 class="art-h2">In process</h2>
                     <ul id="sortable2" type="status2" class="connectedSortable detail-task2">
                         @foreach($tasks as $task)
                             @if($task->status_id==2)
                                 <li data-index="{{$task->id}}" data-position="{{$task->position}}" data-status="{{$task->todo_list_id}} " class="has-dropdown">
                                     <p>
                                         <a style="color: black;" >{{$task->name}}</a>
+                                    </p>
+                                    <p class="badges">
+                                        <span class="js-badges">
+                                            <p class="badge js-due-date-badge is-due-past" title="This card is past due.">
+                                                <span class="badge-icon icon-sm icon-clock"></span>
+                                                <span class="badge-text js-due-date-text">{{$task->created_at}}</span>
+                                                <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
+                                            </p>
+                                        </span>
                                     </p>
                                 </li>
                             @endif
@@ -40,13 +58,22 @@
             </div>
             <div class="col-md-4 animate-box">
                 <article class="model">
-                    <h2>Done</h2>
+                    <h2 class="art-h2">Done</h2>
                     <ul id="sortable3" type="status3" class="connectedSortable detail-task3">
                         @foreach($tasks as $task)
                             @if($task->status_id==3)
                                 <li data-index="{{$task->id}}" data-position="{{$task->position}}" data-status="{{$task->todo_list_id}} " class="has-dropdown">
                                     <p>
                                         <a style="color: black;" >{{$task->name}}</a>
+                                    </p>
+                                    <p class="badges">
+                                        <span class="js-badges">
+                                            <p class="badge js-due-date-badge is-due-past" title="This card is past due.">
+                                                <span class="badge-icon icon-sm icon-clock"></span>
+                                                <span class="badge-text js-due-date-text">{{$task->created_at}}</span>
+                                                <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
+                                            </p>
+                                        </span>
                                     </p>
                                 </li>
                             @endif

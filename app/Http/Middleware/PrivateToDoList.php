@@ -23,6 +23,7 @@ class PrivateToDoList
      */
     public function handle($request, Closure $next)
     {
+        if(!Auth::check()) return redirect()->route('home');
         $code = '';
         $code = @$request->code;
         if($code == ''){
@@ -36,7 +37,7 @@ class PrivateToDoList
             $todoList = TodoList::where('link', $code)->first();
         }
         if($todoList == null ) return redirect()->route('home');
-        if(!Auth::check()) return redirect()->route('home');
+        if($todoList->is_public) return $next($request);
         if(Auth::user()->level==2) return $next($request);
         if(Auth::user()->id == $todoList->owner_id) return $next($request);
         $Access = Access::where('todo_list_id', $todoList->id)->get();

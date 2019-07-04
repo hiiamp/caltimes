@@ -290,6 +290,18 @@ class TodoListsController extends Controller
         foreach ($tasks as $task)
         {
             $userTask = $this->userRepo->find($task->user_id);
+            $t = $userTask->name;
+            $t = str_split($t);
+            $temp = $t[0];
+            $check = 0;
+            foreach ($t as $a)
+            {
+                if($check == 1) {
+                    $temp.=$a;
+                    $check = 0;
+                } else if( $a == ' ') $check = 1;
+            }
+            $userTask->character = $temp;
             $task->assign = $userTask;
             /*if($task->status_id == 1) $task->status = 'To do';
             else if($task->status_id == 2) $task->status = 'In process';
@@ -349,6 +361,7 @@ class TodoListsController extends Controller
                 if ($total_row > 0) {
                     foreach ($data as $list) {
                         $list->owner = $this->userRepo->find($list->owner_id);
+                        $list->member = $this->accessRepo->findByField('todo_list_id', $list->id)->count();
                         if ($list->is_public == 1) {
                             $is_public = '<p><span><i class="icon-globe"></i></span> Public <br></p>';
                         } else {
@@ -363,6 +376,7 @@ class TodoListsController extends Controller
                                     <p class="admin"><span>' . $list->created_at . '</span></p>
                                     ' . $is_public . '
                                     <p><span><i class="icon-location-2"></i></span> Created By: '.$list->owner->name.'<br></p>
+                                    <p><span><i class="icon-eye2"></i></span> Member: '.$list->member.' <br></p>
                                     <p><a href="' . route('link.board', ['code' => $list->link]) . '" class="btn btn-primary btn-outline with-arrow">See more</a></p>
                                 </article>
                             </div>

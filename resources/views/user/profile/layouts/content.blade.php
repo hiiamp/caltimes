@@ -70,7 +70,9 @@
                                                     <th scope="col">Name</th>
                                                     <th scope="col">Email</th>
                                                     <th scope="col">On list</th>
-                                                    <th scope="col">Level</th>
+                                                    @if(\Illuminate\Support\Facades\Auth::user()->level == 2)
+                                                        <th scope="col">Level</th>
+                                                    @endif
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -85,12 +87,14 @@
                                                         <td>
                                                             {{$user->list_name}}
                                                         </td>
-                                                        <td>
-                                                            @if($user->level == 2) Admin
-                                                            @elseif($user->level == 1) User
-                                                            @else Not validate
-                                                            @endif
-                                                        </td>
+                                                        @if(\Illuminate\Support\Facades\Auth::user()->level== 2)
+                                                            <td>
+                                                                @if($user->level == 2) Admin
+                                                                @elseif($user->level == 1) User
+                                                                @else Not validate
+                                                                @endif
+                                                            </td>
+                                                        @endif
                                                     </tr>
                                                 @endforeach
                                                 </tbody>

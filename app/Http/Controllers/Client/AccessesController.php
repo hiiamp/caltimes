@@ -213,7 +213,7 @@ class AccessesController extends Controller
         $todo_list_id = $request['todo_list_id'];
         $user = $this->repository->findUserByEmail($email);
         if($user == null){
-            return redirect()->back()->with('message1','Email wasn\'t exist!');
+            return redirect()->back()->with('message1','Email don\'t exist!');
         }
         if($user->id == Auth::user()->id){
             return redirect()->back()->with('message1','Can\'t share for yourself!');

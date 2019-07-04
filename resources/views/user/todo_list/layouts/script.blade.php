@@ -6,6 +6,12 @@
     $( function function1() {
         function temp(){
             $( "#sortable1, #sortable2, #sortable3" ).sortable({
+                scroll: true,
+                axis: "x,y",
+                containment: "body",
+                revert: true,
+                helper: "clone",
+                disable: false,
                 connectWith: ".connectedSortable",
                 update: function(event,ui){
                     var status_task = $(this).attr('id')
@@ -170,4 +176,12 @@
             dialog1.close();
         };
     } );
+    $(function(){
+        $('#sortable1 li, #sortable2 li, #sortable3 li').mousedown(function(event){
+            $(this).css('transform',' rotate(5deg)');
+        });
+        $('#sortable1 li, #sortable2 li, #sortable3 li').mouseleave(function(event){
+            $(this).css('transform',' rotate(0deg)');
+        });
+    });
 </script>
