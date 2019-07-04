@@ -237,8 +237,20 @@ class UsersController extends Controller
                 $users = $this->repository->allBuilder()->paginate(5);
                 $users->name_table = 'All User';
             }
+            $t = Auth::user()->name;
+            $t = str_split($t);
+            $temp1 = $t[0];
+            $check = 0;
+            foreach ($t as $a)
+            {
+                if($check == 1) {
+                    $temp1.=$a;
+                    $check = 0;
+                } else if( $a == ' ') $check = 1;
+            }
             return view('admin.user', [
                 'users' => $users,
+                'character' => $temp1
             ]);
         }
         return redirect()->route('home');

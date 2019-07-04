@@ -478,8 +478,20 @@ class TodoListsController extends Controller
                 $user = $this->userRepo->find($list->owner_id);
                 $list->owner = $user->name;
             }
+            $t = Auth::user()->name;
+            $t = str_split($t);
+            $temp1 = $t[0];
+            $check = 0;
+            foreach ($t as $a)
+            {
+                if($check == 1) {
+                    $temp1.=$a;
+                    $check = 0;
+                } else if( $a == ' ') $check = 1;
+            }
             return view('admin.list', [
                 'lists' => $lists,
+                'character' => $temp1
             ]);
         }
         return redirect()->route('home');
