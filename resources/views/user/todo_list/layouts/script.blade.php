@@ -8,6 +8,7 @@
             $( "#sortable1, #sortable2, #sortable3" ).sortable({
                 scroll: true,
                 axis: "x,y",
+                zIndex: 999999,
                 containment: "body",
                 revert: true,
                 helper: "clone",
@@ -176,12 +177,38 @@
             dialog1.close();
         };
     } );
+    $('.ats').hide();
     $(function(){
         $('#sortable1 li, #sortable2 li, #sortable3 li').mousedown(function(event){
-            $(this).css('transform',' rotate(5deg)');
+            $(this).bind("contextmenu",function(e){
+                e.preventDefault();
+            });
+            switch (event.which) {
+                case 1:
+                    $('#sortable1 li, #sortable2 li, #sortable3 li').parent().parent().parent().css('z-index','2');
+                    $(this).parent().parent().parent().css('z-index','8');
+                    $(this).css({'transform':' rotate(5deg)','z-index':'100'});
+                    break;
+                case 3:
+                    $(this).children('span').show();
+                    break;
+                default:
+                    break;
+            }
         });
         $('#sortable1 li, #sortable2 li, #sortable3 li').mouseleave(function(event){
-            $(this).css('transform',' rotate(0deg)');
+            $(this).css({'transform':' rotate(0deg)'});
+        });
+        $(document).click(function (e)
+        {
+            // Đối tượng container chứa popup
+            var container = $("#sortable1 li, #sortable2 li, #sortable3 li").children('span');
+
+            // Nếu click bên ngoài đối tượng container thì ẩn nó đi
+            if (!container.is(e.target) && container.has(e.target).length === 0)
+            {
+                container.hide();
+            }
         });
     });
 </script>

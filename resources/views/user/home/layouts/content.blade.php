@@ -19,7 +19,7 @@
                                 @else
                                     <p><span><i class="icon-globe"></i></span> Private <br></p>
                                 @endif
-                                <p><span><i class="icon-location-2"></i></span> Created By: {{$list->owner->name}} <br></p>
+                                <p><span><i class="icon-location-2"></i></span> {{$list->owner->name}} <br></p>
                                 <p><span><i class="icon-eye2"></i></span> Member: {{$list->member}} <br></p>
                                 <p><a href="{{route('link.board', ['code' => $list->link])}}" class="btn btn-primary btn-outline with-arrow">See more</a></p>
                                 <!--<div class="cart">

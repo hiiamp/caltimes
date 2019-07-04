@@ -5,7 +5,7 @@
             @break
         @endforeach
         <div class="row displayTask" id="Task123">
-            <div class="col-md-4 animate-box">
+            <div class="col-md-4 animate-box" id="todolist">
                 <article class="model">
                     <h2 class="art-h2">To do</h2>
                     <ul id="sortable1" type="status1" class="connectedSortable detail-task1">
@@ -15,6 +15,7 @@
                                     <p>
                                         <a style="color: black;" >{{$task->name}}</a>
                                     </p>
+                                    <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}</span>
                                     <p class="badges">
                                         <span class="js-badges">
                                             <p class="badge js-due-date-badge is-due-past" title="This card is past due.">
@@ -31,7 +32,7 @@
                     <button id="add-task" type="submit" class="btn btn-primary">Add task</button>
                 </article>
             </div>
-            <div class="col-md-4 animate-box">
+            <div class="col-md-4 animate-box" id="inprocesslist">
                 <article class="model">
                     <h2 class="art-h2">In process</h2>
                     <ul id="sortable2" type="status2" class="connectedSortable detail-task2">
@@ -41,6 +42,7 @@
                                     <p>
                                         <a style="color: black;" >{{$task->name}}</a>
                                     </p>
+                                    <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}</span>
                                     <p class="badges">
                                         <span class="js-badges">
                                             <p class="badge js-due-date-badge is-due-past" title="This card is past due.">
@@ -56,7 +58,7 @@
                     </ul>
                 </article>
             </div>
-            <div class="col-md-4 animate-box">
+            <div class="col-md-4 animate-box" id="donelist">
                 <article class="model">
                     <h2 class="art-h2">Done</h2>
                     <ul id="sortable3" type="status3" class="connectedSortable detail-task3">
@@ -66,6 +68,7 @@
                                     <p>
                                         <a style="color: black;" >{{$task->name}}</a>
                                     </p>
+                                    <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}</span>
                                     <p class="badges">
                                         <span class="js-badges">
                                             <p class="badge js-due-date-badge is-due-past" title="This card is past due.">

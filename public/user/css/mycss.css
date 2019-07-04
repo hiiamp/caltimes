@@ -63,7 +63,6 @@
 }
 #sortable1 li:hover, #sortable2 li:hover, #sortable3 li:hover {
   background-color: #d0dae2;
-    z-index: 100;
 }
 #sortable1 li, #sortable2 li, #sortable3 li {
   background-color: #FFFFFF;
@@ -76,7 +75,6 @@
   transition: all 0.2s;
   -moz-animation: all 0.2s;
   -webkit-animation: all 0s;
-    z-index: 100;
 }
 #sortable1 li p, #sortable2 li p, #sortable3 li p{
     display: block;
