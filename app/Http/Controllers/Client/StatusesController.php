@@ -11,6 +11,7 @@ use App\Http\Requests\StatusCreateRequest;
 use App\Http\Requests\StatusUpdateRequest;
 use App\Repositories\StatusRepository;
 use App\Validators\StatusValidator;
+use App\Http\Controllers\Controller;
 
 /**
  * Class StatusesController.

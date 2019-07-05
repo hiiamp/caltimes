@@ -61,6 +61,8 @@ Route::post('edit_task', 'Client\TasksController@editTask')->name('edit.task')->
 
 Route::post('delete_task', 'Client\TasksController@deleteTask')->name('delete.task');
 
+Route::post('outList', 'Client\AccessesController@outList')->name('out.list');
+
 Route::post('delete_user', 'Client\UsersController@deleteUser')->name('delete.user')->middleware('admin');
 
 Route::get('profile', 'Client\UsersController@profileUser')->name('profile')->middleware('auth');
@@ -75,3 +77,7 @@ Route::get('auth/facebook', 'Auth\LoginController@redirectToProvider')->name('fa
 Route::get('auth/facebook/callback', 'Auth\LoginController@handleProviderCallback');
 
 Route::get('searchUser', 'Client\UsersController@searchUser')->name('searchUser');
+
+Route::get('toggleMyCoWorker', 'Client\CoworkersController@toggleCoWorker')->name('toggleCoWorker');
+
+Route::get('toggleShareList', 'Client\AccessesController@toggleShareList')->name('toggleShareList');

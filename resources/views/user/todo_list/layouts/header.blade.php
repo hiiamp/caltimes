@@ -14,6 +14,7 @@
                                 <h4>Your list is Private</h4>
                             @endif
                             <p class="breadcrumbs" style="font-size: large">
+                                    <span><a class="worker_joined">Worker Joined</a></span>
                                     <span><a class="sharewith">Share with</a></span>
                                 @if($list->is_public == 0)
                                     <span><a href="{{route('private.list').'?list_id='.$list->id}}">Change to Public</a></span>
@@ -23,13 +24,16 @@
                                 <span><a id="delete_list">Delete</a></span>
                             </p>
                         @else
-                            <span><a hidden="hidden" class="sharewith">Share with</a></span>
-                            <span><a hidden="hidden" id="delete_list">Delete</a></span>
                             @if($list->is_public == 1)
                                 <h4>This list is Public</h4>
                             @else
                                 <h4>This list is Private</h4>
                             @endif
+                            <p class="breadcrumbs" style="font-size: large">
+                                <span><a class="worker_joined">Worker Joined</a></span>
+                                <span><a hidden="hidden" class="sharewith">Share with</a></span>
+                                <span><a hidden="hidden" id="delete_list">Delete</a></span>
+                            </p>
                         @endif
                     </div>
                 </div>
@@ -55,25 +59,26 @@
             <div class="form-group">
                 <input id="share" type="submit" value="Share" class="btn btn-primary">
                 <input id="cancelshare" type="reset" value="Cancel" class="btn btn-primary">
+                <input id="myfavourite" type="reset" value="My Favourite Co-Worker" class="btn btn-primary">
             </div>
         </form>
     </dialog>
 
     <dialog id="deletelistdialog">
-            <form method="post" action="{{route('delete.list')}}">
-                @csrf
-                <div class="row form-group">
-                    <div class="col-md-12">
-                        <p>You really want to delete this list?</p>
-                        <input id="todo_list_id" type="hidden" class="form-control" name="todo_list_id" value="{{$list->id}}">
-                    </div>
+        <form method="post" action="{{route('delete.list')}}">
+            @csrf
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <p>You really want to delete this list?</p>
+                    <input id="todo_list_id" type="hidden" class="form-control" name="todo_list_id" value="{{$list->id}}">
                 </div>
-                <div class="form-group">
-                    <input id="delete_submit" type="submit" value="Yes, I'm sure." class="btn btn-primary">
-                    <input id="delete_cancel" type="reset" value="Cancel" class="btn btn-primary">
-                </div>
-            </form>
-        </dialog>
+            </div>
+            <div class="form-group">
+                <input id="delete_submit" type="submit" value="Yes, I'm sure." class="btn btn-primary">
+                <input id="delete_cancel" type="reset" value="Cancel" class="btn btn-primary">
+            </div>
+        </form>
+    </dialog>
     @if(session('message1'))
         <script>
             var dialog_share = document.querySelector('#sharewithdialog');
@@ -81,4 +86,115 @@
         </script>
     @endif
 
+    <dialog id="dialogjoined">
+        <div class="">
+            <table id="customers">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Number of Tasks</th>
+                    <th scope="col">Option</th>
+                </tr>
+                </thead>
+                <tbody>
+                    @foreach($list_users as $u)
+                        <tr>
+                            <td>
+                                {{$u->name}}
+                            </td>
+                            <td>
+                                {{$u->email}}
+                            </td>
+                            <td>
+                                {{$u->countTask}}
+                            </td>
+                            <td>
+                                @if(\Illuminate\Support\Facades\Auth::check())
+                                <form>
+                                    @if($u->id == \Illuminate\Support\Facades\Auth::user()->id)
+                                        @if($own == true)
+                                            <a href="{{route('profile')}}" class="btn btn-sm btn-primary" style="color: white"> My Profile </a>
+                                            <input id="outlist" hidden="hidden" disabled>
+                                        @else
+                                            <input id="outlist" data-wk="yes" style="color: #ffffff" type="reset" class="btn btn-sm btn-primary" data-id="{{$u->id}}" value="Leave this list?">
+                                        @endif
+                                    @else
+                                        @if($u->isCo != 0)
+                                            <input data-wk="yes" type="reset" class="listwk btn btn-sm btn-primary" data-id="{{$u->id}}" value="Remove favourite">
+                                        @else
+                                            <input data-wk="no" type="reset" class="listwk btn btn-sm btn-primary" data-id="{{$u->id}}" value="Add favourite">
+                                        @endif
+                                        @if($own == true)
+                                            <input data-wk="yes" type="reset" class="sharewk btn btn-sm btn-primary" data-id="{{$u->id}}" list-id="{{$list->id}}" value="Kick Out?">
+                                        @else
+                                            <input class="sharewk" hidden="hidden" disabled>
+                                        @endif
+                                    @endif
+                                </form>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <button id="joinedcancel" class="btn btn-sm btn-primary">Cancel</button>
+        </div>
+    </dialog>
+
+    <!-- notification dialog -->
+    <dialog id="out_list_dialog">
+        <form method="post" action="{{route('out.list')}}">
+            @csrf
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <p>You really want to out this list?</p>
+                    <input type="hidden" class="form-control" name="todo_list_id" value="{{$list->id}}">
+                </div>
+            </div>
+            <div class="form-group">
+                <input id="delete_access_submit" type="submit" value="Yes, I'm sure." class="btn btn-primary">
+                <input id="delete_access_cancel" type="reset" value="Cancel" class="btn btn-primary">
+            </div>
+        </form>
+    </dialog>
+
+    <!-- favourite coworker share dialog -->
+    @if(\Illuminate\Support\Facades\Auth::check())
+    <dialog id="myfavourite_dialog">
+        <div class="">
+            <table id="customers">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Option</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($favourites as $u)
+                    <tr>
+                        <td>
+                            {{$u->name}}
+                        </td>
+                        <td>
+                            {{$u->email}}
+                        </td>
+                        <td>
+                            <form>
+                                @if($u->shared == 0)
+                                    <input data-fv="no" type="reset" class="sharefv btn btn-sm btn-primary" data-id="{{$u->id}}" list-id="{{$list->id}}" value="Share this list">
+                                @else
+                                    <input data-fv="yes" type="reset" class="sharefv btn btn-sm btn-primary" data-id="{{$u->id}}" list-id="{{$list->id}}" value="UnShare">
+                                @endif
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+            <button id="fvdialogcancel" class="btn btn-sm btn-primary">Cancel</button>
+        </div>
+    </dialog>
+    @endif
 </section>

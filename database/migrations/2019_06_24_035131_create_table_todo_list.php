@@ -19,7 +19,7 @@ class CreateTableTodoList extends Migration
             $table->string('name');
             $table->string('link');
             $table->bigInteger('owner_id')->nullable()->unsigned();
-            $table->foreign('owner_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('owner_id')->references('id')->on('users');
             $table->boolean('is_public')->default(true);
             $table->timestamps();
         });

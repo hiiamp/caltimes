@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Repositories\CoworkerRepository;
 use Response;
 use App\Entities\Access;
 use App\Entities\TodoList;
@@ -21,6 +22,7 @@ use App\Validators\TodoListValidator;
 use Illuminate\Support\Facades\Auth;
 use App\Entities\User;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 /**
  * Class TodoListsController.
@@ -51,19 +53,22 @@ class TodoListsController extends Controller
 
     protected $accessRepo;
 
+    protected $coworkerRepo;
     /**
      * TodoListsController constructor.
      *
      * @param TodoListRepository $repository
      * @param TodoListValidator $validator
      */
-    public function __construct(TodoListRepository $repository, TodoListValidator $validator, UserRepository $userRepo, TasksRepository $tasksRepo, AccessRepository $accessRepo)
+    public function __construct(TodoListRepository $repository, TodoListValidator $validator, UserRepository $userRepo,
+        TasksRepository $tasksRepo, AccessRepository $accessRepo, CoworkerRepository $coworkerRepo)
     {
         $this->repository = $repository;
         $this->validator  = $validator;
         $this->userRepo = $userRepo;
         $this->tasksRepo = $tasksRepo;
         $this->accessRepo = $accessRepo;
+        $this->coworkerRepo = $coworkerRepo;
     }
 
     /**
@@ -309,14 +314,47 @@ class TodoListsController extends Controller
                     else $task->status = 'Unknown 404';*/
         }
         $userShared = $this->repository->findUserShared($todoList->id)->get();
+        foreach ($userShared as $u)
+        {
+            $u->countTask = $this->tasksRepo->findWhere([
+                    'todo_list_id'=> $todoList->id,
+                    'user_id' => $u->id
+                ])->count();
+            if(!Auth::check()) $u->isCo = 0;
+            else {
+                $u->isCo = $this->coworkerRepo->findWhere([
+                    'user_id' => Auth::user()->id,
+                    'user_co_id' => $u->id
+                ])->count();
+            }
+        }
         $check_own = true;
+        if(!Auth::check()){
+            $check_own = false;
+            return view('user.todo_list.index')->with([
+                'list' => $todoList,
+                'username' => $username,
+                'tasks' => $tasks,
+                'list_users' => $userShared,
+                'own' => $check_own,
+            ]);
+        }
         if($user->id != Auth::user()->id) $check_own = false;
+        $favourites = $this->coworkerRepo->findFavourites(Auth::user()->id);
+        foreach ($favourites as $u)
+        {
+            $u->shared = $this->accessRepo->findWhere([
+                'todo_list_id' => $todoList->id,
+                'user_id' => $u->id
+            ])->count();
+        }
         return view('user.todo_list.index')->with([
             'list' => $todoList,
             'username' => $username,
             'tasks' => $tasks,
             'list_users' => $userShared,
-            'own' => $check_own
+            'own' => $check_own,
+            'favourites' => $favourites
         ]);
     }
 

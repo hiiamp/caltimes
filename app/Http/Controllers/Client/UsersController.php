@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Repositories\AccessRepository;
+use App\Repositories\CoworkerRepository;
 use App\Repositories\TasksRepository;
 use App\Repositories\TodoListRepository;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
+use App\Http\Controllers\Controller;
 
 
 /**
@@ -39,19 +41,22 @@ class UsersController extends Controller
     protected $accessRepo;
 
     protected $todoListRepo;
+
+    protected $coworkerRepo;
     /**
      * UsersController constructor.
      *
      * @param UserRepository $repository
      * @param UserValidator $validator
      */
-    public function __construct(UserRepository $repository, UserValidator $validator, TasksRepository $tasksRepo, AccessRepository $accessRepo, TodoListRepository $todoListRepo)
+    public function __construct(UserRepository $repository, UserValidator $validator, TasksRepository $tasksRepo, AccessRepository $accessRepo, TodoListRepository $todoListRepo, CoworkerRepository $coworkerRepo)
     {
         $this->repository = $repository;
         $this->validator  = $validator;
         $this->tasksRepo = $tasksRepo;
         $this->accessRepo = $accessRepo;
         $this->todoListRepo =$todoListRepo;
+        $this->coworkerRepo = $coworkerRepo;
     }
 
     /**
@@ -221,7 +226,7 @@ class UsersController extends Controller
      */
     public function manageUser(Request $request)
     {
-        if(Auth::user()->level==2){
+        if(Auth::user()->level==self::isAdmin){
             $list_id = $request['list_id'];
             if($list_id != null){
                 $temp = null;
@@ -261,12 +266,13 @@ class UsersController extends Controller
      */
     public function profileUser()
     {
-        if(Auth::user()->level>0){
+        if(Auth::user()->level>self::isNotActive){
             $users = $this->repository->findCoWorker(Auth::user()->id)->paginate(5);
             foreach ($users as $u)
             {
                 $a = $this->todoListRepo->find($u->id);
                 $u->list_name = $a->name;
+                $u->list_code = $a->link;
             }
             $lists = $this->todoListRepo->findListCanView(Auth::user()->id)->paginate(5);
             foreach ($lists as $list)
@@ -276,9 +282,11 @@ class UsersController extends Controller
                 $user = $this->repository->find($list->owner_id);
                 $list->owner = $user->name;
             }
+            $favourites = $this->coworkerRepo->findFavourites(Auth::user()->id);
             return view('user.profile.index', [
                 'users' => $users,
-                'lists' =>$lists
+                'lists' =>$lists,
+                'favourites' => $favourites
             ]);
         }
         return redirect()->route('home');
@@ -321,8 +329,8 @@ class UsersController extends Controller
             $total_row = $data->count();
             if ($total_row > 0) {
                 foreach ($data as $user) {
-                    if($user->level == 2) $a = 'Admin';
-                    else if($user->level == 1) $a = 'User';
+                    if($user->level == self::isAdmin) $a = 'Admin';
+                    else if($user->level == self::isUser) $a = 'User';
                     else $a = 'Not validate';
                     $output .= '
                         <tr>

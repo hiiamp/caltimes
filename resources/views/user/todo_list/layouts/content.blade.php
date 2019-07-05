@@ -1,4 +1,4 @@
-<div class="colorlib-blog">
+<div class="colorlib-blog" >
     <div class="container">
         @foreach($tasks as $task)
             <input id="list_id1" type="hidden" value="{{$task->todo_list_id}}">
@@ -18,7 +18,7 @@
                                     <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}</span>
                                     <p class="badges">
                                         <span class="js-badges">
-                                            <p class="badge js-due-date-badge is-due-past" title="This card is past due.">
+                                            <p class="badge js-due-date-badge is-due-past" @if($task->important == 2) style="background-color: #008700" title="Low Priority" @elseif($task->important == 1) style="background-color: #979107" title="Medium Priority" @else title="High Priority" @endif>
                                                 <span class="badge-icon icon-sm icon-clock"></span>
                                                 <span class="badge-text js-due-date-text">{{$task->created_at}}</span>
                                                 <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
@@ -29,7 +29,9 @@
                             @endif
                         @endforeach
                     </ul>
-                    <button id="add-task" type="submit" class="btn btn-primary">Add task</button>
+                    @if(\Illuminate\Support\Facades\Auth::check())
+                        <button id="add-task" type="submit" class="btn btn-primary">Add task</button>
+                    @endif
                 </article>
             </div>
             <div class="col-md-4 animate-box" id="inprocesslist">
@@ -45,7 +47,7 @@
                                     <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}</span>
                                     <p class="badges">
                                         <span class="js-badges">
-                                            <p class="badge js-due-date-badge is-due-past" title="This card is past due.">
+                                            <p class="badge js-due-date-badge is-due-past" @if($task->important == 2) style="background-color: #008700" title="Low Priority" @elseif($task->important == 1) style="background-color: #979107" title="Medium Priority" @else title="High Priority" @endif>
                                                 <span class="badge-icon icon-sm icon-clock"></span>
                                                 <span class="badge-text js-due-date-text">{{$task->created_at}}</span>
                                                 <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
@@ -71,7 +73,7 @@
                                     <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}</span>
                                     <p class="badges">
                                         <span class="js-badges">
-                                            <p class="badge js-due-date-badge is-due-past" title="This card is past due.">
+                                            <p class="badge js-due-date-badge is-due-past" @if($task->important == 2) style="background-color: #008700" title="Low Priority" @elseif($task->important == 1) style="background-color: #979107" title="Medium Priority" @else title="High Priority" @endif>
                                                 <span class="badge-icon icon-sm icon-clock"></span>
                                                 <span class="badge-text js-due-date-text">{{$task->created_at}}</span>
                                                 <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
@@ -118,7 +120,24 @@
                                     <p class="hiddenn" id="status3" hidden="hidden"><span><i class="icon-paperplane"></i></span> Status <br> Done </p>
                                 </div>
                                 <div class="con-info">
-                                    <p><span><i class="icon-globe"></i></span>Prioty level <br> Medium </p>
+                                    <p><span><i class="icon-globe"></i></span>Prioty level <br></p>
+                                    @foreach($tasks as $task)
+                                        <select class="btn prioty" name="priority" class="custom-select" id="priority{{$task->id}}">
+                                            @if($task->important == 0)
+                                                <option id="p0" value="0" style="background-color: #0da5c0" selected>High</option>
+                                                <option id="p1" value="1" style="background-color: #00b3ee">Medium</option>
+                                                <option id="p2" value="2" style="background-color: #00f7b5">Low</option>
+                                            @elseif($task->important == 1)
+                                                <option id="p0" value="0" style="background-color: #0da5c0">High</option>
+                                                <option id="p1" value="1" style="background-color: #00b3ee" selected>Medium</option>
+                                                <option id="p2" value="2" style="background-color: #00f7b5">Low</option>
+                                            @else
+                                                <option id="p0" value="0" style="background-color: #0da5c0">High</option>
+                                                <option id="p1" value="1" style="background-color: #00b3ee">Medium</option>
+                                                <option id="p2" value="2" style="background-color: #00f7b5" selected>Low</option>
+                                            @endif
+                                        </select>
+                                    @endforeach
                                 </div>
                                 <div class="con-info">
                                     @foreach($tasks as $task)
@@ -143,7 +162,9 @@
                         @endforeach
                     </div>
                     <div class="form-group">
-                        <input id="save11" type="submit" value="Save" class="btn btn-primary">
+                        @if(\Illuminate\Support\Facades\Auth::check())
+                            <input id="save11" type="submit" value="Save" class="btn btn-primary">
+                        @endif
                         <input id="out11" type="reset" value="Cancel" class="btn btn-primary">
                     </div>
                 </div>
@@ -186,9 +207,9 @@
                         <label class="input-group-text" for="inputGroupSelect01">Importance</label>
                     </div>
                     <select class="btn" name="priority" class="custom-select" id="priority">
-                        <option>High</option>
-                        <option>Medium</option>
-                        <option>Low</option>
+                        <option value="0">High</option>
+                        <option value="1" selected>Medium</option>
+                        <option value="2">Low</option>
                     </select>
                 </div>
             </div>

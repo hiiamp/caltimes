@@ -9,6 +9,12 @@
   z-index: 999;
   display: none;
 }
+.colorlib-logo {
+    position: fixed;
+}
+.owl-stage {
+    transition: unset;
+}
 .modal-content{
   width: 500px;
   height: 300px;
@@ -90,7 +96,7 @@
     border-radius: 10px;
     text-align: center;
     color: #FFFFFF;
-    background-color: #1b4b72;
+    background-color: #267fbd;
 }
 .badges {
     float: left;
@@ -106,7 +112,7 @@
     text-overflow: ellipsis;
 }
 .badge.is-due-past {
-    background-color: #ec9488;
+    background-color: #c8796f;
     border-radius: 4px;
     color: #fff;
 }
@@ -123,6 +129,7 @@
     vertical-align: top;
     white-space: nowrap;
     border-radius: 4px;
+    color: #FFFFFF;
 }
 .member-initials {
     height: 28px;

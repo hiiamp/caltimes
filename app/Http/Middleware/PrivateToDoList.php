@@ -23,7 +23,6 @@ class PrivateToDoList
      */
     public function handle($request, Closure $next)
     {
-        if(!Auth::check()) return redirect()->route('home');
         $code = '';
         $code = @$request->code;
         if($code == ''){

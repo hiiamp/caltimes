@@ -21,7 +21,7 @@ class CreateTableTasks extends Migration
             $table->bigInteger('todo_list_id')->unsigned();
             $table->foreign('todo_list_id')->references('id')->on('todo_list');
             $table->bigInteger('user_id')->nullable()->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->bigInteger('status_id')->unsigned();
             $table->foreign('status_id')->references('id')->on('status');
             $table->integer('position')->default(0);

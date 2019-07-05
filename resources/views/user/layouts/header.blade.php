@@ -60,7 +60,6 @@
 <script src="{{ asset('user/js/main.js')}}"></script>
 <script src="{{ asset('user/js/modernizr-2.6.2.min.js')}}"></script>
 <script src="{{ asset('user/js/respond.min.js')}}"></script>
-<script language="JavaScript" type="text/javascript" src="{{ asset('user/js/query-1.12.4.js')}}"></script>
 <script language="JavaScript" type="text/javascript" src="{{ asset('user/js/jquery-ui.js')}}"></script>
 <script type="text/javascript">
     var token = '{{ csrf_token() }}';

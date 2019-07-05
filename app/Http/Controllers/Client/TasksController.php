@@ -20,6 +20,7 @@ use App\Http\Requests\TasksCreateRequest;
 use App\Http\Requests\TasksUpdateRequest;
 use App\Repositories\TasksRepository;
 use App\Validators\TasksValidator;
+use App\Http\Controllers\Controller;
 
 /**
  * Class TasksController.
@@ -235,7 +236,7 @@ class TasksController extends Controller
         $status = $request['status'];
         $data = [
             'name' => $name,
-            'priority' => $priority,
+            'important' => $priority,
             'status_id' => $status,
             'todo_list_id' => $todo_list_id,
             'user_id' => Auth::user()->id,
@@ -257,12 +258,14 @@ class TasksController extends Controller
         if($name=='') $name=$task->name;
         $content = $request['content'];
         $assign = $request['assign'];
+        $important = $request['priority'];
         if($assign=='') $assign=$task->user_id;
         $data = [
             'name' => $name,
             //'priority' => $priority,
             'content' => $content,
-            'user_id' => $assign
+            'user_id' => $assign,
+            'important' => $important
         ];
         $this->repository->find($request['task_id'])->update($data);
 
