@@ -18,8 +18,12 @@
                 <div class="col-md-4 animate-box"></div>
                 <div class="col-md-4 animate-box">
                     <ul>
-                        <li><a href="#">Board</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li>
+                            <a href="{{route('register')}}" class="btn btn-primary btn-lg btn-custom">
+                                Register
+                                <i class="icon-arrow-right3"></i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -107,7 +111,8 @@
                                 <input type="submit" value="Sign in" class="btn btn-primary">
                             </div>
                             <div class="col-md-4">
-                                <a href="{{route('facebook.login')}}">Login with Facebook</a>
+                                <!--<a href="{{route('facebook.login')}}">Login with Facebook</a>-->
+                                <a class = "developing">Login with Facebook</a>
                             </div>
                             <div class="col-md-4">
                                 <a href="{{route('register')}}">Create an account?</a>
@@ -119,7 +124,19 @@
         </div>
     </div>
 </div>
-
+<dialog id="develop">
+    <h2 class="alert alert-warning" style="color: red">This function is developing</h2>
+    <input id="deve_cancel" type="reset" value="Cancel" class="btn btn-primary">
+</dialog>
+<script>
+    var dialog_deve = document.querySelector('#develop');
+    document.querySelector('.developing').onclick = function() {
+        dialog_deve.showModal();
+    };
+    document.querySelector('#deve_cancel').onclick = function() {
+        dialog_deve.close();
+    };
+</script>
 @include('user.layouts.script')
 </body>
 </html>

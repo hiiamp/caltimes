@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Entities\User;
 use App\Repositories\TodoListRepository;
 use Illuminate\Http\Request;
 
@@ -222,7 +223,9 @@ class AccessesController extends Controller
         if($user->id == Auth::user()->id){
             return redirect()->back()->with('message1','Can\'t share for yourself!');
         }
-
+        if($user->level == User::isBlocked) {
+            return redirect()->back()->with('message1','This account is deleted/banned!');
+        }
         $user_id = $user->id;
         $name = $user->name;
         if($this->repository->checkAcsExist($user_id, $todo_list_id)){
@@ -237,13 +240,11 @@ class AccessesController extends Controller
 
     public function toggleShareList(Request $request)
     {
-        if($request->ajax())
-        {
+        if($request->ajax()) {
             $todo_list_id = $request['todo_list_id'];
             $user_id = $request['user_id'];
             $acs = $this->repository->findWhere(['todo_list_id' => $todo_list_id, 'user_id' => $user_id]);
-            if($acs->count() != 0)
-            {
+            if($acs->count() != 0) {
                 $this->repository->delete($acs->first()->id);
             } else {
                 $this->repository->create([

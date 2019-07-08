@@ -15,6 +15,11 @@ class Tasks extends Model implements Transformable
 {
     use TransformableTrait;
 
+    /**
+     * define constant id user UnAssigned
+     */
+    const Unassigned = 1;
+
     protected $table='tasks';
     /**
      * The attributes that are mass assignable.

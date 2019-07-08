@@ -58,4 +58,10 @@ interface TodoListRepository extends RepositoryInterface
      * @return mixed
      */
     public function changeIsPublicList($id);
+
+    /**
+     * @param $user_id
+     * @return mixed
+     */
+    public function findListInRecycle($user_id);
 }

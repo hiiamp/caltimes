@@ -37,6 +37,7 @@ class PrivateToDoList
         }
         if($todoList == null ) return redirect()->route('home');
         if($todoList->is_public) return $next($request);
+        if(!Auth::check()) return redirect()->route('home');
         if(Auth::user()->level==2) return $next($request);
         if(Auth::user()->id == $todoList->owner_id) return $next($request);
         $Access = Access::where('todo_list_id', $todoList->id)->get();

@@ -17,6 +17,7 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
 use App\Http\Controllers\Controller;
+use App\Entities\User;
 
 
 /**
@@ -226,7 +227,7 @@ class UsersController extends Controller
      */
     public function manageUser(Request $request)
     {
-        if(Auth::user()->level==self::isAdmin){
+        if(Auth::user()->level == User::isAdmin){
             $list_id = $request['list_id'];
             if($list_id != null){
                 $temp = null;
@@ -266,7 +267,7 @@ class UsersController extends Controller
      */
     public function profileUser()
     {
-        if(Auth::user()->level>self::isNotActive){
+        if(Auth::user()->level > User::isNotActive){
             $users = $this->repository->findCoWorker(Auth::user()->id)->paginate(5);
             foreach ($users as $u)
             {
@@ -283,10 +284,17 @@ class UsersController extends Controller
                 $list->owner = $user->name;
             }
             $favourites = $this->coworkerRepo->findFavourites(Auth::user()->id);
+            $recycleList = $this->todoListRepo->findListInRecycle(Auth::user()->id);
+            if(isset($recycleList) && count($recycleList))
+                foreach ($recycleList as $list)
+                {
+                    $list->numtask = count($this->tasksRepo->getTaskByIdList($list->id));
+                }
             return view('user.profile.index', [
                 'users' => $users,
                 'lists' =>$lists,
-                'favourites' => $favourites
+                'favourites' => $favourites,
+                'recycleList' => $recycleList
             ]);
         }
         return redirect()->route('home');
@@ -299,14 +307,40 @@ class UsersController extends Controller
     public function deleteUser(Request $request)
     {
         $user_id = $request['user_id'];
-
-        $this->accessRepo->deleteWhere(['user_id'=> $user_id]);
+        if($user_id === '') return redirect()->back()->with('notif', 'Have an error when delete user!');
+        $this->accessRepo->deleteWhere(['user_id' => $user_id]);
+        $this->coworkerRepo->deleteWhere(['user_id' => $user_id]);
+        $this->coworkerRepo->deleteWhere(['user_co_id' => $user_id]);
+        $tasks = $this->tasksRepo->findWhere(['user_id' => $user_id]);
+        foreach ($tasks as $task)
+        {
+            $this->tasksRepo->update(['user_id' => 1], $task->id);
+        }
         $todo_list = $this->todoListRepo->findByField('owner_id', $user_id);
         foreach ($todo_list as $list)
         {
-            $this->tasksRepo->deleteWhere(['todo_list_id'=> $list->id]);
+            $users = $this->todoListRepo->findUserShared($list->id)->get();
+            $temp = 0;
+            $onew = 0;
+            foreach ($users as $user)
+            {
+                if($user->id != $user_id) {
+                    $c = $this->tasksRepo->findWhere([
+                        'todo_list_id'=> $list->id,
+                        'user_id' => $user->id
+                    ])->count();
+                    if($c > $temp && $user->id != 1) {
+                        $temp = $c;
+                        $onew = $user->id;
+                    }
+                }
+            }
+            if($onew == 0) {
+                $this->todoListRepo->delete($list->id);
+            } else {
+                $this->todoListRepo->update(['owner_id' => $onew], $list->id);
+            }
         }
-        $this->todoListRepo->deleteWhere(['owner_id' => $user_id]);
         $name = $this->repository->find($user_id)->name;
         $this->repository->delete($user_id);
         return redirect()->back()->with('notif', 'Delete user '.$name.' success!');
@@ -329,8 +363,8 @@ class UsersController extends Controller
             $total_row = $data->count();
             if ($total_row > 0) {
                 foreach ($data as $user) {
-                    if($user->level == self::isAdmin) $a = 'Admin';
-                    else if($user->level == self::isUser) $a = 'User';
+                    if($user->level == User::isAdmin) $a = 'Admin';
+                    else if($user->level == User::isUser) $a = 'User';
                     else $a = 'Not validate';
                     $output .= '
                         <tr>

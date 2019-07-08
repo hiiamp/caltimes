@@ -25,7 +25,7 @@
                 <form class="form-inline qbstp-header-subscribe">
                     <div class="col-three-forth">
                         <div class="form-group">
-                            <input id="search" name="search" type="text" class="btn" placeholder="Search...">
+                            <input id="search" style="text-align: left" name="search" type="text" class="btn" placeholder=" Enter what you want to find">
                         </div>
                     </div>
                 </form>

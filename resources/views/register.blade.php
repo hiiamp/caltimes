@@ -18,8 +18,10 @@
                 <div class="col-md-4 animate-box"></div>
                 <div class="col-md-4 animate-box">
                     <ul>
-                        <li><a href="#">Board</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li class="btn btn-primary btn-lg btn-custom has-dropdown" style="margin-right: 20px">
+                            <a href="{{route('login')}}">Login
+                                <i class="icon-arrow-right3"></i></a>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -15,7 +15,7 @@
                                     <p>
                                         <a style="color: black;" >{{$task->name}}</a>
                                     </p>
-                                    <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}</span>
+                                    <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}@if($task->assign->id == @Auth::user()->id) (me) @endif</span>
                                     <p class="badges">
                                         <span class="js-badges">
                                             <p class="badge js-due-date-badge is-due-past" @if($task->important == 2) style="background-color: #008700" title="Low Priority" @elseif($task->important == 1) style="background-color: #979107" title="Medium Priority" @else title="High Priority" @endif>
@@ -44,7 +44,7 @@
                                     <p>
                                         <a style="color: black;" >{{$task->name}}</a>
                                     </p>
-                                    <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}</span>
+                                    <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}@if($task->assign->id == @Auth::user()->id) (me) @endif</span>
                                     <p class="badges">
                                         <span class="js-badges">
                                             <p class="badge js-due-date-badge is-due-past" @if($task->important == 2) style="background-color: #008700" title="Low Priority" @elseif($task->important == 1) style="background-color: #979107" title="Medium Priority" @else title="High Priority" @endif>
@@ -70,7 +70,7 @@
                                     <p>
                                         <a style="color: black;" >{{$task->name}}</a>
                                     </p>
-                                    <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}</span>
+                                    <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}@if($task->assign->id == @Auth::user()->id) (me) @endif</span>
                                     <p class="badges">
                                         <span class="js-badges">
                                             <p class="badge js-due-date-badge is-due-past" @if($task->important == 2) style="background-color: #008700" title="Low Priority" @elseif($task->important == 1) style="background-color: #979107" title="Medium Priority" @else title="High Priority" @endif>
@@ -107,10 +107,10 @@
                                     <input hidden="hidden" value="" id="task_edit_id" name="task_id" >
                                     <select class="btn" name="assign" class="custom-select" id="assign">
                                         @foreach($tasks as $task)
-                                            <option class="hiddenn" hidden="hidden" id="assign{{$task->id}}" value="{{$task->assign->id}}">{{$task->assign->name}}</option>
+                                            <option class="hiddenn" hidden="hidden" id="assign{{$task->id}}" value="{{$task->assign->id}}">{{$task->assign->name}}@if($task->assign->id == @Auth::user()->id) (me) @endif</option>
                                         @endforeach
                                         @foreach($list_users as $userp)
-                                            <option class="showw" id="choose{{$userp->id}}" value="{{$userp->id}}">{{$userp->name}}</option>
+                                            <option class="showw" id="choose{{$userp->id}}" value="{{$userp->id}}">{{$userp->name}}@if($userp->id == @Auth::user()->id) (me) @endif</option>
                                         @endforeach
                                     </select>
                                 </div>

@@ -15,25 +15,25 @@ class TodoListTableSeeder extends Seeder
         TodoList::create([
             'name'       =>     'basic project',
             'link'       =>     str_random(8),
-            'owner_id'   =>      '1',
+            'owner_id'   =>      '2',
             'is_public'  =>      '1'
         ]);
         TodoList::create([
             'name'       =>     'homewwork',
             'link'       =>     str_random(8),
-            'owner_id'   =>      '2',
+            'owner_id'   =>      '3',
             'is_public'  =>      '1'
         ]);
         TodoList::create([
             'name'       =>     'learn english',
             'link'       =>     str_random(8),
-            'owner_id'   =>      '3',
+            'owner_id'   =>      '4',
             'is_public'  =>      '0'
         ]);
         TodoList::create([
             'name'       =>     'create a news',
             'link'       =>     str_random(8),
-            'owner_id'   =>      '4',
+            'owner_id'   =>      '5',
             'is_public'  =>      '1'
         ]);
     }

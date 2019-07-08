@@ -22,7 +22,7 @@ class TodoList extends Model implements Transformable
      * @var array
      */
     protected $fillable = [
-        'name', 'link', 'owner_id', 'is_public'
+        'name', 'link', 'owner_id', 'is_public', 'isDeleted'
     ];
     /**
      * The attributes that should be hidden for arrays.

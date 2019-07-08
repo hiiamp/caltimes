@@ -14,14 +14,15 @@
                                 <h4>Your list is Private</h4>
                             @endif
                             <p class="breadcrumbs" style="font-size: large">
-                                    <span><a class="worker_joined">Worker Joined</a></span>
-                                    <span><a class="sharewith">Share with</a></span>
+                                    <input class="btn btn-sm btn-primary worker_joined" value="Worker Joined" type="button">
+                                    <input class="btn btn-sm btn-primary sharewith" value="Share with" type="button">
                                 @if($list->is_public == 0)
-                                    <span><a href="{{route('private.list').'?list_id='.$list->id}}">Change to Public</a></span>
+                                    <button class="btn btn-sm btn-primary"><a style="color: white" href="{{route('private.list').'?list_id='.$list->id}}">Change to Public</a></button>
                                 @else
-                                    <span><a href="{{route('public.list').'?list_id='.$list->id}}">Change to Private</a></span>
+                                    <button class="btn btn-sm btn-primary"><a style="color: white" href="{{route('public.list').'?list_id='.$list->id}}">Change to Private</a></button>
                                 @endif
-                                <span><a id="delete_list">Delete</a></span>
+                                <input class="btn btn-sm btn-primary" id="delete_list" value="Delete" type="button">
+                                <input class="btn btn-sm btn-primary activities" value="Activities" type="button">
                             </p>
                         @else
                             @if($list->is_public == 1)
@@ -30,9 +31,10 @@
                                 <h4>This list is Private</h4>
                             @endif
                             <p class="breadcrumbs" style="font-size: large">
-                                <span><a class="worker_joined">Worker Joined</a></span>
+                                <input class="btn btn-sm btn-primary worker_joined" value="Worker Joined" type="button">
                                 <span><a hidden="hidden" class="sharewith">Share with</a></span>
                                 <span><a hidden="hidden" id="delete_list">Delete</a></span>
+                                <input class="btn btn-sm btn-primary activities" value="Activities" type="button">
                             </p>
                         @endif
                     </div>
@@ -65,11 +67,11 @@
     </dialog>
 
     <dialog id="deletelistdialog">
-        <form method="post" action="{{route('delete.list')}}">
+        <form method="post" action="{{route('recycle.list')}}">
             @csrf
             <div class="row form-group">
                 <div class="col-md-12">
-                    <p>You really want to delete this list?</p>
+                    <p>You really wanna move this list to your recycle?</p>
                     <input id="todo_list_id" type="hidden" class="form-control" name="todo_list_id" value="{{$list->id}}">
                 </div>
             </div>
@@ -101,7 +103,7 @@
                     @foreach($list_users as $u)
                         <tr>
                             <td>
-                                {{$u->name}}
+                                {{$u->name}}@if($u->id == @Auth::user()->id) (me) @endif
                             </td>
                             <td>
                                 {{$u->email}}
@@ -110,9 +112,9 @@
                                 {{$u->countTask}}
                             </td>
                             <td>
-                                @if(\Illuminate\Support\Facades\Auth::check())
+                                @if(Auth::check())
                                 <form>
-                                    @if($u->id == \Illuminate\Support\Facades\Auth::user()->id)
+                                    @if($u->id == Auth::user()->id)
                                         @if($own == true)
                                             <a href="{{route('profile')}}" class="btn btn-sm btn-primary" style="color: white"> My Profile </a>
                                             <input id="outlist" hidden="hidden" disabled>
@@ -160,7 +162,7 @@
     </dialog>
 
     <!-- favourite coworker share dialog -->
-    @if(\Illuminate\Support\Facades\Auth::check())
+    @if(Auth::check())
     <dialog id="myfavourite_dialog">
         <div class="">
             <table id="customers">
@@ -198,3 +200,16 @@
     </dialog>
     @endif
 </section>
+<dialog id="activiesdialog">
+    <h2 class="alert alert-warning" style="color: red">This function is developing</h2>
+    <input id="acti_cancel" type="reset" value="Cancel" class="btn btn-primary">
+</dialog>
+<script>
+    var dialog_deve = document.querySelector('#activiesdialog');
+    document.querySelector('.activities').onclick = function() {
+        dialog_deve.showModal();
+    };
+    document.querySelector('#acti_cancel').onclick = function() {
+        dialog_deve.close();
+    };
+</script>

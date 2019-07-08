@@ -204,10 +204,12 @@
                 document.getElementById(task_id).attributes.removeNamedItem('hidden');
                 document.getElementById('priority' + t_id).attributes.removeNamedItem('disabled');
                 var user_id = document.getElementById(task_id).getAttribute('value');
-                user_id = 'choose' + user_id;
-                var hidden = document.createAttribute('hidden');
-                hidden.value = 'hidden';
-                document.getElementById(user_id).attributes.setNamedItem(hidden);
+                if(user_id !== '1') {
+                    user_id = 'choose' + user_id;
+                    var hidden = document.createAttribute('hidden');
+                    hidden.value = 'hidden';
+                    document.getElementById(user_id).attributes.setNamedItem(hidden);
+                }
                 var selected = document.createAttribute("selected");
                 selected.value = 'selected';
                 document.getElementById(task_id).attributes.setNamedItem(selected);
@@ -433,10 +435,12 @@
                     document.getElementById(task_id).attributes.removeNamedItem('hidden');
                     document.getElementById('priority' + t_id).attributes.removeNamedItem('disabled');
                     var user_id = document.getElementById(task_id).getAttribute('value');
-                    user_id = 'choose' + user_id;
-                    var hidden = document.createAttribute('hidden');
-                    hidden.value = 'hidden';
-                    document.getElementById(user_id).attributes.setNamedItem(hidden);
+                    if(user_id !== '1') {
+                        user_id = 'choose' + user_id;
+                        var hidden = document.createAttribute('hidden');
+                        hidden.value = 'hidden';
+                        document.getElementById(user_id).attributes.setNamedItem(hidden);
+                    }
                     var selected = document.createAttribute("selected");
                     selected.value = 'selected';
                     document.getElementById(task_id).attributes.setNamedItem(selected);

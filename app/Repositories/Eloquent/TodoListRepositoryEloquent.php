@@ -60,7 +60,7 @@ class TodoListRepositoryEloquent extends BaseRepository implements TodoListRepos
     {
         //$lists = TodoList::where('owner_id', $id);
         $lists = TodoList::select('todo_list.id', 'is_public', 'link', 'todo_list.name', 'owner_id', 'todo_list.created_at')->join('access', 'todo_list.id', '=', 'todo_list_id')
-            ->where('access.user_id',$id)->orderByRaw('todo_list.created_at DESC');
+            ->where('access.user_id',$id)->where('todo_list.isDeleted', false)->orderByRaw('todo_list.created_at DESC');
         //$data['listshare'] = $listshare;
         return $lists;
     }
@@ -78,8 +78,9 @@ class TodoListRepositoryEloquent extends BaseRepository implements TodoListRepos
 
     public function searchList($search)
     {
-        return TodoList::where('name', 'like', '%' . $search . '%')->get();
+        return TodoList::where('name', 'like', '%' . $search . '%')->where('isDeleted', false)->get();
     }
+
     public function findUserShared($id_list)
     {
         $users = User::select('users.id', 'name', 'email', 'level')->join('access', 'users.id', '=', 'user_id')->where('todo_list_id', $id_list);
@@ -99,5 +100,10 @@ class TodoListRepositoryEloquent extends BaseRepository implements TodoListRepos
         } else {
             TodoList::where('id', $id)->update(['is_public' => 0]);
         }
+    }
+
+    public function findListInRecycle($user_id)
+    {
+        return TodoList::where('owner_id', $user_id)->where('isDeleted', true)->get();
     }
 }

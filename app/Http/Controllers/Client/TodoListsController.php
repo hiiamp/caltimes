@@ -291,6 +291,7 @@ class TodoListsController extends Controller
         $todoList = $this->repository->findByField('link',$code)->first();
         $user = $this->userRepo->find($todoList->owner_id);
         $username = $user->name;
+        if($todoList->isDeleted) return redirect()->route('home')->with('notif', $todoList->name.' is deleted, contact '.$user->email.'('.$username.') to recover it.');
         $tasks = $this->tasksRepo->getTaskByIdList($todoList->id);
         foreach ($tasks as $task)
         {
@@ -386,15 +387,15 @@ class TodoListsController extends Controller
             if ($search != '') {
                 $data = $this->repository->searchList($search);
             } else {
-                if(Auth::user()->level == 1) {
+                if(Auth::user()->level == User::isUser) {
                     $data = $this->repository->findListCanView(Auth::user()->id)->paginate(6);
                 }
-                else {
+                else if(Auth::user()->level == User::isAdmin) {
                     $data = $this->repository->allBuider()->paginate(5);
                 }
             }
             $total_row = $data->count();
-            if(Auth::user()->level == 1)
+            if(Auth::user()->level == User::isUser)
             {
                 if ($total_row > 0) {
                     foreach ($data as $list) {
@@ -429,8 +430,8 @@ class TodoListsController extends Controller
             else
             {
                 if ($total_row > 0) {
-
                     foreach ($data as $list) {
+                        $list->owner = $this->userRepo->find($list->owner_id);
                         $output .= '
                             <tr>
                                 <td>
@@ -443,11 +444,11 @@ class TodoListsController extends Controller
                                     '.$list->created_at.'
                                 </td>
                                 <td>
-                                    '.$list->owner.'
+                                    '.$list->owner->name.'
                                 </td>
                                 <td>
                                     <a href="'.route('admin.user').'?list_id='.$list->id.'" class="btn btn-sm btn-primary" style="color: whitesmoke"> Worker </a>
-                                    <a data-index="'.$list->id.'" id="Delete'.$list->id.'" class="btn btn-sm btn-primary delete_l" style="color: whitesmoke"> Delete </a>;
+                                    <a data-index="'.$list->id.'" id="Delete'.$list->id.'" class="btn btn-sm btn-primary delete_l" style="color: whitesmoke"> Delete </a>
                                 </td>
                             </tr>
                         ';
@@ -488,13 +489,33 @@ class TodoListsController extends Controller
         return redirect()->route('home')->with('deleted_list', 'Deleted '.$name.' success!');
     }
 
+    public function moveListToRecycle(Request $request)
+    {
+        $admin = '';
+        $admin = @$request['checkadmin'];
+        $list = $this->repository->find($request['todo_list_id']);
+        $name = $list->name;
+        $this->repository->update(['isDeleted' => true], $list->id);
+        if($admin != '') return redirect()->back()->with('notif', 'Deleted '.$name.' success!');
+        return redirect()->route('home')->with('deleted_list', 'Move '.$name.' to your recycle, come there to recover it!');
+    }
+
+    public function recoverList($code)
+    {
+        $list = $this->repository->findByField('link', $code)->first( );
+        $name = $list->name;
+        $this->repository->update(['isDeleted' => false], $list->id);
+        //if($admin != '') return redirect()->back()->with('notif', 'Recover '.$name.' success!');
+        return redirect()->route('link.board', ['code' => $list->link])->with('notif', 'Recover '.$name.' success!');
+    }
+
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function manageList(Request $request)
     {
-        if(Auth::user()->level == 2){
+        if(Auth::user()->level == User::isAdmin){
             $user_id = $request['user_id'];
             if($user_id!=null){
                 $temp = $this->userRepo->find($user_id);

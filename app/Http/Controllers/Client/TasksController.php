@@ -239,7 +239,7 @@ class TasksController extends Controller
             'important' => $priority,
             'status_id' => $status,
             'todo_list_id' => $todo_list_id,
-            'user_id' => Auth::user()->id,
+            'user_id' => 1,
             'position' => $position
         ];
         $this->repository->create($data);

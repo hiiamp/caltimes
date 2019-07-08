@@ -10,74 +10,81 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('home', 'Client\TodoListsController@viewAllLists')->name('home')->middleware('auth');
-
 Route::get('/', function () {
    return view('index');
 })->name('welcome')->middleware('check.login');
 
-//Auth::routes();
 Route::get('login', function () {
    return view('login');
 })->name('login')->middleware('check.login');
-
-Route::post('login', 'Auth\LoginController@login');
-
-Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::get('register', function () {
     return view('register');
 })->name('register')->middleware('check.login');
 
-Route::post('register', 'Auth\RegisterController@register');
+Route::group(['namespace' => 'Auth'], function() {
 
+    Route::post('register', 'RegisterController@register');
 
-Route::get('user/activation/{token}', 'Auth\RegisterController@activateUser')->name('user.activate');
+    Route::get('user/activation/{token}', 'RegisterController@activateUser')->name('user.activate');
 
-//Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('auth/facebook', 'LoginController@redirectToProvider')->name('facebook.login') ;
 
-Route::post('create_list', 'Client\TodoListsController@createList')->name('create_list')->middleware('auth');
+    Route::get('auth/facebook/callback', 'LoginController@handleProviderCallback');
 
-Route::get('public_list', 'Client\TodoListsController@changeIsPublicList')->name('public.list');
+    Route::post('login', 'LoginController@login');
 
-Route::get('private_list', 'Client\TodoListsController@changeIsPublicList')->name('private.list');
+    Route::get('logout', 'LoginController@logout')->name('logout');
+});
 
-Route::post('delete_list', 'Client\TodoListsController@deleteList')->name('delete.list')->middleware('private.list');
+Route::group(['namespace' => 'Client'], function() {
 
-Route::get('board/{code}', 'Client\TodoListsController@viewList')->name('link.board')->middleware('private.list');
+    Route::get('home', 'TodoListsController@viewAllLists')->name('home')->middleware('auth');
 
-Route::post('share_list', 'Client\AccessesController@createShare')->name('share.list')->middleware('private.list');
+    Route::get('searchUser', 'UsersController@searchUser')->name('searchUser');
 
-Route::post('content_swapPosition', 'Client\TasksController@swapPosition')->name('content_swapPosition');
+    Route::get('toggleMyCoWorker', 'CoworkersController@toggleCoWorker')->name('toggleCoWorker');
 
-Route::post('create_task', 'Client\TasksController@createTask')->name('create_task')->middleware('private.list');
+    Route::get('toggleShareList', 'AccessesController@toggleShareList')->name('toggleShareList');
 
-Route::get('searchList', 'Client\TodoListsController@searchList')->name('searchList');
+    Route::post('create_list', 'TodoListsController@createList')->name('create_list')->middleware('auth');
 
-Route::get('searchTask', 'Client\TasksController@searchTask')->name('searchTask');
+    Route::get('public_list', 'TodoListsController@changeIsPublicList')->name('public.list');
 
-Route::post('edit_task', 'Client\TasksController@editTask')->name('edit.task')->middleware('private.list');
+    Route::get('private_list', 'TodoListsController@changeIsPublicList')->name('private.list');
 
-Route::post('delete_task', 'Client\TasksController@deleteTask')->name('delete.task');
+    Route::post('delete_list', 'TodoListsController@deleteList')->name('delete.list')->middleware('private.list');
 
-Route::post('outList', 'Client\AccessesController@outList')->name('out.list');
+    Route::post('recycle_list', 'TodoListsController@moveListToRecycle')->name('recycle.list')->middleware('private.list');
 
-Route::post('delete_user', 'Client\UsersController@deleteUser')->name('delete.user')->middleware('admin');
+    Route::get('board/{code}', 'TodoListsController@viewList')->name('link.board')->middleware('private.list');
 
-Route::get('profile', 'Client\UsersController@profileUser')->name('profile')->middleware('auth');
+    Route::get('recover/{code}', 'TodoListsController@recoverList')->name('list.recover')->middleware('private.list');
+
+    Route::post('share_list', 'AccessesController@createShare')->name('share.list')->middleware('private.list');
+
+    Route::post('content_swapPosition', 'TasksController@swapPosition')->name('content_swapPosition');
+
+    Route::post('create_task', 'TasksController@createTask')->name('create_task')->middleware('private.list');
+
+    Route::get('searchList', 'TodoListsController@searchList')->name('searchList');
+
+    Route::get('recover/{code}', 'TodoListsController@recoverList')->name('list.recover');
+
+    Route::get('searchTask', 'TasksController@searchTask')->name('searchTask');
+
+    Route::post('edit_task', 'TasksController@editTask')->name('edit.task')->middleware('private.list');
+
+    Route::post('delete_task', 'TasksController@deleteTask')->name('delete.task');
+
+    Route::post('outList', 'AccessesController@outList')->name('out.list');
+
+    Route::post('delete_user', 'UsersController@deleteUser')->name('delete.user')->middleware('admin');
+
+    Route::get('profile', 'UsersController@profileUser')->name('profile')->middleware('auth');
+});
 
 Route::group(['prefix' => 'admin'], function () {
     Route::get('list', 'Client\TodoListsController@manageList')->name('admin.list')->middleware('admin');
     Route::get('user', 'Client\UsersController@manageUser')->name('admin.user')->middleware('admin');
 });
-
-Route::get('auth/facebook', 'Auth\LoginController@redirectToProvider')->name('facebook.login') ;
-
-Route::get('auth/facebook/callback', 'Auth\LoginController@handleProviderCallback');
-
-Route::get('searchUser', 'Client\UsersController@searchUser')->name('searchUser');
-
-Route::get('toggleMyCoWorker', 'Client\CoworkersController@toggleCoWorker')->name('toggleCoWorker');
-
-Route::get('toggleShareList', 'Client\AccessesController@toggleShareList')->name('toggleShareList');

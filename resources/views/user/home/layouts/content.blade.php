@@ -68,7 +68,7 @@
     </form>
 </dialog>
 <script>
-    var dialog1 = document.querySelector('#sharewithdialog');
+    /*var dialog1 = document.querySelector('#sharewithdialog');
     document.querySelector('.sharewith').onclick = function() {
         dialog1.showModal();
     };
@@ -77,7 +77,7 @@
     };
     document.querySelector('#cancelshare').onclick = function() {
         dialog1.close();
-    };
+    };*/
 </script>
 
 <script type="text/javascript">

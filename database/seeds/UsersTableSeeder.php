@@ -14,6 +14,13 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         User::create([
+            'name'            =>  'Unassigned',
+            'email'           =>  'CantDelete',
+            'password'        =>  Hash::make(Str::random(10)),
+            'remember_token'  =>  Str::random(10),
+            'level'           =>  '1'
+        ]);
+        User::create([
             'name'            =>  'user1',
             'email'           =>  'user1@gmail.com',
             'password'        =>  Hash::make('user123'),

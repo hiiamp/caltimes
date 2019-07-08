@@ -15,6 +15,13 @@ class Status extends Model implements Transformable
 {
     use TransformableTrait;
 
+    /**
+     * define constant to show status of each tasks
+     */
+    const isToDo = 1;
+    const isInProcess = 2;
+    const isDone = 3;
+
     protected $table='status';
     /**
      * The attributes that are mass assignable.

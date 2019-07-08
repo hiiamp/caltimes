@@ -12,6 +12,17 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    /**
+     * define level of user
+     */
+    const isAdmin = 2;
+
+    const isUser = 1;
+
+    const isNotActive = 0;
+
+    const isBlocked = 3;
+
     protected $table = 'users';
     /**
      * The attributes that are mass assignable.

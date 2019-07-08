@@ -58,6 +58,10 @@ class LoginController extends Controller
             auth()->logout();
             return back()->with('warning', 'You need validate your account, check your mail please.');
         } else if($user->level == 2) return redirect()->route('admin.list');
+        if($user->level == 3) {
+            auth()->logout();
+            return back()->with('warning', 'Your account is deleted/banned!');
+        }
         return redirect()->intended($this->redirectPath());
     }
     /**

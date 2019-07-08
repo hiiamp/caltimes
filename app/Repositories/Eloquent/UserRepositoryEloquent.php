@@ -68,10 +68,9 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
 
     public function findCoWorker($id)
     {
-        $users = User::select('todo_list.id', 'users.name', 'email', 'level')->join('access', 'users.id', '=', 'user_id')
+        return User::select('todo_list.id', 'users.name', 'email', 'level')->join('access', 'users.id', '=', 'user_id')
             ->join('todo_list', 'access.todo_list_id', '=', 'todo_list.id')
             ->where('todo_list.owner_id', $id)->where('users.id', '!=', $id);
-        return $users;
     }
 
     public function allBuilder($columns = ['*'])
