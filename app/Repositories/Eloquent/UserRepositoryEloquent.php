@@ -46,11 +46,19 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getToken()
     {
         return hash_hmac('sha256', str_random(40), config('app.key'));
     }
 
+    /**
+     * @param $id
+     * @return mixed|string
+     * @throws \Exception
+     */
     public function createActivation($id)
     {
         $token = $this->getToken();
@@ -61,11 +69,20 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
         return $token;
     }
 
+    /**
+     * @param $id
+     * @param array $columns
+     * @return mixed
+     */
     public function find($id, $columns = ['*'])
     {
         return User::where('id', $id)->first();
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function findCoWorker($id)
     {
         return User::select('todo_list.id', 'users.name', 'email', 'level')->join('access', 'users.id', '=', 'user_id')
@@ -73,13 +90,28 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
             ->where('todo_list.owner_id', $id)->where('users.id', '!=', $id);
     }
 
+    /**
+     * @param array $columns
+     * @return mixed
+     */
     public function allBuilder($columns = ['*'])
     {
         return User::where('id', '>', 0);
     }
 
+    /**
+     * @param $search
+     * @return mixed
+     */
     public function searchUser($search)
     {
         return User::where('name', 'like', '%' . $search . '%')->get();
+    }
+
+    public function notiUser($todo_list_id)
+    {
+        $users = User::select('users.id','users.name')->join('access', 'users.id', '=', 'user_id')
+            ->where('access.todo_list_id', $todo_list_id)->get();
+        return $users;
     }
 }

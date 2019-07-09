@@ -125,7 +125,7 @@
     </div>
 </div>
 <dialog id="develop">
-    <h2 class="alert alert-warning" style="color: red">This function is developing</h2>
+    <h2 class="alert alert-danger">This function is developing: <br> Sorry for the inconvenience!</h2>
     <input id="deve_cancel" type="reset" value="Cancel" class="btn btn-primary">
 </dialog>
 <script>

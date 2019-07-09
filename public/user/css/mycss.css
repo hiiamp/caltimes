@@ -9,8 +9,38 @@
   z-index: 999;
   display: none;
 }
+article {
+    width: 250px;
+    height: 400px;
+    padding: 10px;
+    padding-top: 20px;
+    border-radius: 10px;
+}
+.title_item_home {
+    color: #FFFFFF;
+    min-height: 100px;
+    opacity: 0.95;
+    border-radius: 10px;
+    background: #499bea;
+    background: -moz-linear-gradient(-45deg, #499bea 0%, #798eea 100%);
+    background: -webkit-linear-gradient(-45deg, #499bea 0%, #798eea 100%);
+    background: -o-linear-gradient(-45deg, #499bea 0%, #798eea 100%);
+    background: -ms-linear-gradient(-45deg, #499bea 0%, #798eea 100%);
+    background: -webkit-linear-gradient(315deg, #499bea 0%, #798eea 100%);
+    background: -o-linear-gradient(315deg, #499bea 0%, #798eea 100%);
+    background: linear-gradient(135deg, #499bea 0%, #798eea 100%);
+}
+.margin_home {
+
+}
 .colorlib-logo {
     position: fixed;
+}
+.container-land-home {
+    margin-top: 0;
+}
+.colorlib-blog {
+    padding-top: 15px;
 }
 .owl-stage {
     transition: unset;
@@ -54,11 +84,11 @@
   float: left;
   margin-right: 10px;
   border-radius: 10px;
-  background-color: #7a868c;
+  background-color: #c1c8e4;
 }
 #sortable1, #sortable2, #sortable3 {
   border: 0px solid #eee;
-  background-color: #7a868c;
+  background-color: #c1c8e4;
   width: 340px;
   min-height: 50px;
   list-style-type: none;
@@ -96,7 +126,7 @@
     border-radius: 10px;
     text-align: center;
     color: #FFFFFF;
-    background-color: #267fbd;
+    background-color: rgba(50, 142, 234, 0.84);
 }
 .badges {
     float: left;
@@ -193,7 +223,7 @@ dialog {
 .delete_task {
     background: indianred;
     color: #fff;
-    border: 1px solid #4aca85;
+    border: 0px solid #4aca85;
     margin-right: 4px;
     margin-bottom: 4px;
     font-size: 14px;

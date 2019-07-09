@@ -176,7 +176,6 @@ class CoworkersController extends Controller
                     'message' => $e->getMessageBag()
                 ]);
             }
-
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
@@ -192,7 +191,6 @@ class CoworkersController extends Controller
     public function destroy($id)
     {
         $deleted = $this->repository->delete($id);
-
         if (request()->wantsJson()) {
 
             return response()->json([
@@ -200,15 +198,22 @@ class CoworkersController extends Controller
                 'deleted' => $deleted,
             ]);
         }
-
         return redirect()->back()->with('message', 'Coworker deleted.');
     }
 
+    /**
+     * @param Request $request
+     * @return false|string
+     */
     public function toggleCoWorker(Request $request)
     {
-        if($request->ajax())
-        {
-            $user_co_id = $request['user_co_id'];
+        if($request->ajax()) {
+            if(isset($request['user_co_id'])) {
+                $user_co_id = $request['user_co_id'];
+            }
+            else {
+                return redirect()->back()->with('notif', 'There was an error when you performed this operation.');
+            }
             if($user_co_id == Auth::user()->id) return json_encode(['status1' => 'error']);
             $check = $this->repository->findWhere([
                 'user_id' => Auth::user()->id,
@@ -220,7 +225,8 @@ class CoworkersController extends Controller
                     'user_co_id' => $user_co_id
                 ]);
                 return json_encode(['status1' => 'add']);
-            } else {
+            }
+            else {
                 $id = $this->repository->findWhere([
                     'user_id' => Auth::user()->id,
                     'user_co_id' => $user_co_id

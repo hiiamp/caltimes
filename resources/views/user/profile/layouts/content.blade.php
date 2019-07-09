@@ -31,7 +31,7 @@
                                                     </div>
                                                     <div class="col-md-8 col-md-pull-4 animate-box">
                                                         <h2>{{\Illuminate\Support\Facades\Auth::user()->name}}</h2>
-                                                        <form method="post" action="">
+                                                        <form data-pjax method="get" action="#">
                                                             <div class="col-md-12">
                                                                 <p>Title</p>
                                                                 <input hidden="hidden" name="name" id="" cols="30" rows="1" class="hidden_dis" value="" >
@@ -89,7 +89,7 @@
                                             </table>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-12 text-center">
+                                            <div data-pjax class="col-md-12 text-center">
                                                 <ul class="pagination">
 
                                                 </ul>
@@ -132,7 +132,7 @@
                                                             {{$user->email}}
                                                         </td>
                                                         <td>
-                                                            <a class="btn btn-sm btn-primary" href="{{route('link.board',['code'=>$user->list_code])}}">{{$user->list_name}}</a>
+                                                            <a data-pjax class="btn btn-sm btn-primary" href="{{route('link.board',['code'=>$user->list_code])}}">{{$user->list_name}}</a>
                                                         </td>
                                                         @if(\Illuminate\Support\Facades\Auth::user()->level== 2)
                                                             <td>
@@ -148,7 +148,7 @@
                                             </table>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-12 text-center">
+                                            <div data-pjax class="col-md-12 text-center">
                                                 <ul class="pagination">
                                                     {{$users->links()}}
                                                 </ul>
@@ -193,8 +193,8 @@
                                                             {{$list->created_at}}
                                                         </td>
                                                         <td>
-                                                            <a class="btn btn-sm btn-primary" href="{{route('list.recover',['code'=>$list->link])}}">Recover List</a>
-                                                            <a data-index="{{$list->id}}" id="Delete{{$list->id}}" class="btn btn-sm btn-primary delete_l" style="color: whitesmoke"> Delete </a>
+                                                            <a data-pjax class="btn btn-sm btn-primary" href="{{route('list.recover',['code'=>$list->link])}}">Recover List</a>
+                                                            <a data-pjax data-index="{{$list->id}}" id="Delete{{$list->id}}" class="btn btn-sm btn-primary delete_l" style="color: whitesmoke"> Delete </a>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -202,7 +202,7 @@
                                             </table>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-12 text-center">
+                                            <div data-pjax class="col-md-12 text-center">
                                                 <ul class="pagination">
                                                     <!--{{$users->links()}}-->
                                                 </ul>
@@ -256,7 +256,7 @@
 </script>
 
 <dialog id="deletelistdialog1">
-    <form method="post" action="{{route('delete.list')}}">
+    <form data-pjax method="post" action="{{route('delete.list')}}">
         @csrf
         <div class="row form-group">
             <div class="col-md-12">

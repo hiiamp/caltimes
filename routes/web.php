@@ -83,8 +83,9 @@ Route::group(['namespace' => 'Client'], function() {
 
     Route::get('profile', 'UsersController@profileUser')->name('profile')->middleware('auth');
 });
+Route::get('searchUser', 'Client\UsersController@searchUser')->name('searchUser');
 
-Route::group(['prefix' => 'admin'], function () {
-    Route::get('list', 'Client\TodoListsController@manageList')->name('admin.list')->middleware('admin');
-    Route::get('user', 'Client\UsersController@manageUser')->name('admin.user')->middleware('admin');
-});
+Route::get('notification', function () {
+    return view('user.notification.index');
+})->name('notification');
+

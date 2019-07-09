@@ -12,16 +12,16 @@
                     <div class="product-entry">
                         <div class="product-img">
                             <article>
-                                <h2>{{$list->name}}</h2>
-                                <p class="admin"><span>{{$list->created_at}}</span></p>
+                                <h3 class="title_item_home">{{$list->name}}</h3>
+                                <p class="admin margin_home"><span>{{$list->created_at}}</span></p>
                                 @if($list->is_public==1)
-                                    <p><span><i class="icon-globe"></i></span> Public <br></p>
+                                    <p class="margin_home"><span><i class="icon-globe"></i></span> Public <br></p>
                                 @else
-                                    <p><span><i class="icon-globe"></i></span> Private <br></p>
+                                    <p class="margin_home"><span><i class="icon-globe"></i></span> Private <br></p>
                                 @endif
-                                <p><span><i class="icon-location-2"></i></span> {{$list->owner->name}} <br></p>
-                                <p><span><i class="icon-eye2"></i></span> Member: {{$list->member}} <br></p>
-                                <p><a href="{{route('link.board', ['code' => $list->link])}}" class="btn btn-primary btn-outline with-arrow">See more</a></p>
+                                <p class="margin_home"><span><i class="icon-location-2"></i></span> {{$list->owner->name}} <br></p>
+                                <p class="margin_home"><span><i class="icon-eye2"></i></span> Member: {{$list->member}} <br></p>
+                                <p class="margin_home"><a data-pjax href="{{route('link.board', ['code' => $list->link])}}" class="btn btn-primary btn-outline with-arrow">See more</a></p>
                                 <!--<div class="cart">
                                     <p class="breadcrumbs" style="font-size: small">
                                         <span>
@@ -39,7 +39,7 @@
             @endforeach
 
             <div class="row">
-                <div class="col-md-12 text-center">
+                <div data-pjax class="col-md-12 text-center">
                     {{$lists->links()}}
                     <!--<ul class="pagination">
                         <li class="disabled"><a href="#">&laquo;</a></li>

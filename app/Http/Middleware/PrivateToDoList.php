@@ -25,14 +25,15 @@ class PrivateToDoList
     {
         $code = '';
         $code = @$request->code;
-        if($code == ''){
+        if($code == '') {
             $list_id = '';
             $list_id = @$request->todo_list_id;
             if($list_id == '') $list_id = $request->todoid;
             if($list_id == '') return redirect()->route('home');
             $todoList = TodoList::where('id', $list_id)->first();
             $code = $todoList->link;
-        } else{
+        }
+        else {
             $todoList = TodoList::where('link', $code)->first();
         }
         if($todoList == null ) return redirect()->route('home');

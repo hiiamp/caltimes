@@ -3,17 +3,14 @@
 namespace App\Http\Controllers\Client;
 
 use App\Entities\Tasks;
-use App\Entities\TodoList;
-use App\Entities\User;
+use App\Notifications\RepliedToThread;
 use App\Repositories\TodoListRepository;
 use App\Repositories\UserRepository;
-use App\Validators\TodoListValidator;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Client\TodoListsController;
 
-
-use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\TasksCreateRequest;
@@ -45,7 +42,6 @@ class TasksController extends Controller
     protected $userRepo;
 
     protected $tasksRepo;
-
 
     /**
      * TasksController constructor.
@@ -229,11 +225,16 @@ class TasksController extends Controller
      */
     public function createTask(Request $request)
     {
-        $name = $request['name'];
-        $priority = $request['priority'];
-        $todo_list_id = $request['todoid'];
-        $position = $request['position'];
-        $status = $request['status'];
+        if(isset($request['name'])&&isset($request['priority'])&&isset($request['todoid'])&&isset($request['position'])&&isset($request['status'])) {
+            $name = $request['name'];
+            $priority = $request['priority'];
+            $todo_list_id = $request['todoid'];
+            $position = $request['position'];
+            $status = $request['status'];
+        }
+        else {
+            return redirect()->back()->with('notif', 'There was an error when you create a task.');
+        }
         $data = [
             'name' => $name,
             'important' => $priority,
@@ -242,8 +243,11 @@ class TasksController extends Controller
             'user_id' => 1,
             'position' => $position
         ];
+        $user = $this->userRepo->find(Auth::user()->id);
+        $list = $this->listRepo->find($todo_list_id);
         $this->repository->create($data);
-
+        $users = $this->userRepo->notiUser($todo_list_id);
+        Notification::send($users,new RepliedToThread($list,Tasks::latest('id')->first(),'create', $user));
         return redirect()->back();
     }
 
@@ -253,22 +257,28 @@ class TasksController extends Controller
      */
     public function editTask(Request $request)
     {
-        $task = $this->repository->find($request['task_id']);
+        $todo_list_id = $request['todo_list_id'];
+        $task = $this->repository->find($todo_list_id);
         $name = $request['name'];
         if($name=='') $name=$task->name;
         $content = $request['content'];
         $assign = $request['assign'];
+        $id_task = $request['task_id'];
         $important = $request['priority'];
         if($assign=='') $assign=$task->user_id;
         $data = [
+            'id'   => $id_task,
             'name' => $name,
-            //'priority' => $priority,
             'content' => $content,
             'user_id' => $assign,
+            'created_at' => Carbon::now(),
             'important' => $important
         ];
-        $this->repository->find($request['task_id'])->update($data);
-
+        $list = $this->listRepo->find($todo_list_id);
+        $user = $this->userRepo->find(Auth::user()->id);
+        $this->repository->find($id_task)->update($data);
+        $users = $this->userRepo->notiUser($todo_list_id);
+        Notification::send($users,new RepliedToThread($list,$data,'edit', $user));
         return redirect()->back();
     }
 
@@ -278,11 +288,16 @@ class TasksController extends Controller
      */
     public function deleteTask(Request $request)
     {
+        $todo_list_id = $request['todolistid'];
+        $users = $this->userRepo->notiUser($todo_list_id);
+        $user = $this->userRepo->find(Auth::user()->id);
+        $list = $this->listRepo->find($todo_list_id);
         $id = $request['task_id'];
         $task = $this->repository->find($id);
+        Notification::send($users,new RepliedToThread($list,$task,'delete',$user));
         $name = $task->name;
         $this->repository->delete($id);
-        return redirect()->back()->with('notif', 'Delete task: \''.$name.'\' success!');
+        return redirect()->back()->with('notif', 'Delete task: \'' . $name . '\' success!');
     }
 
     /**
@@ -290,14 +305,14 @@ class TasksController extends Controller
      */
     public function swapPosition(Request $request)
     {
-        if(isset($request['update'])){
+        if(isset($request['update'])) {
             foreach ($request['positions'] as $position){
                 $index = $position[0];
                 $newPosition = $position[1];
                 $this->repository->find($index)->update([
-                                            'position' => $newPosition,
-                                            'status_id' => $position[2]
-                                            ]);
+                    'position' => $newPosition,
+                    'status_id' => $position[2]
+                ]);
             }
             exit('success');
         }
@@ -308,8 +323,7 @@ class TasksController extends Controller
      */
     public function searchTask(Request $request)
     {
-        if($request->ajax())
-        {
+        if($request->ajax()) {
             $error = 'No data found';
             $output = '';
             $todo = '';
@@ -317,26 +331,21 @@ class TasksController extends Controller
             $done = '';
             $search = $request->search;
             $todo_list_id = $request->todo_list_id;
-            if($search != '')
-            {
+            if($search != '') {
                 $data=$this->repository->searchTask($search,$todo_list_id);
             }
-            else
-            {
+            else {
                 $data=$this->repository->getTaskByIdList($todo_list_id);
             }
             $total_row = $data->count();
-            if($total_row>0)
-            {
-                foreach ($data as $task)
-                {
+            if($total_row>0) {
+                foreach ($data as $task) {
                     $userTask = $this->userRepo->find($task->user_id);
                     $t = $userTask->name;
                     $t = str_split($t);
                     $temp = $t[0];
                     $check = 0;
-                    foreach ($t as $a)
-                    {
+                    foreach ($t as $a) {
                         if($check == 1) {
                             $temp.=$a;
                             $check = 0;
@@ -361,8 +370,7 @@ class TasksController extends Controller
                                         </span>
                                     </p>
                                 </li>';
-                    else
-                    if($task-> status_id == 2)
+                    else if($task-> status_id == 2)
                         $inprocess .= '<li data-index="'.$task->id.'" data-position="'.$task->position.'" data-status="'.$task->todo_list_id.' " class="has-dropdown">
                                     <p>
                                         <a style="color: black;" >'.$task->name.'</a>
@@ -378,8 +386,7 @@ class TasksController extends Controller
                                         </span>
                                     </p>
                                 </li>';
-                    else
-                        if($task-> status_id == 3)
+                    else if($task-> status_id == 3)
                             $done .= '<li data-index="'.$task->id.'" data-position="'.$task->position.'" data-status="'.$task->todo_list_id.' " class="has-dropdown">
                                     <p>
                                         <a style="color: black;" >'.$task->name.'</a>
@@ -425,8 +432,7 @@ class TasksController extends Controller
                     </div>
                     ';
             }
-            else
-            {
+            else {
                 $output .= '
                     <div class="col-md-4">
                         <article class="model">
@@ -455,11 +461,11 @@ class TasksController extends Controller
                     </div>
                     ';
             }
-            $data1 = array(
+            $data = array(
                 'table_data'  => $output,
-                'ten' => $data
+                'total_data'  => $total_row
             );
-            echo json_encode($data1);
+            echo json_encode($data);
         }
     }
 }

@@ -11,6 +11,9 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface CoworkerRepository extends RepositoryInterface
 {
-    //
+    /**
+     * @param $user_id
+     * @return list favourite co-worker
+     */
     public function findFavourites($user_id);
 }

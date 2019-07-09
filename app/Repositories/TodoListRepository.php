@@ -18,20 +18,20 @@ interface TodoListRepository extends RepositoryInterface
     public function create(array $data);
 
     /**
-     * @param $id
-     * @return mixed
+     * @param $id (user)
+     * @return lists user can view
      */
     public function findListCanView($id);
 
     /**
-     * @param $id
-     * @return mixed
+     * @param $id (list)
+     * @return find user who owner list
      */
     public function findOwner($id);
 
     /**
      * @param $data
-     * @return mixed
+     * @return access which created now
      */
     public function addAccess($data);
 

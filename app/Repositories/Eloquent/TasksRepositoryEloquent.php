@@ -45,11 +45,20 @@ class TasksRepositoryEloquent extends BaseRepository implements TasksRepository
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getTaskByIdList($id)
     {
         return Tasks::where('todo_list_id', $id)->orderBy('position')->get();
     }
 
+    /**
+     * @param $search
+     * @param $todo_list_id
+     * @return mixed
+     */
     public function searchTask($search,$todo_list_id)
     {
         return Tasks::where('name', 'like', '%'.$search.'%')->get();

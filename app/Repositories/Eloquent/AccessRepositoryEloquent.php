@@ -46,11 +46,20 @@ class AccessRepositoryEloquent extends BaseRepository implements AccessRepositor
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
+    /**
+     * @param $email
+     * @return mixed
+     */
     public function findUserByEmail($email)
     {
         return User::where('email', $email)->first();
     }
 
+    /**
+     * @param array $data
+     * @return mixed|void
+     * @throws \Prettus\Repository\Exceptions\RepositoryException
+     */
     public function create(array $data)
     {
         $model = $this->model->newInstance($data);
@@ -58,6 +67,11 @@ class AccessRepositoryEloquent extends BaseRepository implements AccessRepositor
         $this->resetModel();
     }
 
+    /**
+     * @param $id
+     * @param $idlist
+     * @return bool|mixed
+     */
     public function checkAcsExist($id, $idlist)
     {
         $accesses = Access::where('user_id', $id)->get();

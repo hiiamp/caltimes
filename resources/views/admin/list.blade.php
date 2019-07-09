@@ -1,63 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('admin.master')
 
-<head>
-    @include('admin.layouts.header')
-</head>
-<body>
-<!-- Sidenav -->
-<nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
-    <div class="container-fluid">
-        <!-- Toggler -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenav-collapse-main"
-                aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- Brand -->
-        <a class="navbar-brand pt-0" href="{{route('home')}}">
-            <h1>CALTIMES</h1>
-        </a>
-        <!-- Collapse -->
-        <div class="collapse navbar-collapse" id="sidenav-collapse-main">
-            <!-- Collapse header -->
-            <div class="navbar-collapse-header d-md-none">
-                <div class="row">
-                    <div class="col-6 collapse-brand">
-                        <a href="#">
-                            <img src="{{asset('admin/img/brand/blue.png')}}">
-                        </a>
-                    </div>
-                    <div class="col-6 collapse-close">
-                        <button type="button" class="navbar-toggler" data-toggle="collapse"
-                                data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false"
-                                aria-label="Toggle sidenav">
-                            <span></span>
-                            <span></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <!-- Navigation -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{route('admin.list')}}">
-                        <i class="ni ni-bullet-list-67 text-red"></i> List management
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.user')}}">
-                        <i class="ni ni-circle-08 text-pink"></i> User management
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<div class="main-content">
-
-    @include('admin.layouts.navbar')
-
+@section('content')
+    <title>Manage List</title>
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -65,7 +9,7 @@
                     <h3 class="mb-0">{{$lists->table_name}}</h3>
                 </div>
                 <div class="table-responsive">
-                    <table class="table align-items-center table-flush">
+                        <table id="customers">
                         <thead class="thead-light">
                         <tr>
                             <th scope="col">Code</th>
@@ -91,7 +35,7 @@
                                     {{$list->owner}}
                                 </td>
                                 <td>
-                                    <a href="{{route('admin.user').'?list_id='.$list->id}}" class="btn btn-sm btn-primary" style="color: whitesmoke"> Worker </a>
+                                    <a data-pjax href="{{route('admin.user').'?list_id='.$list->id}}" class="btn btn-sm btn-primary" style="color: whitesmoke"> Worker </a>
                                     @if(Auth::user()->level==2)
                                         <a data-index="{{$list->id}}" id="Delete{{$list->id}}" class="btn btn-sm btn-primary delete_l" style="color: whitesmoke"> Delete </a>
                                     @endif
@@ -115,10 +59,9 @@
             </div>
         </div>
     </div>
-</div>
 
 <dialog id="deletelistdialog1">
-    <form method="post" action="{{route('delete.list')}}">
+    <form data-pjax method="post" action="{{route('delete.list')}}">
         @csrf
         <div class="row form-group">
             <div class="col-md-12">
@@ -151,6 +94,8 @@
         document.querySelector('#delete_cancel1').onclick = function () {
             dialog_delete.close();
         };
+           $('#nav-list').css('background-color','grey') ;
+           $('#nav-user').css('background-color','white') ;
     });
 </script>
 <script type="text/javascript">
@@ -171,6 +116,4 @@
         });
     })
 </script>
-
-</body>
-</html>
+@endsection

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Client;
 
 use App\Repositories\CoworkerRepository;
+use App\Notifications\RepliedToThread;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Notification;
 use Response;
 use App\Entities\Access;
 use App\Entities\TodoList;
@@ -249,7 +252,7 @@ class TodoListsController extends Controller
         $tdLists = $this->repository->findByField('name', $name);
         foreach ($tdLists as $tdList)
         {
-            if($tdList->owner_id == Auth::user()->id){
+            if($tdList->owner_id == Auth::user()->id) {
                 return redirect()->back()->with([
                     'name_exist' => 'temp',
                     'name' => $name
@@ -263,11 +266,10 @@ class TodoListsController extends Controller
             'owner_id' => $user_id
         ];
         $this->repository->create($data);
-
         $todolists = $this->repository->findByField('name', $name);
         foreach ($todolists as $todolist)
         {
-            if($todolist->owner_id == Auth::user()->id){
+            if($todolist->owner_id == Auth::user()->id) {
                 $this->repository->addAccess([
                     'user_id' => $user_id,
                     'todo_list_id' => $todolist->id
@@ -330,7 +332,7 @@ class TodoListsController extends Controller
             }
         }
         $check_own = true;
-        if(!Auth::check()){
+        if(!Auth::check()) {
             $check_own = false;
             return view('user.todo_list.index')->with([
                 'list' => $todoList,
@@ -386,7 +388,8 @@ class TodoListsController extends Controller
             $search = $request->search;
             if ($search != '') {
                 $data = $this->repository->searchList($search);
-            } else {
+            }
+            else {
                 if(Auth::user()->level == User::isUser) {
                     $data = $this->repository->findListCanView(Auth::user()->id)->paginate(6);
                 }
@@ -395,15 +398,15 @@ class TodoListsController extends Controller
                 }
             }
             $total_row = $data->count();
-            if(Auth::user()->level == User::isUser)
-            {
+            if(Auth::user()->level == User::isUser) {
                 if ($total_row > 0) {
                     foreach ($data as $list) {
                         $list->owner = $this->userRepo->find($list->owner_id);
                         $list->member = $this->accessRepo->findByField('todo_list_id', $list->id)->count();
                         if ($list->is_public == 1) {
                             $is_public = '<p><span><i class="icon-globe"></i></span> Public <br></p>';
-                        } else {
+                        }
+                        else {
                             $is_public = '<p><span><i class="icon-globe"></i></span> Private <br></p>';
                         }
                         $output .= '
@@ -427,8 +430,7 @@ class TodoListsController extends Controller
                     $output = '<h2>No Data Found</h2>';
                 }
             }
-            else
-            {
+            else {
                 if ($total_row > 0) {
                     foreach ($data as $list) {
                         $list->owner = $this->userRepo->find($list->owner_id);
@@ -454,8 +456,7 @@ class TodoListsController extends Controller
                         ';
                     }
                 }
-                else
-                {
+                else {
                     $output = '<h2>No Data Found</h2>';
                 }
             }
@@ -474,9 +475,24 @@ class TodoListsController extends Controller
     public function deleteList(Request $request)
     {
         $admin = '';
-        $admin = @$request['checkadmin'];
-        $todo_list_id = $request['todo_list_id'];
+        if(isset($request['checkadmin']) && isset($request['todo_list_id'])) {
+            $admin = $request['checkadmin'];
+            $todo_list_id = $request['todo_list_id'];
+        }
+        else {
+            return redirect()->back()->with('notif', 'There was an error when you delete a list.');
+        }
+        $users = $this->userRepo->notiUser($todo_list_id);
+        $user = $this->userRepo->find(Auth::user()->id);
+        $task = [
+            'id'   => '0',
+            'name' => 'null',
+            'content' => 'null',
+            'user_id' => 'null',
+            'created_at' => Carbon::now(),
+        ];
         $list = $this->repository->find($request['todo_list_id']);
+        Notification::send($users,new RepliedToThread($list,$task,'delete a list',$user));
         $name = $list->name;
         $this->tasksRepo->deleteWhere([
             'todo_list_id' => $todo_list_id
@@ -489,6 +505,10 @@ class TodoListsController extends Controller
         return redirect()->route('home')->with('deleted_list', 'Deleted '.$name.' success!');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function moveListToRecycle(Request $request)
     {
         $admin = '';
@@ -515,18 +535,22 @@ class TodoListsController extends Controller
      */
     public function manageList(Request $request)
     {
+        $check1=0;
         if(Auth::user()->level == User::isAdmin){
             $user_id = $request['user_id'];
-            if($user_id!=null){
+            if($user_id!=null) {
                 $temp = $this->userRepo->find($user_id);
                 if($temp == null) {
                     $lists = $this->repository->allBuider()->paginate(5);
                     $lists->table_name = 'All list';
-                } else {
+                }
+                else {
                     $lists = $this->repository->findListCanView($user_id)->paginate(5);
                     $lists->table_name = 'List of user: '.$temp->name;
+                    $check1=1;
                 }
-            } else {
+            }
+            else {
                 $lists = $this->repository->allBuider()->paginate(5);
                 $lists->table_name = 'All list';
             }
@@ -546,12 +570,22 @@ class TodoListsController extends Controller
                 if($check == 1) {
                     $temp1.=$a;
                     $check = 0;
-                } else if( $a == ' ') $check = 1;
+                }
+                else if( $a == ' ') $check = 1;
             }
-            return view('admin.list', [
-                'lists' => $lists,
-                'character' => $temp1
-            ]);
+            if($check1 == 0) {
+                return view('admin.list', [
+                    'lists' => $lists,
+                    'character' => $temp1,
+                ]);
+            } else {
+                return view('admin.list', [
+                    'lists' => $lists,
+                    'character' => $temp1,
+                    'check' => $check1
+                ]);
+            }
+
         }
         return redirect()->route('home');
     }
@@ -562,12 +596,27 @@ class TodoListsController extends Controller
      */
     public function changeIsPublicList(Request $request)
     {
-        $id = $request['list_id'];
+        if(isset($request['list_id'])) {
+            $id = $request['list_id'];
+        }
+        else {
+            return redirect()->back()->with('notif', 'There was an error when you change status of a list.');
+        }
         $list = $this->repository->find($id);
         if($list->owner_id != Auth::user()->id){
             return redirect()->route('home');
         }
         $this->repository->changeIsPublicList($id);
+        $users = $this->userRepo->notiUser($id);
+        $user = $this->userRepo->find(Auth::user()->id);
+        $task = [
+            'id'   => '0',
+            'name' => 'null',
+            'content' => 'null',
+            'user_id' => 'null',
+            'created_at' => Carbon::now(),
+        ];
+        Notification::send($users,new RepliedToThread($list,$task,'change',$user));
         return redirect()->back();
     }
 }

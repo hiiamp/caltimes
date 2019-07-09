@@ -17,12 +17,11 @@
                                     <input class="btn btn-sm btn-primary worker_joined" value="Worker Joined" type="button">
                                     <input class="btn btn-sm btn-primary sharewith" value="Share with" type="button">
                                 @if($list->is_public == 0)
-                                    <button class="btn btn-sm btn-primary"><a style="color: white" href="{{route('private.list').'?list_id='.$list->id}}">Change to Public</a></button>
+                                    <button class="btn btn-sm btn-primary"><a data-pjax style="color: white" href="{{route('private.list').'?list_id='.$list->id}}">Change to Public</a></button>
                                 @else
-                                    <button class="btn btn-sm btn-primary"><a style="color: white" href="{{route('public.list').'?list_id='.$list->id}}">Change to Private</a></button>
+                                    <button class="btn btn-sm btn-primary"><a data-pjax style="color: white" href="{{route('public.list').'?list_id='.$list->id}}">Change to Private</a></button>
                                 @endif
                                 <input class="btn btn-sm btn-primary" id="delete_list" value="Delete" type="button">
-                                <input class="btn btn-sm btn-primary activities" value="Activities" type="button">
                             </p>
                         @else
                             @if($list->is_public == 1)
@@ -79,6 +78,32 @@
                 <input id="delete_submit" type="submit" value="Yes, I'm sure." class="btn btn-primary">
                 <input id="delete_cancel" type="reset" value="Cancel" class="btn btn-primary">
             </div>
+            </form>
+    </dialog>
+    <dialog id="activities">
+        <form method="" action="">
+            @csrf
+            <table id="customers">
+                @if(\Illuminate\Support\Facades\Auth::Check())
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Acticities</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if(auth()->user()->unreadNotifications->count())
+                        @foreach(auth()->user()->unreadNotifications as $notification)
+                        <tr>
+                            <td>
+                                {{$notification->data['user']['name']}} {{$notification->data['act']}} a task "{{$notification->data['task']['name']}}" on list "{{$notification->data['list']['name']}}" at {{$notification->data['task']['created_at']}}
+                            </td>
+                        </tr>
+                        @endforeach
+                    @endif
+                    </tbody>
+                @endif
+            </table>
+            <input id="noti_cancel" type="reset" value="Cancel" class="btn btn-primary">
         </form>
     </dialog>
     @if(session('message1'))
@@ -87,7 +112,6 @@
             dialog_share.showModal();
         </script>
     @endif
-
     <dialog id="dialogjoined">
         <div class="">
             <table id="customers">
@@ -204,12 +228,3 @@
     <h2 class="alert alert-warning" style="color: red">This function is developing</h2>
     <input id="acti_cancel" type="reset" value="Cancel" class="btn btn-primary">
 </dialog>
-<script>
-    var dialog_deve = document.querySelector('#activiesdialog');
-    document.querySelector('.activities').onclick = function() {
-        dialog_deve.showModal();
-    };
-    document.querySelector('#acti_cancel').onclick = function() {
-        dialog_deve.close();
-    };
-</script>

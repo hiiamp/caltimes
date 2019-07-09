@@ -92,7 +92,7 @@
 
 <!--Detail task-->
 <dialog id="detail-dialog">
-    <form method="post" action="{{route('edit.task')}}">
+    <form data-pjax method="post" action="{{route('edit.task')}}">
         @csrf()
         <div class="container">
             <div class="row">
@@ -103,7 +103,7 @@
                             <div class="contact-info-wrap-flex">
                                 <div class="con-info">
                                     <p><span><i class="icon-location-2"></i></span> Assign </p>
-                                    <input type="hidden" class="form-control" name="todo_list_id" value="{{$list->id}}">
+                                    <input type="hidden" id="todo_list_id" class="form-control" name="todo_list_id" value="{{$list->id}}">
                                     <input hidden="hidden" value="" id="task_edit_id" name="task_id" >
                                     <select class="btn" name="assign" class="custom-select" id="assign">
                                         @foreach($tasks as $task)
@@ -175,13 +175,13 @@
 
 <!--delete task-->
 <dialog id="deletetaskdialog">
-    <form method="post" action="{{route('delete.task')}}">
+    <form data-pjax method="post" action="{{route('delete.task')}}">
         @csrf
         <div class="row form-group">
             <div class="col-md-12">
                 <p>You really want to delete this task?</p>
                 <input id="delete_task_id" type="hidden" class="form-control" name="task_id" value="">
-                <input type="hidden" class="form-control" name="todo_list_id" value="{{$list->id}}">
+                <input type="hidden" id="todolistid" class="form-control" name="todolistid" value="{{$list->id}}">
             </div>
         </div>
         <div class="form-group">
@@ -192,7 +192,7 @@
 </dialog>
 <!--Create task-->
 <dialog id="create-task">
-    <form method="post" action="{{route('create_task')}}">
+    <form data-pjax method="post" action="{{route('create_task')}}">
         @csrf
         <div class="row form-group">
             <div class="col-md-12">

@@ -227,19 +227,28 @@ class UsersController extends Controller
      */
     public function manageUser(Request $request)
     {
-        if(Auth::user()->level == User::isAdmin){
-            $list_id = $request['list_id'];
-            if($list_id != null){
+        $check1 = 0;
+        if(Auth::user()->level == User::isAdmin) {
+            if(isset($request['list_id'])) {
+                $list_id = $request['list_id'];
+            }
+            else {
+                $list_id = null;
+            }
+            if($list_id != null) {
                 $temp = null;
                 $temp = $this->todoListRepo->find($list_id);
-                if($temp == null){
+                if($temp == null) {
                     $users = $this->repository->allBuilder()->paginate(5);
                     $users->name_table = 'All User';
-                } else {
+                }
+                else {
                     $users = $this->todoListRepo->findUserShared($list_id)->paginate(5);
                     $users->name_table = 'Worker joined: '.$temp->name;
+                    $check1 = 1;
                 }
-            } else{
+            }
+            else {
                 $users = $this->repository->allBuilder()->paginate(5);
                 $users->name_table = 'All User';
             }
@@ -254,10 +263,18 @@ class UsersController extends Controller
                     $check = 0;
                 } else if( $a == ' ') $check = 1;
             }
-            return view('admin.user', [
-                'users' => $users,
-                'character' => $temp1
-            ]);
+            if($check1 == 0) {
+                return view('admin.user', [
+                    'users' => $users,
+                    'character' => $temp1,
+                ]);
+            } else {
+                return view('admin.user', [
+                    'users' => $users,
+                    'character' => $temp1,
+                    'check' => $check1
+                ]);
+            }
         }
         return redirect()->route('home');
     }
@@ -267,7 +284,7 @@ class UsersController extends Controller
      */
     public function profileUser()
     {
-        if(Auth::user()->level > User::isNotActive){
+        if(Auth::user()->level > User::isNotActive) {
             $users = $this->repository->findCoWorker(Auth::user()->id)->paginate(5);
             foreach ($users as $u)
             {
@@ -306,6 +323,13 @@ class UsersController extends Controller
      */
     public function deleteUser(Request $request)
     {
+        if(isset($request['user_id'])) {
+            $user_id = $request['user_id'];
+        }
+        else {
+            return redirect()->back()->with('notif', 'There was an error when you delete a user.');
+        }
+        $this->accessRepo->deleteWhere(['user_id'=> $user_id]);
         $user_id = $request['user_id'];
         if($user_id === '') return redirect()->back()->with('notif', 'Have an error when delete user!');
         $this->accessRepo->deleteWhere(['user_id' => $user_id]);
@@ -357,7 +381,8 @@ class UsersController extends Controller
             $search = $request->search;
             if ($search != '') {
                 $data = $this->repository->searchUser($search);
-            } else {
+            }
+            else {
                 $data = $this->repository->allBuilder()->paginate(5);
             }
             $total_row = $data->count();
@@ -384,7 +409,8 @@ class UsersController extends Controller
                         </tr>
                         ';
                 }
-            } else {
+            }
+            else {
                 $output = '<h2>No Data Found</h2>';
             }
             $data = array(

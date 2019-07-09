@@ -1,64 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    @include('admin.layouts.header')
-</head>
-
-<body>
-<!-- Sidenav -->
-<nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
-    <div class="container-fluid">
-        <!-- Toggler -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenav-collapse-main"
-                aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- Brand -->
-        <a class="navbar-brand pt-0" href="{{route('home')}}">
-            <h1>CALTIMES</h1>
-        </a>
-        <!-- Collapse -->
-        <div class="collapse navbar-collapse" id="sidenav-collapse-main">
-            <!-- Collapse header -->
-            <div class="navbar-collapse-header d-md-none">
-                <div class="row">
-                    <div class="col-6 collapse-brand">
-                        <a href="#">
-                            <img src="{{asset('admin/img/brand/blue.png')}}">
-                        </a>
-                    </div>
-                    <div class="col-6 collapse-close">
-                        <button type="button" class="navbar-toggler" data-toggle="collapse"
-                                data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false"
-                                aria-label="Toggle sidenav">
-                            <span></span>
-                            <span></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <!-- Navigation -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.list')}}">
-                        <i class="ni ni-bullet-list-67 text-red"></i> List management
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{route('admin.user')}}">
-                        <i class="ni ni-circle-08 text-pink"></i> User management
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<div class="main-content">
-
-    @include('admin.layouts.navbar')
-
+@extends('admin.master')
+@section('content')
+    <title>Manage User</title>
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -66,7 +8,7 @@
                     <h3 class="mb-0">{{$users->name_table}}</h3>
                 </div>
                 <div class="table-responsive">
-                    <table class="table align-items-center table-flush">
+                        <table class="table align-items-center table-flush">
                         <thead class="thead-light">
                         <tr>
                             <th scope="col">Name</th>
@@ -99,7 +41,7 @@
                                 </td>
                             @endif
                             <td>
-                                <a href="{{route('admin.list').'?user_id='.$user->id}}" class="btn btn-sm btn-primary" style="color: whitesmoke"> List joined </a>
+                                <a data-pjax href="{{route('admin.list').'?user_id='.$user->id}}" class="btn btn-sm btn-primary" style="color: whitesmoke"> List joined </a>
                                 @if($user->level != 2)
                                     <a data-index="{{$user->id}}" class="btn btn-sm btn-primary delete_u" style="color: whitesmoke"> Delete </a>
                                 @endif
@@ -123,10 +65,9 @@
             </div>
         </div>
     </div>
-</div>
 
 <dialog id="deleteuserdialog1">
-    <form method="post" action="{{route('delete.user')}}">
+    <form data-pjax method="post" action="{{route('delete.user')}}">
         @csrf
         <div class="row form-group">
             <div class="col-md-12">
@@ -158,6 +99,8 @@
         document.querySelector('#delete_cancel2').onclick = function () {
             dialog_delete2.close();
         };
+        $('#nav-user').css('background-color','grey') ;
+        $('#nav-list').css('background-color','white') ;
     });
 </script>
 
@@ -180,5 +123,4 @@
     })
 </script>
 @include('user.layouts.notification')
-</body>
-</html>
+@endsection

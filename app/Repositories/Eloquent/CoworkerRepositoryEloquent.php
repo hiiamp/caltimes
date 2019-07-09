@@ -46,6 +46,10 @@ class CoworkerRepositoryEloquent extends BaseRepository implements CoworkerRepos
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
+    /**
+     * @param $user_id
+     * @return list favourite co-worker
+     */
     public function findFavourites($user_id)
     {
         return User::select('users.id', 'name', 'email')->join('coworkers', 'user_co_id', '=', 'users.id')->where('user_id', $user_id)->get();

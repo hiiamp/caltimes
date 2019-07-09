@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
@@ -13,7 +14,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  */
 class Tasks extends Model implements Transformable
 {
-    use TransformableTrait;
+    use TransformableTrait, Notifiable;
 
     /**
      * define constant id user UnAssigned
@@ -37,8 +38,7 @@ class Tasks extends Model implements Transformable
     protected $hidden = [
     ];
 
-    public function todo_list()
-    {
+    public function todo_list() {
         return $this->belongsTo('App\Entities\TodoList','todo_list_id','id');
     }
 }

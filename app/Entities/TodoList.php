@@ -38,7 +38,8 @@ class TodoList extends Model implements Transformable
         return TodoList::where('link', $code)->first();
     }
 
-    public function tasks(){
+    public function tasks()
+    {
         return $this->hasMany('App\Entities\Tasks','todo_list_id','id');
     }
 
