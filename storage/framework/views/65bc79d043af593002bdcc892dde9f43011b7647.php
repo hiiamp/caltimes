@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <?php echo $__env->make('admin.layouts.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-</head>
-
-<body>
-<?php echo $__env->make('admin.layouts.sidenav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<div class="main-content">
-
-    <?php echo $__env->make('admin.layouts.navbar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php $__env->startSection('content'); ?>
+    <title>Manage List</title>
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -17,7 +7,7 @@
                     <h3 class="mb-0"><?php echo e($lists->table_name); ?></h3>
                 </div>
                 <div class="table-responsive">
-                    <table class="table align-items-center table-flush">
+                        <table id="customers">
                         <thead class="thead-light">
                         <tr>
                             <th scope="col">Code</th>
@@ -46,8 +36,8 @@
 
                                 </td>
                                 <td>
-                                    <a href="<?php echo e(route('admin.user').'?list_id='.$list->id); ?>" class="btn btn-sm btn-primary" style="color: whitesmoke"> Worker </a>
-                                    <?php if(\Illuminate\Support\Facades\Auth::user()->level==2): ?>
+                                    <a data-pjax href="<?php echo e(route('admin.user').'?list_id='.$list->id); ?>" class="btn btn-sm btn-primary" style="color: whitesmoke"> Worker </a>
+                                    <?php if(Auth::user()->level==2): ?>
                                         <a data-index="<?php echo e($list->id); ?>" id="Delete<?php echo e($list->id); ?>" class="btn btn-sm btn-primary delete_l" style="color: whitesmoke"> Delete </a>
                                     <?php endif; ?>
                                 </td>
@@ -71,10 +61,9 @@
             </div>
         </div>
     </div>
-</div>
 
 <dialog id="deletelistdialog1">
-    <form method="post" action="<?php echo e(route('delete.list')); ?>">
+    <form data-pjax method="post" action="<?php echo e(route('delete.list')); ?>">
         <?php echo csrf_field(); ?>
         <div class="row form-group">
             <div class="col-md-12">
@@ -107,10 +96,28 @@
         document.querySelector('#delete_cancel1').onclick = function () {
             dialog_delete.close();
         };
+           $('#nav-list').css('background-color','grey') ;
+           $('#nav-user').css('background-color','white') ;
     });
 </script>
+<script type="text/javascript">
+    $('#search').on('keyup',function(){
+        let search = $('#search').val();
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url : '<?php echo e(route('searchList')); ?>',
+            dataType: 'json',
+            data:{'search':search},
+            success:function(data){
+                $('tbody').html(data.table_data);
+                console.log(data);
+                console.log(data.total_data);
+            }
+        });
+    })
+</script>
+<?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('admin.layouts.script', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-</body>
-</html>
-<?php /**PATH /home/truongphi/internPHP/bigproject/todo-list/resources/views/admin/list.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('admin.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /home/truongphi/internPHP/bigproject/todo-list/resources/views/admin/list.blade.php ENDPATH**/ ?>

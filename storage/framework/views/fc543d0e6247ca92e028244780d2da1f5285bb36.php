@@ -12,16 +12,16 @@
                     <div class="product-entry">
                         <div class="product-img">
                             <article>
-                                <h2><?php echo e($list->name); ?></h2>
-                                <p class="admin"><span><?php echo e($list->created_at); ?></span></p>
+                                <h3 class="title_item_home"><?php echo e($list->name); ?></h3>
+                                <p class="admin margin_home"><span><?php echo e($list->created_at); ?></span></p>
                                 <?php if($list->is_public==1): ?>
-                                    <p><span><i class="icon-globe"></i></span> Public <br></p>
+                                    <p class="margin_home"><span><i class="icon-globe"></i></span> Public <br></p>
                                 <?php else: ?>
-                                    <p><span><i class="icon-globe"></i></span> Private <br></p>
+                                    <p class="margin_home"><span><i class="icon-globe"></i></span> Private <br></p>
                                 <?php endif; ?>
-                                <p><span><i class="icon-location-2"></i></span> Created By: <?php echo e($list->owner->name); ?> <br></p>
-                                <p><span><i class="icon-eye2"></i></span> Member: <?php echo e($list->member); ?> <br></p>
-                                <p><a href="<?php echo e(route('link.board', ['code' => $list->link])); ?>" class="btn btn-primary btn-outline with-arrow">See more</a></p>
+                                <p class="margin_home"><span><i class="icon-location-2"></i></span> <?php echo e($list->owner->name); ?> <br></p>
+                                <p class="margin_home"><span><i class="icon-eye2"></i></span> Member: <?php echo e($list->member); ?> <br></p>
+                                <p class="margin_home"><a data-pjax href="<?php echo e(route('link.board', ['code' => $list->link])); ?>" class="btn btn-primary btn-outline with-arrow">See more</a></p>
                                 <!--<div class="cart">
                                     <p class="breadcrumbs" style="font-size: small">
                                         <span>
@@ -39,7 +39,7 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             <div class="row">
-                <div class="col-md-12 text-center">
+                <div data-pjax class="col-md-12 text-center">
                     <?php echo e($lists->links()); ?>
 
                     <!--<ul class="pagination">
@@ -69,7 +69,7 @@
     </form>
 </dialog>
 <script>
-    var dialog1 = document.querySelector('#sharewithdialog');
+    /*var dialog1 = document.querySelector('#sharewithdialog');
     document.querySelector('.sharewith').onclick = function() {
         dialog1.showModal();
     };
@@ -78,7 +78,7 @@
     };
     document.querySelector('#cancelshare').onclick = function() {
         dialog1.close();
-    };
+    };*/
 </script>
 
 <script type="text/javascript">

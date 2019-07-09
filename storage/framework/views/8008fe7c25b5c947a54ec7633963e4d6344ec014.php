@@ -16,8 +16,10 @@
 <meta name="twitter:image" content="" />
 <meta name="twitter:url" content="" />
 <meta name="twitter:card" content="" />
+<meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
 <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600" rel="stylesheet">
+
 <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400" rel="stylesheet">
 <!-- Animate.css -->
 <link rel="stylesheet" href="<?php echo e(asset('user/css/animate.css')); ?>">
@@ -31,14 +33,18 @@
 
 <!-- Owl Carousel -->
 <link rel="stylesheet" href="<?php echo e(asset('user/css/owl.carousel.min.css')); ?>">
+
 <link rel="stylesheet" href="<?php echo e(asset('user/css/owl.theme.default.min.css')); ?>">
 
 <!-- Theme style  -->
 <link rel="stylesheet" href="<?php echo e(asset('user/css/style.css')); ?>">
+
 <link rel="stylesheet" href="<?php echo e(asset('user/css/mycss.css')); ?>">
 
 <!-- jQuery -->
 <script src="<?php echo e(asset('user/js/jquery.min.js')); ?>"></script>
+
+<script src="<?php echo e(asset('user/js/jquery.pjax.js')); ?>"></script>
 <!-- jQuery Easing -->
 <script src="<?php echo e(asset('user/js/jquery.easing.1.3.js')); ?>"></script>
 <!-- Bootstrap -->
@@ -53,19 +59,28 @@
 <script src="<?php echo e(asset('user/js/owl.carousel.min.js')); ?>"></script>
 <!-- Magnific Popup -->
 <script src="<?php echo e(asset('user/js/jquery.magnific-popup.min.js')); ?>"></script>
+
 <script src="<?php echo e(asset('user/js/magnific-popup-options.js')); ?>"></script>
 <!-- Counters -->
 <script src="<?php echo e(asset('user/js/jquery.countTo.js')); ?>"></script>
 <!-- Main -->
 <script src="<?php echo e(asset('user/js/main.js')); ?>"></script>
+
 <script src="<?php echo e(asset('user/js/modernizr-2.6.2.min.js')); ?>"></script>
+
 <script src="<?php echo e(asset('user/js/respond.min.js')); ?>"></script>
-<script language="JavaScript" type="text/javascript" src="<?php echo e(asset('user/js/query-1.12.4.js')); ?>"></script>
+
+<link rel="stylesheet"  src="<?php echo e(asset('css/app.css')); ?>">
+
 <script language="JavaScript" type="text/javascript" src="<?php echo e(asset('user/js/jquery-ui.js')); ?>"></script>
+
 <script type="text/javascript">
     var token = '<?php echo e(csrf_token()); ?>';
 </script>
+
 <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+
 <script type="text/javascript">
     $.ajaxSetup({ headers: { 'csrftoken' : '<?php echo e(csrf_token()); ?>' } });
-</script><?php /**PATH /home/truongphi/internPHP/bigproject/todo-list/resources/views/user/layouts/header.blade.php ENDPATH**/ ?>
+</script>
+<?php /**PATH /home/truongphi/internPHP/bigproject/todo-list/resources/views/user/layouts/header.blade.php ENDPATH**/ ?>

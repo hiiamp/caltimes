@@ -14,22 +14,28 @@
                                 <h4>Your list is Private</h4>
                             <?php endif; ?>
                             <p class="breadcrumbs" style="font-size: large">
-                                    <span><a class="sharewith">Share with</a></span>
+                                    <input class="btn btn-sm btn-primary worker_joined" value="Worker Joined" type="button">
+                                    <input class="btn btn-sm btn-primary sharewith" value="Share with" type="button">
                                 <?php if($list->is_public == 0): ?>
-                                    <span><a href="<?php echo e(route('private.list').'?list_id='.$list->id); ?>">Change to Public</a></span>
+                                    <button class="btn btn-sm btn-primary"><a data-pjax style="color: white" href="<?php echo e(route('private.list').'?list_id='.$list->id); ?>">Change to Public</a></button>
                                 <?php else: ?>
-                                    <span><a href="<?php echo e(route('public.list').'?list_id='.$list->id); ?>">Change to Private</a></span>
+                                    <button class="btn btn-sm btn-primary"><a data-pjax style="color: white" href="<?php echo e(route('public.list').'?list_id='.$list->id); ?>">Change to Private</a></button>
                                 <?php endif; ?>
-                                <span><a id="delete_list">Delete</a></span>
+                                <input class="btn btn-sm btn-primary" id="delete_list" value="Delete" type="button">
+                                <input class="btn btn-sm btn-primary activities" value="Activities" type="button">
                             </p>
                         <?php else: ?>
-                            <span><a hidden="hidden" class="sharewith">Share with</a></span>
-                            <span><a hidden="hidden" id="delete_list">Delete</a></span>
                             <?php if($list->is_public == 1): ?>
                                 <h4>This list is Public</h4>
                             <?php else: ?>
                                 <h4>This list is Private</h4>
                             <?php endif; ?>
+                            <p class="breadcrumbs" style="font-size: large">
+                                <input class="btn btn-sm btn-primary worker_joined" value="Worker Joined" type="button">
+                                <span><a hidden="hidden" class="sharewith">Share with</a></span>
+                                <span><a hidden="hidden" id="delete_list">Delete</a></span>
+                                <input class="btn btn-sm btn-primary activities" value="Activities" type="button">
+                            </p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -55,25 +61,26 @@
             <div class="form-group">
                 <input id="share" type="submit" value="Share" class="btn btn-primary">
                 <input id="cancelshare" type="reset" value="Cancel" class="btn btn-primary">
+                <input id="myfavourite" type="reset" value="My Favourite Co-Worker" class="btn btn-primary">
             </div>
         </form>
     </dialog>
 
     <dialog id="deletelistdialog">
-            <form method="post" action="<?php echo e(route('delete.list')); ?>">
-                <?php echo csrf_field(); ?>
-                <div class="row form-group">
-                    <div class="col-md-12">
-                        <p>You really want to delete this list?</p>
-                        <input id="todo_list_id" type="hidden" class="form-control" name="todo_list_id" value="<?php echo e($list->id); ?>">
-                    </div>
+        <form method="post" action="<?php echo e(route('recycle.list')); ?>">
+            <?php echo csrf_field(); ?>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <p>You really wanna move this list to your recycle?</p>
+                    <input id="todo_list_id" type="hidden" class="form-control" name="todo_list_id" value="<?php echo e($list->id); ?>">
                 </div>
-                <div class="form-group">
-                    <input id="delete_submit" type="submit" value="Yes, I'm sure." class="btn btn-primary">
-                    <input id="delete_cancel" type="reset" value="Cancel" class="btn btn-primary">
-                </div>
-            </form>
-        </dialog>
+            </div>
+            <div class="form-group">
+                <input id="delete_submit" type="submit" value="Yes, I'm sure." class="btn btn-primary">
+                <input id="delete_cancel" type="reset" value="Cancel" class="btn btn-primary">
+            </div>
+        </form>
+    </dialog>
     <?php if(session('message1')): ?>
         <script>
             var dialog_share = document.querySelector('#sharewithdialog');
@@ -81,5 +88,133 @@
         </script>
     <?php endif; ?>
 
+    <dialog id="dialogjoined">
+        <div class="">
+            <table id="customers">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Number of Tasks</th>
+                    <th scope="col">Option</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <?php $__currentLoopData = $list_users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <tr>
+                            <td>
+                                <?php echo e($u->name); ?><?php if($u->id == @Auth::user()->id): ?> (me) <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php echo e($u->email); ?>
+
+                            </td>
+                            <td>
+                                <?php echo e($u->countTask); ?>
+
+                            </td>
+                            <td>
+                                <?php if(Auth::check()): ?>
+                                <form>
+                                    <?php if($u->id == Auth::user()->id): ?>
+                                        <?php if($own == true): ?>
+                                            <a href="<?php echo e(route('profile')); ?>" class="btn btn-sm btn-primary" style="color: white"> My Profile </a>
+                                            <input id="outlist" hidden="hidden" disabled>
+                                        <?php else: ?>
+                                            <input id="outlist" data-wk="yes" style="color: #ffffff" type="reset" class="btn btn-sm btn-primary" data-id="<?php echo e($u->id); ?>" value="Leave this list?">
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <?php if($u->isCo != 0): ?>
+                                            <input data-wk="yes" type="reset" class="listwk btn btn-sm btn-primary" data-id="<?php echo e($u->id); ?>" value="Remove favourite">
+                                        <?php else: ?>
+                                            <input data-wk="no" type="reset" class="listwk btn btn-sm btn-primary" data-id="<?php echo e($u->id); ?>" value="Add favourite">
+                                        <?php endif; ?>
+                                        <?php if($own == true): ?>
+                                            <input data-wk="yes" type="reset" class="sharewk btn btn-sm btn-primary" data-id="<?php echo e($u->id); ?>" list-id="<?php echo e($list->id); ?>" value="Kick Out?">
+                                        <?php else: ?>
+                                            <input class="sharewk" hidden="hidden" disabled>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </form>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </tbody>
+            </table>
+            <button id="joinedcancel" class="btn btn-sm btn-primary">Cancel</button>
+        </div>
+    </dialog>
+
+    <!-- notification dialog -->
+    <dialog id="out_list_dialog">
+        <form method="post" action="<?php echo e(route('out.list')); ?>">
+            <?php echo csrf_field(); ?>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <p>You really want to out this list?</p>
+                    <input type="hidden" class="form-control" name="todo_list_id" value="<?php echo e($list->id); ?>">
+                </div>
+            </div>
+            <div class="form-group">
+                <input id="delete_access_submit" type="submit" value="Yes, I'm sure." class="btn btn-primary">
+                <input id="delete_access_cancel" type="reset" value="Cancel" class="btn btn-primary">
+            </div>
+        </form>
+    </dialog>
+
+    <!-- favourite coworker share dialog -->
+    <?php if(Auth::check()): ?>
+    <dialog id="myfavourite_dialog">
+        <div class="">
+            <table id="customers">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Option</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $__currentLoopData = $favourites; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <tr>
+                        <td>
+                            <?php echo e($u->name); ?>
+
+                        </td>
+                        <td>
+                            <?php echo e($u->email); ?>
+
+                        </td>
+                        <td>
+                            <form>
+                                <?php if($u->shared == 0): ?>
+                                    <input data-fv="no" type="reset" class="sharefv btn btn-sm btn-primary" data-id="<?php echo e($u->id); ?>" list-id="<?php echo e($list->id); ?>" value="Share this list">
+                                <?php else: ?>
+                                    <input data-fv="yes" type="reset" class="sharefv btn btn-sm btn-primary" data-id="<?php echo e($u->id); ?>" list-id="<?php echo e($list->id); ?>" value="UnShare">
+                                <?php endif; ?>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </tbody>
+            </table>
+            <button id="fvdialogcancel" class="btn btn-sm btn-primary">Cancel</button>
+        </div>
+    </dialog>
+    <?php endif; ?>
 </section>
+<dialog id="activiesdialog">
+    <h2 class="alert alert-warning" style="color: red">This function is developing</h2>
+    <input id="acti_cancel" type="reset" value="Cancel" class="btn btn-primary">
+</dialog>
+<script>
+    var dialog_deve = document.querySelector('#activiesdialog');
+    document.querySelector('.activities').onclick = function() {
+        dialog_deve.showModal();
+    };
+    document.querySelector('#acti_cancel').onclick = function() {
+        dialog_deve.close();
+    };
+</script>
 <?php /**PATH /home/truongphi/internPHP/bigproject/todo-list/resources/views/user/todo_list/layouts/header.blade.php ENDPATH**/ ?>

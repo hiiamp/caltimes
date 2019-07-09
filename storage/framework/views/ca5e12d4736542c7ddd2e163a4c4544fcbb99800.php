@@ -11,8 +11,19 @@
 <link type="text/css" href="<?php echo e(asset('admin/css/argon.css?v=1.0.0')); ?>" rel="stylesheet">
 <!-- jQuery -->
 <script src="<?php echo e(asset('user/js/jquery.min.js')); ?>"></script>
+
+
 <!-- jQuery Easing -->
 <script src="<?php echo e(asset('user/js/jquery.easing.1.3.js')); ?>"></script>
-<script language="JavaScript" type="text/javascript" src="<?php echo e(asset('user/js/query-1.12.4.js')); ?>"></script>
 <script language="JavaScript" type="text/javascript" src="<?php echo e(asset('user/js/jquery-ui.js')); ?>"></script>
+<script src="<?php echo e(asset('admin/vendor/jquery/dist/jquery.min.js')); ?>"></script>
+<script src="<?php echo e(asset('admin/vendor/bootstrap/dist/js/bootstrap.bundle.min.js')); ?>"></script>
+<!-- Optional JS -->
+<script src="<?php echo e(asset('admin/vendor/chart.js/dist/Chart.min.js')); ?>"></script>
+<script src="<?php echo e(asset('admin/vendor/chart.js/dist/Chart.extension.js')); ?>"></script>
+<!-- Argon JS -->
+<script src="<?php echo e(asset('admin/js/argon.js?v=1.0.0')); ?>"></script>
+<script src="<?php echo e(asset('user/js/jquery.pjax.js')); ?>"></script>
+
+<link rel="stylesheet" href="<?php echo e(asset('user/css/mycss.css')); ?>">
 <?php /**PATH /home/truongphi/internPHP/bigproject/todo-list/resources/views/admin/layouts/header.blade.php ENDPATH**/ ?>

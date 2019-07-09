@@ -1,16 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <?php echo $__env->make('admin.layouts.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-</head>
-
-<body>
-<?php echo $__env->make('admin.layouts.sidenav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-
-<div class="main-content">
-
-    <?php echo $__env->make('admin.layouts.navbar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php $__env->startSection('content'); ?>
+    <title>Manage User</title>
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -18,7 +7,7 @@
                     <h3 class="mb-0"><?php echo e($users->name_table); ?></h3>
                 </div>
                 <div class="table-responsive">
-                    <table class="table align-items-center table-flush">
+                        <table class="table align-items-center table-flush">
                         <thead class="thead-light">
                         <tr>
                             <th scope="col">Name</th>
@@ -31,6 +20,10 @@
                         </thead>
                         <tbody>
                         <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php if($user->id == 1): ?> <?php continue; ?>
+                            <?php endif; ?>
+                            <?php if($user->level == 3): ?> <?php continue; ?>
+                            <?php endif; ?>
                         <tr>
                             <td>
                                 <?php echo e($user->name); ?>
@@ -49,8 +42,8 @@
                                 </td>
                             <?php endif; ?>
                             <td>
-                                <a href="<?php echo e(route('admin.list').'?user_id='.$user->id); ?>" class="btn btn-sm btn-primary" style="color: whitesmoke"> List joined </a>
-                                <?php if(\Illuminate\Support\Facades\Auth::user()->level==2): ?>
+                                <a data-pjax href="<?php echo e(route('admin.list').'?user_id='.$user->id); ?>" class="btn btn-sm btn-primary" style="color: whitesmoke"> List joined </a>
+                                <?php if($user->level != 2): ?>
                                     <a data-index="<?php echo e($user->id); ?>" class="btn btn-sm btn-primary delete_u" style="color: whitesmoke"> Delete </a>
                                 <?php endif; ?>
                             </td>
@@ -74,10 +67,9 @@
             </div>
         </div>
     </div>
-</div>
 
 <dialog id="deleteuserdialog1">
-    <form method="post" action="<?php echo e(route('delete.user')); ?>">
+    <form data-pjax method="post" action="<?php echo e(route('delete.user')); ?>">
         <?php echo csrf_field(); ?>
         <div class="row form-group">
             <div class="col-md-12">
@@ -109,11 +101,30 @@
         document.querySelector('#delete_cancel2').onclick = function () {
             dialog_delete2.close();
         };
+        $('#nav-user').css('background-color','grey') ;
+        $('#nav-list').css('background-color','white') ;
     });
 </script>
 
-<?php echo $__env->make('admin.layouts.script', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<script type="text/javascript">
+    $('#search').on('keyup',function(){
+        let search = $('#search').val();
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url : '<?php echo e(route('searchUser')); ?>',
+            dataType: 'json',
+            data:{'search':search},
+            success:function(data){
+                $('tbody').html(data.table_data);
+                console.log(data);
+                console.log(data.total_data);
+            }
+        });
+    })
+</script>
+<?php echo $__env->make('user.layouts.notification', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php $__env->stopSection(); ?>
 
-</body>
-</html>
-<?php /**PATH /home/truongphi/internPHP/bigproject/todo-list/resources/views/admin/user.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('admin.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /home/truongphi/internPHP/bigproject/todo-list/resources/views/admin/user.blade.php ENDPATH**/ ?>

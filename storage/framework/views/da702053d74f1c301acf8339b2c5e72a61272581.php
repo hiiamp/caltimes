@@ -18,8 +18,12 @@
                 <div class="col-md-4 animate-box"></div>
                 <div class="col-md-4 animate-box">
                     <ul>
-                        <li><a href="#">Board</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li>
+                            <a href="<?php echo e(route('register')); ?>" class="btn btn-primary btn-lg btn-custom">
+                                Register
+                                <i class="icon-arrow-right3"></i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -123,7 +127,8 @@ endif; ?>
                                 <input type="submit" value="Sign in" class="btn btn-primary">
                             </div>
                             <div class="col-md-4">
-                                <a href="<?php echo e(route('facebook.login')); ?>">Login with Facebook</a>
+                                <!--<a href="<?php echo e(route('facebook.login')); ?>">Login with Facebook</a>-->
+                                <a class = "developing">Login with Facebook</a>
                             </div>
                             <div class="col-md-4">
                                 <a href="<?php echo e(route('register')); ?>">Create an account?</a>
@@ -135,7 +140,19 @@ endif; ?>
         </div>
     </div>
 </div>
-
+<dialog id="develop">
+    <h2 class="alert alert-danger">This function is developing: <br> Sorry for the inconvenience!</h2>
+    <input id="deve_cancel" type="reset" value="Cancel" class="btn btn-primary">
+</dialog>
+<script>
+    var dialog_deve = document.querySelector('#develop');
+    document.querySelector('.developing').onclick = function() {
+        dialog_deve.showModal();
+    };
+    document.querySelector('#deve_cancel').onclick = function() {
+        dialog_deve.close();
+    };
+</script>
 <?php echo $__env->make('user.layouts.script', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 </body>
 </html>

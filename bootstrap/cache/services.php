@@ -32,10 +32,11 @@
     28 => 'Prettus\\Repository\\Providers\\RepositoryServiceProvider',
     29 => 'App\\Providers\\AppServiceProvider',
     30 => 'App\\Providers\\AuthServiceProvider',
-    31 => 'App\\Providers\\EventServiceProvider',
-    32 => 'App\\Providers\\RouteServiceProvider',
-    33 => 'Prettus\\Repository\\Providers\\RepositoryServiceProvider',
-    34 => 'Laravel\\Socialite\\SocialiteServiceProvider',
+    31 => 'App\\Providers\\BroadcastServiceProvider',
+    32 => 'App\\Providers\\EventServiceProvider',
+    33 => 'App\\Providers\\RouteServiceProvider',
+    34 => 'Prettus\\Repository\\Providers\\RepositoryServiceProvider',
+    35 => 'Laravel\\Socialite\\SocialiteServiceProvider',
   ),
   'eager' => 
   array (
@@ -55,9 +56,10 @@
     13 => 'Prettus\\Repository\\Providers\\RepositoryServiceProvider',
     14 => 'App\\Providers\\AppServiceProvider',
     15 => 'App\\Providers\\AuthServiceProvider',
-    16 => 'App\\Providers\\EventServiceProvider',
-    17 => 'App\\Providers\\RouteServiceProvider',
-    18 => 'Prettus\\Repository\\Providers\\RepositoryServiceProvider',
+    16 => 'App\\Providers\\BroadcastServiceProvider',
+    17 => 'App\\Providers\\EventServiceProvider',
+    18 => 'App\\Providers\\RouteServiceProvider',
+    19 => 'Prettus\\Repository\\Providers\\RepositoryServiceProvider',
   ),
   'deferred' => 
   array (
