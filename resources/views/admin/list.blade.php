@@ -46,7 +46,7 @@
                     </table>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 text-center" id="paginate-div">
+                    <div data-pjax class="col-md-12 text-center" id="paginate-div">
                     {{$lists->links()}}
                     <!--<ul class="pagination">
                         <li class="disabled"><a href="#">&laquo;</a></li>
