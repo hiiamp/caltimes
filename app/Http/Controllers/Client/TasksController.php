@@ -395,7 +395,7 @@ class TasksController extends Controller
                                     </p>
                                 </li>';
                     else if($task-> status_id == 3)
-                            $done .= '<li data-index="'.$task->id.'" data-position="'.$task->position.'" data-status="'.$task->todo_list_id.' " class="has-dropdown">
+                        $done .= '<li data-index="'.$task->id.'" data-position="'.$task->position.'" data-status="'.$task->todo_list_id.' " class="has-dropdown">
                                     <p>
                                         <a style="color: black;" >'.$task->name.'</a>
                                     </p>
@@ -416,7 +416,7 @@ class TasksController extends Controller
                     <div class="col-md-4" id="todolist">
                         <article class="model">
                             <h2 class="art-h2">To do</h2>
-                            <ul id="sortable1" class="connectedSortable detail-task1">
+                            <ul id="sortable1" type="status1" class="connectedSortable detail-task1">
                                 '.$todo.'
                             </ul>
                             <button id="add-task" type="submit" class="btn btn-primary">Add task</button>
@@ -425,7 +425,7 @@ class TasksController extends Controller
                     <div class="col-md-4" id="inprocesslist">
                         <article class="model">
                             <h2 class="art-h2">In process</h2>
-                            <ul id="sortable2" class="connectedSortable detail-task2">
+                            <ul id="sortable2" type="status2" class="connectedSortable detail-task2">
                                 '.$inprocess.'
                             </ul>
                         </article>
@@ -433,7 +433,7 @@ class TasksController extends Controller
                     <div class="col-md-4" id="donelist">
                         <article class="model">
                             <h2 class="art-h2">Done</h2>
-                            <ul id="sortable3" class="connectedSortable detail-task3">
+                            <ul id="sortable3" type="status3" class="connectedSortable detail-task3">
                                 '.$done.'
                             </ul>
                         </article>
