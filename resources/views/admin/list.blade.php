@@ -134,7 +134,8 @@
                         },
                         url : '{{ route('searchList') }}',
                         dataType: 'json',
-                        data:{'search':search},
+                        data:{'search':search,
+                            'admin':true},
                         success:function(data){
                             $('#tbody-list').html(data.table_data);
                             $(document).pjax('[data-pjax] a, a[data-pjax]', '#page');

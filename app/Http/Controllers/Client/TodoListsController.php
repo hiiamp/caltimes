@@ -327,9 +327,9 @@ class TodoListsController extends Controller
         foreach ($userShared as $u)
         {
             $u->countTask = $this->tasksRepo->findWhere([
-                    'todo_list_id'=> $todoList->id,
-                    'user_id' => $u->id
-                ])->count();
+                'todo_list_id'=> $todoList->id,
+                'user_id' => $u->id
+            ])->count();
             if(!Auth::check()) $u->isCo = 0;
             else {
                 $u->isCo = $this->coworkerRepo->findWhere([
@@ -393,19 +393,21 @@ class TodoListsController extends Controller
         if ($request->ajax()) {
             $output = '';
             $search = $request->search;
+            $check_admin = false;
+            $check_admin = @$request->admin;
             if ($search != '') {
                 $data = $this->repository->searchList($search);
             }
             else {
-                if(Auth::user()->level == User::isUser) {
-                    $data = $this->repository->findListCanView(Auth::user()->id)->paginate(6);
+                if($check_admin) {
+                    $data = $this->repository->allBuider()->paginate(5);
                 }
                 else if(Auth::user()->level == User::isAdmin) {
-                    $data = $this->repository->allBuider()->paginate(5);
+                    $data = $this->repository->findListCanView(Auth::user()->id)->paginate(6);
                 }
             }
             $total_row = $data->count();
-            if(Auth::user()->level == User::isUser) {
+            if(!$check_admin) {
                 if ($total_row > 0) {
                     foreach ($data as $list) {
                         $list->owner = $this->userRepo->find($list->owner_id);
