@@ -105,7 +105,7 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
      */
     public function searchUser($search)
     {
-        return User::where('name', 'like', '%' . $search . '%')->orWhere('name', 'like', '%' . strtolower($search) . '%')->get();
+        return User::where('name', 'like', '%' . $search . '%')->orWhere('name', 'like', '%' . strtolower($search) . '%')->orWhere('name', 'like', '%' . ucwords($search) . '%')->get();
     }
 
     public function notiUser($todo_list_id)
