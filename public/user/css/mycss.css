@@ -313,7 +313,6 @@ dialog {
 /*other loading spinner*/
 /* Meat and potatoes */
 .drops {
-    background-color: #FFFFFF;
     top: 50%;
     list-style: none;
     position: fixed;
@@ -325,6 +324,7 @@ dialog {
     margin-top: 40px; /* padd the top from the text */
 }
 .drops li {
+    background-color: #FFFFFF;
     box-shadow:  0 0 5px #99afff,
     0 0 10px #99afff,
     0 0 15px #99afff,
