@@ -40,8 +40,8 @@
 
             <div class="row">
                 <div data-pjax class="col-md-12 text-center">
-                    {{$lists->links()}}
-                    <!--<ul class="pagination">
+                {{$lists->links()}}
+                <!--<ul class="pagination">
                         <li class="disabled"><a href="#">&laquo;</a></li>
                         <li class="active"><a href="#">1</a></li>
                         <li><a href="#">2</a></li>
@@ -81,19 +81,29 @@
 </script>
 
 <script type="text/javascript">
+    var check = 0;
+    var temp2 = '';
     $('#search').on('keyup',function(){
         let search = $('#search').val();
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url : '{{ route('searchList') }}',
-            dataType: 'json',
-            data:{'search':search},
-            success:function(data){
-                $('.display').html(data.table_data);
-                console.log(data.total_data);
+        if(search !== '') {
+            check++;
+            if(check === 1) {
+                temp2 = $('.display').html();
             }
-        });
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url : '{{ route('searchList') }}',
+                dataType: 'json',
+                data:{'search':search},
+                success:function(data){
+                    $('.display').html(data.table_data);
+                }
+            });
+        } else {
+            check = 0;
+            $('.display').html(temp2);
+        }
     })
 </script>

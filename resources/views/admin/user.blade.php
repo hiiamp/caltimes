@@ -107,7 +107,7 @@
     <script type="text/javascript">
         try {
             var check = 0;
-            var temp1 = '';
+            var temp3 = '';
             function setNewEvent() {
                 var dialog_delete2 = document.querySelector('#deleteuserdialog1');
                 if(dialog_delete2 === null) return;
@@ -130,7 +130,7 @@
                 if(search !== '') {
                     check++;
                     if(check === 1) {
-                        temp1 = $('#tbody-user').html();
+                        temp3 = $('#tbody-user').html();
                     }
                     $('#paginate-div').hide();
                     $.ajax({
@@ -157,7 +157,7 @@
                 else {
                     check = 0;
                     $('#paginate-div').show();
-                    $('#tbody-user').html(temp1);
+                    $('#tbody-user').html(temp3);
                     $(document).pjax('[data-pjax] a, a[data-pjax]', '#page');
                     $(document).on('submit', 'form[data-pjax]', function(event) {
                         $.pjax.submit(event, '#page');
