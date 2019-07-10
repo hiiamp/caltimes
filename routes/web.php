@@ -83,9 +83,10 @@ Route::group(['namespace' => 'Client'], function() {
 
     Route::get('profile', 'UsersController@profileUser')->name('profile')->middleware('auth');
 });
+
 Route::get('searchUser', 'Client\UsersController@searchUser')->name('searchUser');
 
 Route::get('notification', function () {
     return view('user.notification.index');
-})->name('notification');
+})->name('notification')->middleware('auth');
 
