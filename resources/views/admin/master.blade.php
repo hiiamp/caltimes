@@ -55,7 +55,13 @@
 </nav>
 
 <div class="main-content">
-
+    <ul class="drops blue" id="spinner-li">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
     @include('admin.layouts.navbar')
     <div id="page">
         @yield('content')
@@ -63,15 +69,24 @@
 </div>
 @if(Auth::check())
     <script type="text/javascript">
+        $('#spinner-li').hide();
         $(document).ready(function(){
             $(document).pjax('[data-pjax] a, a[data-pjax]', '#page');
             $(document).on('submit', 'form[data-pjax]', function(event) {
+                $('#spinner-li').show();
                 $.pjax.submit(event, '#page');
             });
             // does current browser support PJAX
             if ($.support.pjax) {
-                $.pjax.defaults.timeout = 2000; // time in milliseconds
+                $.pjax.defaults.timeout = 3000; // time in milliseconds
+                $(document).on('click', '[data-pjax] a, a[data-pjax]', function(event) {
+                    $('#spinner-li').show();
+                });
             }
+            $(document).on('pjax:complete', function() {
+                $('#spinner-li').hide();
+            });
+
         });
     </script>
 @endif
