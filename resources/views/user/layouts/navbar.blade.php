@@ -25,7 +25,6 @@
                             @endif
                             <!--<task v-bind:tasks="tasks"></task>-->
                                 <li><a data-pjax href="{{route('notification')}}">Activity</a></li>
-                        @endif
                         <li class="has-dropdown">
                             <a href="#">{{Auth::user()->name}}</a>
                             <ul class="dropdown">
@@ -33,6 +32,7 @@
                                 <li><a href="{{route('logout')}}">Logout</a></li>
                             </ul>
                         </li>
+                        @endif
                     @endauth
                 </ul>
             </div>

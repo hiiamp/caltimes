@@ -37,13 +37,26 @@ class UsersController extends Controller
      */
     protected $validator;
 
+    /**
+     * @var TasksRepository
+     */
     protected $tasksRepo;
 
+    /**
+     * @var AccessRepository
+     */
     protected $accessRepo;
 
+    /**
+     * @var TodoListRepository
+     */
     protected $todoListRepo;
 
+    /**
+     * @var CoworkerRepository
+     */
     protected $coworkerRepo;
+
     /**
      * UsersController constructor.
      *

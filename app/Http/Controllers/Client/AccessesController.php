@@ -32,8 +32,14 @@ class AccessesController extends Controller
      */
     protected $repository;
 
+    /**
+     * @var TodoListRepository
+     */
     protected $listRepo;
 
+    /**
+     * @var UserRepository
+     */
     protected $userRepo;
 
     /**
@@ -41,7 +47,11 @@ class AccessesController extends Controller
      */
     protected $validator;
 
+    /**
+     * @var
+     */
     protected $todolistRepo;
+
     /**
      * AccessesController constructor.
      *

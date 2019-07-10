@@ -45,18 +45,25 @@ class TodoListsController extends Controller
     protected $validator;
 
     /**
-     * @var
+     * @var UserRepository
      */
     protected $userRepo;
 
     /**
-     * @var
+     * @var TasksRepository
      */
     protected $tasksRepo;
 
+    /**
+     * @var AccessRepository
+     */
     protected $accessRepo;
 
+    /**
+     * @var CoworkerRepository
+     */
     protected $coworkerRepo;
+
     /**
      * TodoListsController constructor.
      *
@@ -404,22 +411,22 @@ class TodoListsController extends Controller
                         $list->owner = $this->userRepo->find($list->owner_id);
                         $list->member = $this->accessRepo->findByField('todo_list_id', $list->id)->count();
                         if ($list->is_public == 1) {
-                            $is_public = '<p><span><i class="icon-globe"></i></span> Public <br></p>';
+                            $is_public = '<p class="margin_home"><span><i class="icon-globe"></i></span> Public <br></p>';
                         }
                         else {
-                            $is_public = '<p><span><i class="icon-globe"></i></span> Private <br></p>';
+                            $is_public = '<p class="margin_home"><span><i class="icon-globe"></i></span> Private <br></p>';
                         }
                         $output .= '
                     <div class="col-md-2 col-sm-3 col-xs-6 text-center">
                         <div class="product-entry">
                             <div class="product-img">
                                 <article>
-                                    <h2>' . $list->name . '</h2>
-                                    <p class="admin"><span>' . $list->created_at . '</span></p>
+                                    <h3 class="title_item_home">' . $list->name . '</h3>
+                                    <p class="admin margin_home"><span>' . $list->created_at . '</span></p>
                                     ' . $is_public . '
-                                    <p><span><i class="icon-location-2"></i></span> Created By: '.$list->owner->name.'<br></p>
-                                    <p><span><i class="icon-eye2"></i></span> Member: '.$list->member.' <br></p>
-                                    <p><a href="' . route('link.board', ['code' => $list->link]) . '" class="btn btn-primary btn-outline with-arrow">See more</a></p>
+                                    <p class="margin_home"><span><i class="icon-location-2"></i></span> Created By: '.$list->owner->name.'<br></p>
+                                    <p class="margin_home"><span><i class="icon-eye2"></i></span> Member: '.$list->member.' <br></p>
+                                    <p class="margin_home"><a data-pjax href="' . route('link.board', ['code' => $list->link]) . '" class="btn btn-primary btn-outline with-arrow">See more</a></p>
                                 </article>
                             </div>
                         </div>
@@ -515,6 +522,16 @@ class TodoListsController extends Controller
         $admin = @$request['checkadmin'];
         $list = $this->repository->find($request['todo_list_id']);
         $name = $list->name;
+        $users = $this->userRepo->notiUser($request['todo_list_id']);
+        $user = $this->userRepo->find(Auth::user()->id);
+        $task = [
+            'id'   => '0',
+            'name' => 'null',
+            'content' => 'null',
+            'user_id' => 'null',
+            'created_at' => Carbon::now(),
+        ];
+        Notification::send($users,new RepliedToThread($list,$task,'move a list',$user));
         $this->repository->update(['isDeleted' => true], $list->id);
         if($admin != '') return redirect()->back()->with('notif', 'Deleted '.$name.' success!');
         return redirect()->route('home')->with('deleted_list', 'Move '.$name.' to your recycle, come there to recover it!');
@@ -524,6 +541,16 @@ class TodoListsController extends Controller
     {
         $list = $this->repository->findByField('link', $code)->first( );
         $name = $list->name;
+        $users = $this->userRepo->notiUser($list->id);
+        $user = $this->userRepo->find(Auth::user()->id);
+        $task = [
+            'id'   => '0',
+            'name' => 'null',
+            'content' => 'null',
+            'user_id' => 'null',
+            'created_at' => Carbon::now(),
+        ];
+        Notification::send($users,new RepliedToThread($list,$task,'recover a list',$user));
         $this->repository->update(['isDeleted' => false], $list->id);
         //if($admin != '') return redirect()->back()->with('notif', 'Recover '.$name.' success!');
         return redirect()->route('link.board', ['code' => $list->link])->with('notif', 'Recover '.$name.' success!');
@@ -617,6 +644,18 @@ class TodoListsController extends Controller
             'created_at' => Carbon::now(),
         ];
         Notification::send($users,new RepliedToThread($list,$task,'change',$user));
+        return redirect()->back();
+    }
+
+    public function maskRead()
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        return redirect()->back();
+    }
+
+    public function deleteNoti()
+    {
+        auth()->user()->notifications()->delete();
         return redirect()->back();
     }
 }

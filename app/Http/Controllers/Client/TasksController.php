@@ -36,11 +36,19 @@ class TasksController extends Controller
      */
     protected $validator;
 
-
+    /**
+     * @var TodoListRepository
+     */
     protected $listRepo;
 
+    /**
+     * @var UserRepository
+     */
     protected $userRepo;
 
+    /**
+     * @var
+     */
     protected $tasksRepo;
 
     /**
