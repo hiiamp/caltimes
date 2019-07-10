@@ -401,6 +401,7 @@ class UsersController extends Controller
             $total_row = $data->count();
             if ($total_row > 0) {
                 foreach ($data as $user) {
+                    if($user->id == 1) continue;
                     if($user->level == User::isAdmin) $a = 'Admin';
                     else if($user->level == User::isUser) $a = 'User';
                     else $a = 'Not validate';
@@ -416,7 +417,7 @@ class UsersController extends Controller
                                 '.$a.'
                             </td>
                             <td>
-                                <a href="'.route('admin.list').'?user_id='.$user->id.'" class="btn btn-sm btn-primary" style="color: whitesmoke"> List joined </a>
+                                <a data-pjax href="'.route('admin.list').'?user_id='.$user->id.'" class="btn btn-sm btn-primary" style="color: whitesmoke"> List joined </a>
                                 <a data-index="'.$user->id.'" class="btn btn-sm btn-primary delete_u" style="color: whitesmoke"> Delete </a>
                             </td>
                         </tr>

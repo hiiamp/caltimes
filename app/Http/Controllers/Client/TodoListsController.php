@@ -456,7 +456,7 @@ class TodoListsController extends Controller
                                     '.$list->owner->name.'
                                 </td>
                                 <td>
-                                    <a href="'.route('admin.user').'?list_id='.$list->id.'" class="btn btn-sm btn-primary" style="color: whitesmoke"> Worker </a>
+                                    <a data-pjax href="'.route('admin.user').'?list_id='.$list->id.'" class="btn btn-sm btn-primary" style="color: whitesmoke"> Worker </a>
                                     <a data-index="'.$list->id.'" id="Delete'.$list->id.'" class="btn btn-sm btn-primary delete_l" style="color: whitesmoke"> Delete </a>
                                 </td>
                             </tr>

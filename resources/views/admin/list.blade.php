@@ -120,6 +120,14 @@
                     $('#tbody-list').html(data.table_data);
                     console.log(data);
                     console.log(data.total_data);
+                    $(document).pjax('[data-pjax] a, a[data-pjax]', '#page');
+                    $(document).on('submit', 'form[data-pjax]', function(event) {
+                        $.pjax.submit(event, '#page');
+                    });
+                    // does current browser support PJAX
+                    if ($.support.pjax) {
+                        $.pjax.defaults.timeout = 2000; // time in milliseconds
+                    }
                 }
             });
         }
@@ -127,6 +135,14 @@
             check = 0;
             $('#paginate-div').show();
             $('#tbody-list').html(temp1);
+            $(document).pjax('[data-pjax] a, a[data-pjax]', '#page');
+            $(document).on('submit', 'form[data-pjax]', function(event) {
+                $.pjax.submit(event, '#page');
+            });
+            // does current browser support PJAX
+            if ($.support.pjax) {
+                $.pjax.defaults.timeout = 2000; // time in milliseconds
+            }
         }
     })
 </script>

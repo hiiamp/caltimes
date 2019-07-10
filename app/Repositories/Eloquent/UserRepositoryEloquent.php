@@ -27,10 +27,10 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     }
 
     /**
-    * Specify Validator class name
-    *
-    * @return mixed
-    */
+     * Specify Validator class name
+     *
+     * @return mixed
+     */
     public function validator()
     {
 
@@ -96,7 +96,7 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
      */
     public function allBuilder($columns = ['*'])
     {
-        return User::where('id', '>', 0);
+        return User::where('id', '>', 1);
     }
 
     /**
