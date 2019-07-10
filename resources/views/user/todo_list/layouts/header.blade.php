@@ -33,7 +33,6 @@
                                 <input class="btn btn-sm btn-primary worker_joined" value="Worker Joined" type="button">
                                 <span><a hidden="hidden" class="sharewith">Share with</a></span>
                                 <span><a hidden="hidden" id="delete_list">Delete</a></span>
-                                <input class="btn btn-sm btn-primary activities" value="Activities" type="button">
                             </p>
                         @endif
                     </div>
