@@ -9,7 +9,7 @@
                     <h3 class="mb-0">{{$lists->table_name}}</h3>
                 </div>
                 <div class="table-responsive">
-                        <table id="customers">
+                    <table id="customers">
                         <thead class="thead-light">
                         <tr>
                             <th scope="col">Code</th>
@@ -60,66 +60,99 @@
         </div>
     </div>
 
-<dialog id="deletelistdialog1">
-    <form data-pjax method="post" action="{{route('delete.list')}}">
-        @csrf
-        <div class="row form-group">
-            <div class="col-md-12">
-                <p>You really want to delete this list?</p>
-                <input id="todo_list_id_delete" type="hidden" class="form-control" name="todo_list_id" value="">
-                <input name="checkadmin" value="true" hidden="hidden">
+    <dialog id="deletelistdialog1">
+        <form data-pjax method="post" action="{{route('delete.list')}}">
+            @csrf
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <p>You really want to delete this list?</p>
+                    <input id="todo_list_id_delete" type="hidden" class="form-control" name="todo_list_id" value="">
+                    <input name="checkadmin" value="true" hidden="hidden">
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <input id="delete_submit1" type="submit" value="Yes, I'm sure." class="btn btn-primary">
-            <input id="delete_cancel1" type="reset" value="Cancel" class="btn btn-primary">
-        </div>
-    </form>
-</dialog>
+            <div class="form-group">
+                <input id="delete_submit1" type="submit" value="Yes, I'm sure." class="btn btn-primary">
+                <input id="delete_cancel1" type="reset" value="Cancel" class="btn btn-primary">
+            </div>
+        </form>
+    </dialog>
 
-<script>
-    $(function(){
-        var dialog_delete = document.querySelector('#deletelistdialog1');
-        dialog_delete.close();
-        $(".delete_l").each(function (index) {
-            $(this).click(function () {
-                dialog_delete.showModal();
-                var list_id = $(this).attr('data-index');
-                $('#todo_list_id_delete').attr('value', list_id);
+    <script>
+        $(function(){
+            var dialog_delete = document.querySelector('#deletelistdialog1');
+            dialog_delete.close();
+            $(".delete_l").each(function (index) {
+                $(this).click(function () {
+                    dialog_delete.showModal();
+                    var list_id = $(this).attr('data-index');
+                    $('#todo_list_id_delete').attr('value', list_id);
+                });
             });
+            document.querySelector('#delete_submit1').onclick = function () {
+                dialog_delete.close();
+            };
+            document.querySelector('#delete_cancel1').onclick = function () {
+                dialog_delete.close();
+            };
+            $('#nav-list').css('background-color','grey') ;
+            $('#nav-user').css('background-color','white') ;
         });
-        document.querySelector('#delete_submit1').onclick = function () {
-            dialog_delete.close();
-        };
-        document.querySelector('#delete_cancel1').onclick = function () {
-            dialog_delete.close();
-        };
-           $('#nav-list').css('background-color','grey') ;
-           $('#nav-user').css('background-color','white') ;
-    });
-</script>
-<script type="text/javascript">
-    var check = 0;
-    var temp1 = '';
-    $('#search').on('keyup',function(){
-        let search = $('#search').val();
-        if(search !== '') {
-            check++;
-            if(check === 1) {
-                temp1 = $('#tbody-list').html();
+    </script>
+    <script type="text/javascript">
+        try {
+            var check = 0;
+            var temp1 = '';
+            function setNewEvent_List() {
+                var dialog_delete = document.querySelector('#deletelistdialog1');
+                if(dialog_delete === null) return;
+                dialog_delete.close();
+                $(".delete_l").each(function (index) {
+                    $(this).click(function () {
+                        dialog_delete.showModal();
+                        var list_id = $(this).attr('data-index');
+                        $('#todo_list_id_delete').attr('value', list_id);
+                    });
+                });
+                document.querySelector('#delete_submit1').onclick = function () {
+                    dialog_delete.close();
+                };
+                document.querySelector('#delete_cancel1').onclick = function () {
+                    dialog_delete.close();
+                };
             }
-            $('#paginate-div').hide();
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url : '{{ route('searchList') }}',
-                dataType: 'json',
-                data:{'search':search},
-                success:function(data){
-                    $('#tbody-list').html(data.table_data);
-                    console.log(data);
-                    console.log(data.total_data);
+            $('#search').on('keyup',function(){
+                let search = $('#search').val();
+                if(search !== '') {
+                    check++;
+                    if(check === 1) {
+                        temp1 = $('#tbody-list').html();
+                    }
+                    $('#paginate-div').hide();
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url : '{{ route('searchList') }}',
+                        dataType: 'json',
+                        data:{'search':search},
+                        success:function(data){
+                            $('#tbody-list').html(data.table_data);
+                            $(document).pjax('[data-pjax] a, a[data-pjax]', '#page');
+                            $(document).on('submit', 'form[data-pjax]', function(event) {
+                                $.pjax.submit(event, '#page');
+                            });
+                            // does current browser support PJAX
+                            if ($.support.pjax) {
+                                $.pjax.defaults.timeout = 2000; // time in milliseconds
+                            }
+                            setNewEvent_List();
+                        }
+                    });
+                }
+                else {
+                    check = 0;
+                    $('#paginate-div').show();
+                    $('#tbody-list').html(temp1);
                     $(document).pjax('[data-pjax] a, a[data-pjax]', '#page');
                     $(document).on('submit', 'form[data-pjax]', function(event) {
                         $.pjax.submit(event, '#page');
@@ -129,21 +162,10 @@
                         $.pjax.defaults.timeout = 2000; // time in milliseconds
                     }
                 }
+                setNewEvent_List();
             });
+        } catch (e) {
+
         }
-        else {
-            check = 0;
-            $('#paginate-div').show();
-            $('#tbody-list').html(temp1);
-            $(document).pjax('[data-pjax] a, a[data-pjax]', '#page');
-            $(document).on('submit', 'form[data-pjax]', function(event) {
-                $.pjax.submit(event, '#page');
-            });
-            // does current browser support PJAX
-            if ($.support.pjax) {
-                $.pjax.defaults.timeout = 2000; // time in milliseconds
-            }
-        }
-    })
-</script>
+    </script>
 @endsection
