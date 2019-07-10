@@ -79,9 +79,13 @@
         dialog.close();
     };
     $(window).scroll(function (event) {
-        var distance = $('#addlist').offset().top;
-        var opacity = (250-distance)/250;
-        $('#titlehome').css('opacity', opacity);
+        try {
+            var distance = $('#addlist').offset().top;
+            var opacity = (250-distance)/250;
+            $('#titlehome').css('opacity', opacity);
+        } catch (e) {
+
+        }
     });
 </script>
 
