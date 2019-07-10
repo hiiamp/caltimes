@@ -109,6 +109,7 @@
             check2 = 0;
             $('.display').html(temp2);
             $('#paginate-home').show();
+            search_temp = '';
         }
     })
 </script>
