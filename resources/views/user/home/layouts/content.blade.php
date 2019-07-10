@@ -38,16 +38,16 @@
                 </div>
             @endforeach
 
-            <div class="row">
-                <div data-pjax class="col-md-12 text-center">
-                {{$lists->links()}}
-                <!--<ul class="pagination">
+        </div>
+        <div class="row">
+            <div data-pjax class="col-md-12 text-center" id="paginate-home">
+            {{$lists->links()}}
+            <!--<ul class="pagination">
                         <li class="disabled"><a href="#">&laquo;</a></li>
                         <li class="active"><a href="#">1</a></li>
                         <li><a href="#">2</a></li>
                         <li><a href="#">&raquo;</a></li>
                     </ul>-->
-                </div>
             </div>
         </div>
     </div>
@@ -83,13 +83,17 @@
 <script type="text/javascript">
     var check2 = 0;
     var temp2 = '';
+    var search_temp = '';
     $('#search').on('keyup',function(){
         let search = $('#search').val();
         if(search !== '') {
+            if(search_temp === search) return;
+            search_temp = search;
             check2++;
             if(check2 === 1) {
                 temp2 = $('.display').html();
             }
+            $('#paginate-home').hide();
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -104,6 +108,7 @@
         } else {
             check2 = 0;
             $('.display').html(temp2);
+            $('#paginate-home').show();
         }
     })
 </script>
