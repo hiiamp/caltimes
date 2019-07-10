@@ -106,7 +106,7 @@
 
     <script type="text/javascript">
         try {
-            var check = 0;
+            var check1 = 0;
             var temp3 = '';
             function setNewEvent() {
                 var dialog_delete2 = document.querySelector('#deleteuserdialog1');
@@ -128,8 +128,8 @@
             $('#search').on('keyup',function(){
                 let search = $('#search').val();
                 if(search !== '') {
-                    check++;
-                    if(check === 1) {
+                    check1++;
+                    if(check1 === 1) {
                         temp3 = $('#tbody-user').html();
                     }
                     $('#paginate-div').hide();
@@ -155,7 +155,7 @@
                     });
                 }
                 else {
-                    check = 0;
+                    check1 = 0;
                     $('#paginate-div').show();
                     $('#tbody-user').html(temp3);
                     $(document).pjax('[data-pjax] a, a[data-pjax]', '#page');

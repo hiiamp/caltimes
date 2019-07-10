@@ -81,13 +81,13 @@
 </script>
 
 <script type="text/javascript">
-    var check = 0;
+    var check2 = 0;
     var temp2 = '';
     $('#search').on('keyup',function(){
         let search = $('#search').val();
         if(search !== '') {
-            check++;
-            if(check === 1) {
+            check2++;
+            if(check2 === 1) {
                 temp2 = $('.display').html();
             }
             $.ajax({
@@ -102,7 +102,7 @@
                 }
             });
         } else {
-            check = 0;
+            check2 = 0;
             $('.display').html(temp2);
         }
     })
