@@ -19,7 +19,7 @@
                             <th scope="col">Option</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tbody-list">
                         @foreach($lists as $list)
                             <tr>
                                 <td>
@@ -46,7 +46,7 @@
                     </table>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 text-center">
+                    <div class="col-md-12 text-center" id="paginate-div">
                     {{$lists->links()}}
                     <!--<ul class="pagination">
                         <li class="disabled"><a href="#">&laquo;</a></li>
@@ -99,21 +99,35 @@
     });
 </script>
 <script type="text/javascript">
+    var check = 0;
+    var temp1 = '';
     $('#search').on('keyup',function(){
         let search = $('#search').val();
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url : '{{ route('searchList') }}',
-            dataType: 'json',
-            data:{'search':search},
-            success:function(data){
-                $('tbody').html(data.table_data);
-                console.log(data);
-                console.log(data.total_data);
+        if(search !== '') {
+            check++;
+            if(check === 1) {
+                temp1 = $('#tbody-list').html();
             }
-        });
+            $('#paginate-div').hide();
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url : '{{ route('searchList') }}',
+                dataType: 'json',
+                data:{'search':search},
+                success:function(data){
+                    $('#tbody-list').html(data.table_data);
+                    console.log(data);
+                    console.log(data.total_data);
+                }
+            });
+        }
+        else {
+            check = 0;
+            $('#paginate-div').show();
+            $('#tbody-list').html(temp1);
+        }
     })
 </script>
 @endsection

@@ -19,7 +19,7 @@
                             <th scope="col">Option</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tbody-user">
                         @foreach($users as $user)
                             @if($user->id == 1) @continue
                             @endif
@@ -52,7 +52,7 @@
                     </table>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 text-center">
+                    <div class="col-md-12 text-center" id="paginate-div">
                     {{$users->links()}}
                     <!--<ul class="pagination">
                         <li class="disabled"><a href="#">&laquo;</a></li>
@@ -105,21 +105,36 @@
 </script>
 
 <script type="text/javascript">
+    var check = 0;
+    var temp1 = '';
     $('#search').on('keyup',function(){
         let search = $('#search').val();
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url : '{{ route('searchUser') }}',
-            dataType: 'json',
-            data:{'search':search},
-            success:function(data){
-                $('tbody').html(data.table_data);
-                console.log(data);
-                console.log(data.total_data);
+        if(search !== '') {
+            check++;
+            if(check === 1) {
+                temp1 = $('#tbody-user').html();
             }
-        });
+            $('#paginate-div').hide();
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url : '{{ route('searchUser') }}',
+                dataType: 'json',
+                data:{'search':search},
+                success:function(data){
+                    $('#tbody-user').html(data.table_data);
+                    console.log(data);
+                    console.log(data.total_data);
+                }
+            });
+        }
+        else {
+            check = 0;
+            $('#paginate-div').show();
+            $('#tbody-user').html(temp1);
+
+        }
     })
 </script>
 @include('user.layouts.notification')
