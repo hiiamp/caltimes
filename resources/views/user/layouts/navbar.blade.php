@@ -4,10 +4,12 @@
         'csrfToken' => csrf_token(),
     ]); ?>');
 </script>
-<script>
-    window.Laravel.userId = '<?php echo auth()->user()->id; ?>'
-    window.Laravel.userName = '<?php echo auth()->user()->name; ?>'
-</script>
+@if(Auth::check())
+    <script>
+        window.Laravel.userId = '<?php echo auth()->user()->id; ?>'
+        window.Laravel.userName = '<?php echo auth()->user()->name; ?>'
+    </script>
+@endif
     <div class="top-menu">
         <div class="container">
             <div class="col-md-4 animate-box">
