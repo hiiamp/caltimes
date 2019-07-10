@@ -6,6 +6,8 @@
                 <div class="col-md-12 col-md-offset-0">
                     <div class="animate-box">
                         <h2>Activities</h2>
+                        <button class="btn btn-sm btn-primary"><a data-pjax style="color: white" href="{{route('maskRead')}}">Mask all as read</a></button>
+                        <button class="btn btn-sm btn-primary"><a data-pjax style="color: white" href="{{route('delete_noti')}}">Delete all</a></button>
                         <p class="breadcrumbs" style="font-size: large">
                         </p>
                     </div>

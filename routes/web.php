@@ -11,11 +11,11 @@
 |
 */
 Route::get('/', function () {
-   return view('index');
+    return view('index');
 })->name('welcome')->middleware('check.login');
 
 Route::get('login', function () {
-   return view('login');
+    return view('login');
 })->name('login')->middleware('check.login');
 
 Route::get('register', function () {
@@ -90,3 +90,12 @@ Route::get('notification', function () {
     return view('user.notification.index');
 })->name('notification')->middleware('auth');
 
+Route::get('maskAsRead', function() {
+    auth()->user()->unreadNotifications->markAsRead();
+    return redirect()->back();
+})->name('maskRead');
+
+Route::get('delete_noti', function() {
+    auth()->user()->notifications()->delete();
+    return redirect()->back();
+})->name('delete_noti');
