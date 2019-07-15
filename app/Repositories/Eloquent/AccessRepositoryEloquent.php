@@ -74,11 +74,8 @@ class AccessRepositoryEloquent extends BaseRepository implements AccessRepositor
      */
     public function checkAcsExist($id, $idlist)
     {
-        $accesses = Access::where('user_id', $id)->get();
-        foreach ($accesses as $access)
-        {
-            if($access->todo_list_id == $idlist) return true;
-        }
+        $accesses = Access::where('user_id', $id)->where('todo_list_id', $idlist)->count();
+        if($accesses) return true;
         return false;
     }
 }

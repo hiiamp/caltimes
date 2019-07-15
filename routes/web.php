@@ -39,6 +39,16 @@ Route::group(['namespace' => 'Auth'], function() {
 
 Route::group(['namespace' => 'Client'], function() {
 
+    Route::get('changePassword','UsersController@changePassword')->name('changePassword')->middleware('auth');
+
+    Route::get('resetPassword','UsersController@resetPassword')->name('resetPass');
+
+    Route::get('checkEmail','UsersController@checkEmail')->name('checkEmail');
+
+    Route::post('sendTokenResetPass', 'UsersController@sendTokenResetPass')->name('sendTokenResetPass');
+
+    Route::get('user/resetPass/{token}', 'UsersController@tokenResetPass')->name('user.resetPassToken');
+
     Route::get('home', 'TodoListsController@viewAllLists')->name('home')->middleware('auth');
 
     Route::get('searchUser', 'UsersController@searchUser')->name('searchUser');
@@ -65,7 +75,7 @@ Route::group(['namespace' => 'Client'], function() {
 
     Route::post('content_swapPosition', 'TasksController@swapPosition')->name('content_swapPosition');
 
-    Route::post('create_task', 'TasksController@createTask')->name('create_task')->middleware('private.list');
+    Route::get('create_task', 'TasksController@createTask')->name('create_task');
 
     Route::get('searchList', 'TodoListsController@searchList')->name('searchList');
 
@@ -93,3 +103,7 @@ Route::get('searchUser', 'Client\UsersController@searchUser')->name('searchUser'
 Route::get('notification', function () {
     return view('user.notification.index');
 })->name('notification')->middleware('auth');
+
+Route::get('test', function () {
+    return view('auth.passwords.reset');
+});

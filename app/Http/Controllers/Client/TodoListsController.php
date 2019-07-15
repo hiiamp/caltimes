@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Repositories\CoworkerRepository;
 use App\Notifications\RepliedToThread;
+use App\Repositories\TempAccessRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Notification;
 use Response;
@@ -65,13 +66,17 @@ class TodoListsController extends Controller
     protected $coworkerRepo;
 
     /**
+     * @var TempAccessRepository
+     */
+    protected $tempAccessRepo;
+    /**
      * TodoListsController constructor.
      *
      * @param TodoListRepository $repository
      * @param TodoListValidator $validator
      */
     public function __construct(TodoListRepository $repository, TodoListValidator $validator, UserRepository $userRepo,
-        TasksRepository $tasksRepo, AccessRepository $accessRepo, CoworkerRepository $coworkerRepo)
+        TasksRepository $tasksRepo, AccessRepository $accessRepo, CoworkerRepository $coworkerRepo, TempAccessRepository $tempAccessRepo)
     {
         $this->repository = $repository;
         $this->validator  = $validator;
@@ -79,6 +84,7 @@ class TodoListsController extends Controller
         $this->tasksRepo = $tasksRepo;
         $this->accessRepo = $accessRepo;
         $this->coworkerRepo = $coworkerRepo;
+        $this->tempAccessRepo = $tempAccessRepo;
     }
 
     /**
@@ -327,9 +333,9 @@ class TodoListsController extends Controller
         foreach ($userShared as $u)
         {
             $u->countTask = $this->tasksRepo->findWhere([
-                'todo_list_id'=> $todoList->id,
-                'user_id' => $u->id
-            ])->count();
+                    'todo_list_id'=> $todoList->id,
+                    'user_id' => $u->id
+                ])->count();
             if(!Auth::check()) $u->isCo = 0;
             else {
                 $u->isCo = $this->coworkerRepo->findWhere([
@@ -373,6 +379,24 @@ class TodoListsController extends Controller
      */
     public function viewAllLists()
     {
+        $user = $this->userRepo->find(Auth::user()->id);
+        if(strlen($user->remember_token) > 9) {
+            do {
+                $temp = str_random(8);
+            } while($this->userRepo->findByField('remember_token', $temp)->count());
+            $this->userRepo->update(['remember_token' => $temp], $user->id);
+        }
+        $tempacs = $this->tempAccessRepo->findByField('email', $user->email);
+        if($tempacs->count())
+        {
+            foreach ($tempacs as $t)
+            {
+                if(!$this->accessRepo->findWhere(['user_id' => Auth::user()->id, 'todo_list_id' => $t->todo_list_id])->count()) {
+                    $this->accessRepo->create(['user_id' => Auth::user()->id, 'todo_list_id' => $t->todo_list_id]);
+                }
+                $this->tempAccessRepo->delete($t->id);
+            }
+        }
         $lists = $this->repository->findListCanView(Auth::user()->id)->paginate(6);
         foreach ($lists as $list)
         {
@@ -436,7 +460,8 @@ class TodoListsController extends Controller
                     ';
                     }
                 } else {
-                    $output = '<h2>No Data Found</h2>';
+                    $output = '<h2></h2>
+                               <img style="padding-left: 32%" src="'. asset('user/images/11.png').'">';
                 }
             }
             else {
@@ -509,6 +534,9 @@ class TodoListsController extends Controller
         $this->accessRepo->deleteWhere([
             'todo_list_id' => $todo_list_id
         ]);
+        $this->tempAccessRepo->deleteWhere([
+            'todo_list_id' => $todo_list_id
+        ]);
         $this->repository->delete($request['todo_list_id']);
         if($admin != '') return redirect()->back()->with('notif', 'Deleted '.$name.' success!');
         return redirect()->route('home')->with('deleted_list', 'Deleted '.$name.' success!');
@@ -570,7 +598,7 @@ class TodoListsController extends Controller
             if($user_id!=null) {
                 $temp = $this->userRepo->find($user_id);
                 if($temp == null) {
-                    $lists = $this->repository->allBuider()->paginate(5);
+                    $lists = $this->repository->allBuider()->paginate(7);
                     $lists->table_name = 'All list';
                 }
                 else {
@@ -580,7 +608,7 @@ class TodoListsController extends Controller
                 }
             }
             else {
-                $lists = $this->repository->allBuider()->paginate(5);
+                $lists = $this->repository->allBuider()->paginate(7);
                 $lists->table_name = 'All list';
             }
             foreach ($lists as $list)

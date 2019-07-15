@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Activation Email Todo List</title>
+    <title>Activation Email Caltimes</title>
 </head>
 <body>
 <h4>Welcome you to be a user of todo list. </h4>

@@ -29,6 +29,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\TodoListRepository::class, \App\Repositories\Eloquent\TodoListRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\UserRepository::class, \App\Repositories\Eloquent\UserRepositoryEloquent::class);
         $this->app->bind(\App\Repositories\CoworkerRepository::class, \App\Repositories\Eloquent\CoworkerRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\TempAccessRepository::class, \App\Repositories\Eloquent\TempAccessRepositoryEloquent::class);
         //:end-bindings:
     }
 }

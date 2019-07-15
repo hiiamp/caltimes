@@ -67,6 +67,9 @@
         @yield('content')
     </div>
 </div>
+<script>
+    $('#spinner-li').hide();
+</script>
 @if(Auth::check())
     <script type="text/javascript">
         $('#spinner-li').hide();

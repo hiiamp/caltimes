@@ -18,6 +18,8 @@
 <meta name="twitter:card" content="" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
 <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600" rel="stylesheet">
 
 <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400" rel="stylesheet">

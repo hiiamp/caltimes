@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Mail\UserResetPassEmail;
 use App\Repositories\AccessRepository;
 use App\Repositories\CoworkerRepository;
 use App\Repositories\TasksRepository;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\UserCreateRequest;
@@ -18,6 +20,8 @@ use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
 use App\Http\Controllers\Controller;
 use App\Entities\User;
+use App\Providers\ActivationService;
+use Illuminate\Support\Facades\Mail;
 
 
 /**
@@ -244,8 +248,7 @@ class UsersController extends Controller
         if(Auth::user()->level == User::isAdmin) {
             if(isset($request['list_id'])) {
                 $list_id = $request['list_id'];
-            }
-            else {
+            } else {
                 $list_id = null;
             }
             if($list_id != null) {
@@ -254,14 +257,12 @@ class UsersController extends Controller
                 if($temp == null) {
                     $users = $this->repository->allBuilder()->paginate(5);
                     $users->name_table = 'All User';
-                }
-                else {
+                } else {
                     $users = $this->todoListRepo->findUserShared($list_id)->paginate(5);
                     $users->name_table = 'Worker joined: '.$temp->name;
                     $check1 = 1;
                 }
-            }
-            else {
+            } else {
                 $users = $this->repository->allBuilder()->paginate(5);
                 $users->name_table = 'All User';
             }
@@ -269,13 +270,14 @@ class UsersController extends Controller
             $t = str_split($t);
             $temp1 = $t[0];
             $check = 0;
-            foreach ($t as $a)
-            {
-                if($check == 1) {
-                    $temp1.=$a;
-                    $check = 0;
-                } else if( $a == ' ') $check = 1;
-            }
+            if(is_array($t) && count($t))
+                foreach ($t as $a)
+                {
+                    if($check == 1) {
+                        $temp1.=$a;
+                        $check = 0;
+                    } else if( $a == ' ') $check = 1;
+                }
             if($check1 == 0) {
                 return view('admin.user', [
                     'users' => $users,
@@ -432,6 +434,102 @@ class UsersController extends Controller
                 'total_data' => $total_row
             );
             echo json_encode($data);
+        }
+    }
+
+    /**
+     *
+     */
+    public function changePassword(Request $request)
+    {
+        if($request->ajax()) {
+            $opass = '';
+            $opass = $request['opass'];
+            $npass = '';
+            $npass = $request['npass'];
+            if(Hash::check($opass, Auth::user()->getAuthPassword())) {
+                $this->repository->update(['password' => Hash::make($npass)], Auth::user()->id);
+                echo json_encode(array('success' => true));
+            } else {
+                echo json_encode(array('success' => false));
+            }
+        }
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function checkEmail(Request $request)
+    {
+        if($request->ajax()) {
+            $email = '';
+            $email = $request['email'];
+            $user = null;
+            $user = $this->repository->findByField('email', $email)->first();
+            if($user == null) {
+                echo json_encode(array('success' => false));
+            } else {
+                echo json_encode(array('success' => true, 'name' => $user->name, 'email' => $user->email));
+            }
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|mixed
+     */
+    public function sendTokenResetPass(Request $request)
+    {
+        $email = '';
+        $email = $request['email'];
+        if($email == '') return redirect()->route('welcome')->with('status', 'Have an error, sorry for this inconvenience!');
+        $user = $this->repository->findByField('email', $email)->first();
+        if($user === null) return redirect()->route('welcome')->with('status', 'Have an error, sorry for this inconvenience!');
+        $token = $this->repository->createActivation($user->id);
+        $link = route('user.resetPassToken', $token);
+        $mail = new UserResetPassEmail($link);
+        Mail::to($user->email)->send($mail);
+        return redirect()->route('welcome')->with('status', 'Please check mail to reset your password!');
+    }
+
+    /**
+     * @param $token
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function tokenResetPass($token)
+    {
+        $user = null;
+        $user = $this->repository->findByField('remember_token', $token);
+        if($user == null) return redirect()->route('welcome')->with('status', 'Have an error, sorry for this inconvenience!');
+        return view('login', ['token' => $token]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        if($request->ajax())
+        {
+            $token = '';
+            $token = $request['token'];
+            $pass = '';
+            $pass = $request['npass'];
+            if($pass == '' || $token == '') {
+                echo json_encode(array('success' => false));
+            }
+            $user = null;
+            $user = $this->repository->findByField('remember_token', $token)->first();
+            if($user == null) {
+                echo json_encode(array('success' => false));
+            }
+            $level = $user->level;
+            if($user->level == 0) {
+                $level = 1;
+            }
+            $this->repository->update([
+                'level' => $level,
+                'remember_token' => '',
+                'password' => Hash::make($pass)
+            ], $user->id);
+            echo json_encode(array('success' => true, 'name' => $user->name, 'email' => $user->email));
         }
     }
 }

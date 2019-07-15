@@ -1,3 +1,10 @@
+<script>
+    try {
+        $('#spinner-li').hide();
+    } catch (e) {
+
+    }
+</script>
 @if(\Illuminate\Support\Facades\Auth::check())
     <script type="text/javascript">
         $( function function1() {
@@ -92,6 +99,9 @@
                         }
                     });
                 });
+                $(function () {
+
+                })
                 var dialog_share = document.querySelector('#sharewithdialog');
                 document.querySelector('.sharewith').onclick = function() {
                     dialog_share.showModal();
@@ -217,9 +227,6 @@
                 document.querySelector('#add-task').onclick = function() {
                     dialog1.showModal();
                 };
-                $(this).click(function(){
-
-                });
                 document.querySelector('#save1').onclick = function() {
                     dialog1.close();
                 };

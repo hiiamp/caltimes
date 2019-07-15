@@ -1,4 +1,4 @@
-<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8" style="height: 160px">
     <div class="container-fluid">
         <div class="header-body">
             <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
@@ -10,7 +10,8 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-search"></i></span>
                                 </div>
-                                <input class="form-control" name="search" id="search" type="text" placeholder="Enter what you want to find..">
+                                <input class="form-control" name="search" id="search-list" type="text" placeholder="Enter what you want to find..">
+                                <input class="form-control" name="search" id="search-user" type="text" placeholder="Enter what you want to find..">
                             </div>
                         </div>
                     </div>

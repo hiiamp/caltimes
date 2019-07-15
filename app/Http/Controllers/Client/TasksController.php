@@ -233,30 +233,31 @@ class TasksController extends Controller
      */
     public function createTask(Request $request)
     {
-        if(isset($request['name'])&&isset($request['priority'])&&isset($request['todoid'])&&isset($request['position'])&&isset($request['status'])) {
-            $name = $request['name'];
-            $priority = $request['priority'];
-            $todo_list_id = $request['todoid'];
-            $position = $request['position'];
-            $status = $request['status'];
+        if($request->ajax()){
+            $success_output ='';
+            if($request->get('button_action') == "insert")
+            {
+                $task = [
+                    'name'    =>  $request->get('name'),
+                    'content'     =>  $request->get('content'),
+                    'important' => $request->get('priority'),
+                    'status_id' => 1,
+                    'todo_list_id' => $request->get('todoid'),
+                    'user_id' => 1,
+                    'position' => 0,
+                ];
+                $this->repository->create($task);
+                $success_output = '<h2>Success</h2>';
+            }
+            $user = $this->userRepo->find(Auth::user()->id);
+            $list = $this->listRepo->find($request->get('todoid'));
+            $users = $this->userRepo->notiUser($request->get('todoid'));
+            Notification::send($users,new RepliedToThread($list,Tasks::latest('id')->first(),'create', $user));
+            $output = array(
+                'success'   =>  $success_output
+            );
+            echo json_encode($output);
         }
-        else {
-            return redirect()->back()->with('notif', 'There was an error when you create a task.');
-        }
-        $data = [
-            'name' => $name,
-            'important' => $priority,
-            'status_id' => $status,
-            'todo_list_id' => $todo_list_id,
-            'user_id' => 1,
-            'position' => $position
-        ];
-        $user = $this->userRepo->find(Auth::user()->id);
-        $list = $this->listRepo->find($todo_list_id);
-        $this->repository->create($data);
-        $users = $this->userRepo->notiUser($todo_list_id);
-        Notification::send($users,new RepliedToThread($list,Tasks::latest('id')->first(),'create', $user));
-        return redirect()->back();
     }
 
     /**
@@ -337,6 +338,7 @@ class TasksController extends Controller
             $todo = '';
             $inprocess = '';
             $done = '';
+            $low = '';
             $search = $request->search;
             $todo_list_id = $request->todo_list_id;
             if($search != '') {
@@ -370,7 +372,7 @@ class TasksController extends Controller
                                     <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>'.$task->assign->name.'</span>
                                     <p class="badges">
                                         <span class="js-badges">
-                                            <p class="badge js-due-date-badge is-due-past" title="This card is past due.">
+                                            <p class="badge js-due-date-badge is-due-past" >
                                                 <span class="badge-icon icon-sm icon-clock"></span>
                                                 <span class="badge-text js-due-date-text">'.$task->created_at.'</span>
                                                 <span class="badge-text2 js-due-date-text" title="'.$task->assign->name.'" aria-label="'.$task->assign->name.'">'.$task->assign->character.'</span>
@@ -395,7 +397,7 @@ class TasksController extends Controller
                                     </p>
                                 </li>';
                     else if($task-> status_id == 3)
-                        $done .= '<li data-index="'.$task->id.'" data-position="'.$task->position.'" data-status="'.$task->todo_list_id.' " class="has-dropdown">
+                            $done .= '<li data-index="'.$task->id.'" data-position="'.$task->position.'" data-status="'.$task->todo_list_id.' " class="has-dropdown">
                                     <p>
                                         <a style="color: black;" >'.$task->name.'</a>
                                     </p>

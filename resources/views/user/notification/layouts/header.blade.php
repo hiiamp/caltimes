@@ -1,11 +1,11 @@
-<section id="home" class="video-hero" style="height: 400px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;" data-section="home">
-    <div class="overlay"></div>
-    <div class="display-t display-t2 text-center">
+<section id="home" class="video-hero" style="position: fixed; width: 100%; height: 200px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;" data-section="home">
+    <div style="height: 200px;" class="overlay"></div>
+    <div style="height: 300px;" class="display-t display-t2 text-center">
         <div class="display-tc display-tc2">
             <div class="container">
                 <div class="col-md-12 col-md-offset-0">
                     <div class="animate-box">
-                        <h2>Activities</h2>
+                        <p>Activities</p>
                         <button class="btn btn-sm btn-primary"><a data-pjax style="color: white" href="{{route('maskRead')}}">Mask all as read</a></button>
                         <button class="btn btn-sm btn-primary"><a data-pjax style="color: white" href="{{route('delete_noti')}}">Delete all</a></button>
                         <p class="breadcrumbs" style="font-size: large">

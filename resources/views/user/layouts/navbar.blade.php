@@ -13,19 +13,19 @@
     <div class="top-menu">
         <div class="container">
             <div class="col-md-4 animate-box">
-                <div id="colorlib-logo"><a data-pjax href="{{route('home')}}">Caltimes</a></div>
+                <div style="font-size: x-large" id="colorlib-logo"><a data-pjax href="{{route('home')}}">Caltimes</a></div>
             </div>
             <div class="col-md-6 animate-box">
                 <ul>
-                    <li><a data-pjax href="{{route('home')}}">My Board</a></li>
+                    <li style="font-size: medium"><a data-pjax href="{{route('home')}}">My Board</a></li>
                     @auth
                         @if(Auth::check())
                             @if(Auth::user()->level==2)
-                                <li><a href="{{route('admin.list')}}">Admin page</a></li>
+                                <li style="font-size: medium"><a href="{{route('admin.list')}}">Admin page</a></li>
                             @endif
                             <!--<task v-bind:tasks="tasks"></task>-->
-                                <li><a data-pjax href="{{route('notification')}}">Activity</a></li>
-                        <li class="has-dropdown">
+                                <li style="font-size: medium"><a data-pjax href="{{route('notification')}}">Activity</a></li>
+                        <li class="has-dropdown" style="font-size: medium">
                             <a href="#">{{Auth::user()->name}}</a>
                             <ul class="dropdown">
                                 <li><a data-pjax href="{{route('profile')}}">Profile</a></li>

@@ -1,12 +1,6 @@
-<div class="colorlib-blog">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 text-center colorlib-heading animate-box">
-                <!--<h2>My board</h2>-->
-            </div>
-        </div>
+<div class="colorlib-blog" style="padding-top: 300px;">
+    <div class="container-fluid" style="position: fixed; width: 100%">
         <div class="row display">
-
             @foreach($lists as $list)
                 <div class="col-md-2 col-sm-3 col-xs-6 text-center animate-box">
                     <div class="product-entry">
@@ -37,18 +31,19 @@
                     </div>
                 </div>
             @endforeach
-
         </div>
-        <div class="row">
-            <div data-pjax class="col-md-12 text-center" id="paginate-home">
-            {{$lists->links()}}
-            <!--<ul class="pagination">
-                        <li class="disabled"><a href="#">&laquo;</a></li>
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">&raquo;</a></li>
-                    </ul>-->
-            </div>
+    </div>
+</div>
+<div class="gototop js-top active" style="left: 0%; width: fit-content; height: fit-content; padding: 0">
+    <div style="padding-top: 0px;" class="row">
+        <div data-pjax class="col-md-12 text-center" id="paginate-home">
+        {{$lists->links()}}
+        <!--<ul class="pagination">
+                            <li class="disabled"><a href="#">&laquo;</a></li>
+                            <li class="active"><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">&raquo;</a></li>
+                        </ul>-->
         </div>
     </div>
 </div>

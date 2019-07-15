@@ -1,40 +1,49 @@
-<section id="home" class="video-hero" style="height: 400px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;" data-section="home">
-    <div class="overlay"></div>
-    <div class="display-t display-t2 text-center">
+@if($own == true)
+    <nav style="z-index:101; top: 150px;position: fixed" class="menu menu11">
+        <input type="checkbox" href="#" class="menu-open" name="menu-open" id="menu-open"/>
+        <label class="menu-open-button" for="menu-open">
+            <span class="hamburger hamburger-1"></span>
+            <span class="hamburger hamburger-2"></span>
+            <span class="hamburger hamburger-3"></span>
+        </label>
+        <a title="Back" data-pjax href="{{route('home')}}" class="menu-item"> <i class="fa fa-share"></i> </a>
+        <a title="Delete" id="delete_list"class="menu-item"> <i class="icon-trash2"></i> </a>
+        @if($list->is_public == 0)
+            <a title="Change to public" data-pjax href="{{route('private.list').'?list_id='.$list->id}}" class="menu-item"> <i class="icon-tools"></i> </a>
+        @else
+            <a title="Change to private" data-pjax href="{{route('private.list').'?list_id='.$list->id}}" class="menu-item"> <i class="icon-tools"></i> </a>
+        @endif
+        <a title="Share with" class="menu-item sharewith"> <i class="icon-share3"></i></a>
+        <a title="Worker joined" class="menu-item worker_joined"> <i class="icon-user2"></i></a>
+    </nav>
+@else
+    <nav style="z-index:101; top: 150px;position: fixed" class="menu menu11">
+        <input type="checkbox" href="#" class="menu-open" name="menu-open" id="menu-open"/>
+        <label class="menu-open-button" for="menu-open">
+            <span class="hamburger hamburger-1"></span>
+            <span class="hamburger hamburger-2"></span>
+            <span class="hamburger hamburger-3"></span>
+        </label>
+        <a title="Back" data-pjax href="{{route('home')}}"  class="menu-item"> <i class="fa fa-share"></i> </a>
+        <a style="color: red; pointer-events: none;" title="Delete" id="delete_list"class="menu-item"> <i class="icon-trash2"></i> </a>
+        @if($list->is_public == 0)
+            <a style="color: red; pointer-events: none;" title="Change to public" data-pjax class="menu-item"> <i class="icon-tools"></i> </a>
+        @else
+            <a style="color: red; pointer-events: none;" title="Change to private" data-pjax class="menu-item"> <i class="icon-tools"></i> </a>
+        @endif
+        <a style="color: red; pointer-events: none;" title="Share with" class="menu-item sharewith"> <i class="icon-share3"></i></a>
+        <a title="Worker joined" class="menu-item worker_joined"> <i class="icon-user2"></i></a>
+    </nav>
+@endif
+<section id="home" class="video-hero" style="position: fixed; width: 100%; height: 200px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;" data-section="home">
+    <div style="height: 200px;" class="overlay"></div>
+    <div style="height: 300px;" class="display-t display-t2 text-center">
         <div class="display-tc display-tc2">
             <div class="container">
                 <div class="col-md-12 col-md-offset-0">
-                    <div class="animate-box">
-                        <h2>{{$list->name}}</h2>
-                        <h3>Create by: {{$username}}</h3>
-                        @if($own == true)
-                            @if($list->is_public == 1)
-                                <h4>Your list is Public</h4>
-                            @else
-                                <h4>Your list is Private</h4>
-                            @endif
-                            <p class="breadcrumbs" style="font-size: large">
-                                    <input class="btn btn-sm btn-primary worker_joined" value="Worker Joined" type="button">
-                                    <input class="btn btn-sm btn-primary sharewith" value="Share with" type="button">
-                                @if($list->is_public == 0)
-                                    <button class="btn btn-sm btn-primary"><a data-pjax style="color: white" href="{{route('private.list').'?list_id='.$list->id}}">Change to Public</a></button>
-                                @else
-                                    <button class="btn btn-sm btn-primary"><a data-pjax style="color: white" href="{{route('public.list').'?list_id='.$list->id}}">Change to Private</a></button>
-                                @endif
-                                <input class="btn btn-sm btn-primary" id="delete_list" value="Delete" type="button">
-                            </p>
-                        @else
-                            @if($list->is_public == 1)
-                                <h4>This list is Public</h4>
-                            @else
-                                <h4>This list is Private</h4>
-                            @endif
-                            <p class="breadcrumbs" style="font-size: large">
-                                <input class="btn btn-sm btn-primary worker_joined" value="Worker Joined" type="button">
-                                <span><a hidden="hidden" class="sharewith">Share with</a></span>
-                                <span><a hidden="hidden" id="delete_list">Delete</a></span>
-                            </p>
-                        @endif
+                    <div style="line-height: 0;" class="animate-box">
+                        <p>{{$list->name}}</p>
+                        <h4>Create by: {{$username}}</h4>
                     </div>
                 </div>
             </div>

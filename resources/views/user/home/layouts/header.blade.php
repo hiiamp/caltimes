@@ -1,11 +1,11 @@
-<section id="home" class="video-hero" style="height: 400px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;" data-section="home">    <div class="overlay"></div>
+<section id="home" class="video-hero" style="width: 100%; position: fixed; height: 200px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;" data-section="home">    <div class="overlay"></div>
     <!--<a class="player" data-property="{videoURL:'https://www.youtube.com/watch?v=vqqt5p0q-eU',containment:'#home', showControls:false, autoPlay:true, loop:true, mute:true, startAt:0, opacity:1, quality:'default'}"></a>-->
-    <div class="display-t text-center distance-to-top">
+    <div style="height: 350px; " class="display-t text-center distance-to-top">
         <div class="display-tc">
             <div class="container">
                 <div class="col-md-12 col-md-offset-0">
                     <div class="animate-box">
-                        <h2 id="titlehome">Take on your biggest projects and goals</h2>
+                        <p id="titlehome">Take on your biggest projects and goals</p>
                         <p id="create-board"><a class="btn btn-primary btn-lg btn-custom">Create new board</a></p>
                     </div>
                 </div>

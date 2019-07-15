@@ -8,12 +8,12 @@
 <body>
 <div class="colorlib-loader"></div>
 
-<div id="page">
+<div>
     <nav class="colorlib-nav" role="navigation">
         <div class="top-menu">
             <div class="container">
                 <div class="col-md-4 animate-box">
-                    <div id="colorlib-logo"><a href="{{route('home')}}">Caltimes</a></div>
+                    <div style="font-size: x-large" id="colorlib-logo"><a href="{{route('home')}}">Caltimes</a></div>
                 </div>
                 <div class="col-md-4 animate-box"></div>
                 <div class="col-md-4 animate-box">
@@ -34,14 +34,14 @@
         </div>
     </nav>
 
-    <section id="home" class="video-hero" style="height: 400px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;" data-section="home">
+    <section id="home" class="video-hero" style="height: 200px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;" data-section="home">
         <div class="overlay"></div>
-        <div class="display-t display-t2 text-center">
+        <div style="height: 250px;" class="display-t display-t2 text-center">
             <div class="display-tc display-tc2">
                 <div class="container">
                     <div class="col-md-12 col-md-offset-0">
                         <div class="animate-box">
-                            <h2>Welcome</h2>
+                            <h2 style="font-size: 50px">Welcome</h2>
                         </div>
                     </div>
                 </div>
@@ -105,8 +105,7 @@
                 </span>
             </div>
             <div class="form-group">
-                <input id="ok" type="submit" value="Ok" class="btn btn-primary">
-                <input id="cancel" type="reset" value="Cancel" class="btn btn-primary">
+                <input id="ok" type="submit" value="Ok" style="width: 100px" class="btn btn-primary">
             </div>
     </dialog>
     <script>

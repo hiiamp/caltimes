@@ -36,9 +36,9 @@ class PrivateToDoList
         else {
             $todoList = TodoList::where('link', $code)->first();
         }
-        if($todoList == null ) return redirect()->route('home');
+        if($todoList == null ) return redirect()->route('welcome')->with('status', 'This list isn\'t exist, please check your code!');
         if($todoList->is_public) return $next($request);
-        if(!Auth::check()) return redirect()->route('home');
+        if(!Auth::check()) return redirect()->route('welcome')->with('status', 'This list is private, you need login to access it!');
         if(Auth::user()->level==2) return $next($request);
         if(Auth::user()->id == $todoList->owner_id) return $next($request);
         $Access = Access::where('todo_list_id', $todoList->id)->get();

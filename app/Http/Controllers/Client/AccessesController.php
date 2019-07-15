@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Client;
 
 use App\Entities\User;
+use App\Mail\ShareListEmail;
+use App\Repositories\TempAccessRepository;
 use App\Repositories\TodoListRepository;
 use App\Notifications\RepliedToThread;
 use App\Repositories\UserRepository;
@@ -10,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
 use Prettus\Validator\Contracts\ValidatorInterface;
@@ -53,17 +56,23 @@ class AccessesController extends Controller
     protected $todolistRepo;
 
     /**
+     * @var TempAccessRepository
+     */
+    protected $tempAccessRepo;
+    /**
      * AccessesController constructor.
      *
      * @param AccessRepository $repository
      * @param AccessValidator $validator
      */
-    public function __construct(AccessRepository $repository, AccessValidator $validator, TodoListRepository $listRepo, UserRepository $userRepo)
+    public function __construct(AccessRepository $repository, AccessValidator $validator,
+        TodoListRepository $listRepo, UserRepository $userRepo, TempAccessRepository $tempAccessRepo)
     {
         $this->repository = $repository;
         $this->validator  = $validator;
         $this->listRepo = $listRepo;
         $this->userRepo = $userRepo;
+        $this->tempAccessRepo = $tempAccessRepo;
     }
 
     /**
@@ -237,9 +246,23 @@ class AccessesController extends Controller
         else {
             return redirect()->back()->with('notif', 'There was an error when you shared the list.');
         }
+        $list = $this->listRepo->find($todo_list_id);
         $user = $this->repository->findUserByEmail($email);
         if($user == null) {
-            return redirect()->back()->with('message1','Email don\'t exist!');
+            if($this->tempAccessRepo->findWhere(['email' => $email, 'todo_list_id' => $todo_list_id])->count()) {
+                return redirect()->back()->with('message1','We sent a email to '.$email.' before, this list will share for this user when she/he create account.');
+            } else {
+                $this->tempAccessRepo->create([
+                    'email' => $email,
+                    'todo_list_id' => $todo_list_id
+                ]);
+            }
+            $code = $list->link;
+            $status = 'private';
+            if($list->is_public) $status = 'public';
+            $letter = new ShareListEmail(route('link.board', $code), Auth::user()->name, $status);
+            Mail::to($email)->send($letter);
+            return redirect()->back()->with('message1','Email don\'t match any account! So we sent a email instead.');
         }
         if($user->id == Auth::user()->id) {
             return redirect()->back()->with('message1','Can\'t share for yourself!');
@@ -252,7 +275,6 @@ class AccessesController extends Controller
         if($this->repository->checkAcsExist($user_id, $todo_list_id)) {
             return redirect()->back()->with('message1', 'User '.$name.' is shared this list before!');
         }
-        $list = $this->listRepo->find($todo_list_id);
         $own_user = $this->userRepo->find(Auth::user()->id);
         $this->repository->create([
             'todo_list_id' => $todo_list_id,

@@ -1,4 +1,4 @@
-<div class="colorlib-blog">
+<div class="colorlib-blog" style="padding-top: 150px;">
     <div class="container" style="margin-top: 100px">
         @if(\Illuminate\Support\Facades\Auth::Check())
             <div class="row mobile-wrap">
@@ -6,7 +6,7 @@
                     <div class="features">
                         <div class="f-desc">
                             @if(auth()->user()->notifications->count())
-                                @foreach(auth()->user()->notifications as $notification)
+                                @foreach(auth()->user()->notifications()->limit(15)->get() as $notification)
                                     @if($notification->read_at == '')
                                         <h3 style="color: grey; padding: 10px; border: 1px solid green; background-color: lightblue">
                                             <a id="noti" data-pjax href="{{route('link.board',['code'=>$notification->data['list']['link']])}}" style="color: grey" class="icon"><i class="icon-lightbulb"></i>
