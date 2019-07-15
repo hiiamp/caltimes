@@ -340,8 +340,7 @@ class UsersController extends Controller
     {
         if(isset($request['user_id'])) {
             $user_id = $request['user_id'];
-        }
-        else {
+        } else {
             return redirect()->back()->with('notif', 'There was an error when you delete a user.');
         }
         $this->accessRepo->deleteWhere(['user_id'=> $user_id]);
@@ -425,8 +424,7 @@ class UsersController extends Controller
                         </tr>
                         ';
                 }
-            }
-            else {
+            } else {
                 $output = '<h2>No Data Found</h2>';
             }
             $data = array(

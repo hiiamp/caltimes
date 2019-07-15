@@ -421,12 +421,10 @@ class TodoListsController extends Controller
             $check_admin = @$request->admin;
             if ($search != '') {
                 $data = $this->repository->searchList($search);
-            }
-            else {
+            } else {
                 if($check_admin) {
                     $data = $this->repository->allBuider()->paginate(5);
-                }
-                else if(Auth::user()->level == User::isAdmin) {
+                } else if(Auth::user()->level == User::isAdmin) {
                     $data = $this->repository->findListCanView(Auth::user()->id)->paginate(6);
                 }
             }
@@ -438,8 +436,7 @@ class TodoListsController extends Controller
                         $list->member = $this->accessRepo->findByField('todo_list_id', $list->id)->count();
                         if ($list->is_public == 1) {
                             $is_public = '<p class="margin_home"><span><i class="icon-globe"></i></span> Public <br></p>';
-                        }
-                        else {
+                        } else {
                             $is_public = '<p class="margin_home"><span><i class="icon-globe"></i></span> Private <br></p>';
                         }
                         $output .= '
@@ -463,8 +460,7 @@ class TodoListsController extends Controller
                     $output = '<h2></h2>
                                <img style="padding-left: 32%" src="'. asset('user/images/11.png').'">';
                 }
-            }
-            else {
+            } else {
                 if ($total_row > 0) {
                     foreach ($data as $list) {
                         $list->owner = $this->userRepo->find($list->owner_id);
@@ -489,8 +485,7 @@ class TodoListsController extends Controller
                             </tr>
                         ';
                     }
-                }
-                else {
+                } else {
                     $output = '<h2>No Data Found</h2>';
                 }
             }
@@ -512,8 +507,7 @@ class TodoListsController extends Controller
         if(isset($request['checkadmin']) && isset($request['todo_list_id'])) {
             $admin = $request['checkadmin'];
             $todo_list_id = $request['todo_list_id'];
-        }
-        else {
+        } else {
             return redirect()->back()->with('notif', 'There was an error when you delete a list.');
         }
         $users = $this->userRepo->notiUser($todo_list_id);
@@ -600,14 +594,12 @@ class TodoListsController extends Controller
                 if($temp == null) {
                     $lists = $this->repository->allBuider()->paginate(7);
                     $lists->table_name = 'All list';
-                }
-                else {
+                } else {
                     $lists = $this->repository->findListCanView($user_id)->paginate(5);
                     $lists->table_name = 'List of user: '.$temp->name;
                     $check1=1;
                 }
-            }
-            else {
+            } else {
                 $lists = $this->repository->allBuider()->paginate(7);
                 $lists->table_name = 'All list';
             }
@@ -627,8 +619,7 @@ class TodoListsController extends Controller
                 if($check == 1) {
                     $temp1.=$a;
                     $check = 0;
-                }
-                else if( $a == ' ') $check = 1;
+                } else if( $a == ' ') $check = 1;
             }
             if($check1 == 0) {
                 return view('admin.list', [
@@ -655,8 +646,7 @@ class TodoListsController extends Controller
     {
         if(isset($request['list_id'])) {
             $id = $request['list_id'];
-        }
-        else {
+        } else {
             return redirect()->back()->with('notif', 'There was an error when you change status of a list.');
         }
         $list = $this->repository->find($id);

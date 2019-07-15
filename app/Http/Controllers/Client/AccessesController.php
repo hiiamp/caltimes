@@ -242,8 +242,7 @@ class AccessesController extends Controller
         if(isset($request['email']) && isset($request['todo_list_id'])) {
             $email = $request['email'];
             $todo_list_id = $request['todo_list_id'];
-        }
-        else {
+        } else {
             return redirect()->back()->with('notif', 'There was an error when you shared the list.');
         }
         $list = $this->listRepo->find($todo_list_id);
@@ -302,15 +301,13 @@ class AccessesController extends Controller
             if(isset($request['todo_list_id'])&&isset($request['user_id'])) {
                 $todo_list_id = $request['todo_list_id'];
                 $user_id = $request['user_id'];
-            }
-            else {
+            } else {
                 return redirect()->back()->with('notif', 'There was an error when you toggle the list.');
             }
             $acs = $this->repository->findWhere(['todo_list_id' => $todo_list_id, 'user_id' => $user_id]);
             if($acs->count() != 0) {
                 $this->repository->delete($acs->first()->id);
-            }
-            else {
+            } else {
                 $this->repository->create([
                     'todo_list_id' => $todo_list_id,
                     'user_id' => $user_id
@@ -328,8 +325,7 @@ class AccessesController extends Controller
     {
         if(isset($request['todo_list_id'])) {
             $todo_list_id = $request['todo_list_id'];
-        }
-        else {
+        } else {
             return redirect()->back()->with('notif', 'There was an error when you leave the list.');
         }
         $name = $this->todolistRepo->find($todo_list_id)->name;

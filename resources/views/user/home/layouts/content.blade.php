@@ -1,4 +1,4 @@
-<div class="colorlib-blog" style="padding-top: 300px;">
+<div class="colorlib-blog" style="padding-top: 250px;">
     <div class="container-fluid" style="position: fixed; width: 100%">
         <div class="row display">
             @foreach($lists as $list)

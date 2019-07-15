@@ -235,26 +235,63 @@ class TasksController extends Controller
     {
         if($request->ajax()){
             $success_output ='';
+            $detail = '';
             if($request->get('button_action') == "insert")
             {
-                $task = [
+                $task1 = [
                     'name'    =>  $request->get('name'),
                     'content'     =>  $request->get('content'),
                     'important' => $request->get('priority'),
                     'status_id' => 1,
                     'todo_list_id' => $request->get('todoid'),
-                    'user_id' => 1,
+                    'user_id' => $request->get('assign'),
                     'position' => 0,
                 ];
-                $this->repository->create($task);
-                $success_output = '<h2>Success</h2>';
+                $task1 = $this->repository->create($task1);
+                $userTask = $this->userRepo->find($task1->user_id);
+                $t = $userTask->name;
+                $t = str_split($t);
+                $temp = $t[0];
+                $check = 0;
+                foreach ($t as $a)
+                {
+                    if($check == 1) {
+                        $temp.=$a;
+                        $check = 0;
+                    } else if( $a == ' ') $check = 1;
+                }
+                $userTask->character = $temp;
+                $task1->assign = $userTask;
+                $success_output = view('user.render.addtask')->with(['task'=>$task1])->render();
+                $tasks = $this->repository->getTaskByIdList($request->get('todoid'));
+                foreach ($tasks as $task)
+                {
+                    $userTask = $this->userRepo->find($task->user_id);
+                    $t = $userTask->name;
+                    $t = str_split($t);
+                    $temp = $t[0];
+                    $check = 0;
+                    foreach ($t as $a)
+                    {
+                        if($check == 1) {
+                            $temp.=$a;
+                            $check = 0;
+                        } else if( $a == ' ') $check = 1;
+                    }
+                    $userTask->character = $temp;
+                    $task->assign = $userTask;
+                }
+                $list_users = $this->listRepo->findUserShared($request->get('todoid'))->get();
+
+                $detail = view('user.render.detailtask')->with(['tasks'=>$tasks,'list_users'=>$list_users])->render();
             }
             $user = $this->userRepo->find(Auth::user()->id);
             $list = $this->listRepo->find($request->get('todoid'));
             $users = $this->userRepo->notiUser($request->get('todoid'));
             Notification::send($users,new RepliedToThread($list,Tasks::latest('id')->first(),'create', $user));
             $output = array(
-                'success'   =>  $success_output
+                'out'    =>  $success_output,
+                'detail' => $detail,
             );
             echo json_encode($output);
         }
@@ -343,8 +380,7 @@ class TasksController extends Controller
             $todo_list_id = $request->todo_list_id;
             if($search != '') {
                 $data=$this->repository->searchTask($search,$todo_list_id);
-            }
-            else {
+            } else {
                 $data=$this->repository->getTaskByIdList($todo_list_id);
             }
             $total_row = $data->count();
@@ -441,8 +477,7 @@ class TasksController extends Controller
                         </article>
                     </div>
                     ';
-            }
-            else {
+            } else {
                 $output .= '
                     <div class="col-md-4">
                         <article class="model">

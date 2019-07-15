@@ -210,8 +210,7 @@ class CoworkersController extends Controller
         if($request->ajax()) {
             if(isset($request['user_co_id'])) {
                 $user_co_id = $request['user_co_id'];
-            }
-            else {
+            } else {
                 return redirect()->back()->with('notif', 'There was an error when you performed this operation.');
             }
             if($user_co_id == Auth::user()->id) return json_encode(['status1' => 'error']);
@@ -225,8 +224,7 @@ class CoworkersController extends Controller
                     'user_co_id' => $user_co_id
                 ]);
                 return json_encode(['status1' => 'add']);
-            }
-            else {
+            } else {
                 $id = $this->repository->findWhere([
                     'user_id' => Auth::user()->id,
                     'user_co_id' => $user_co_id

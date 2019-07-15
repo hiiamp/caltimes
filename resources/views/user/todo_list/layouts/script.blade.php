@@ -59,9 +59,7 @@
                             positions: positions,
                             status_id: status_id
                         }, success: function (response) {
-                            console.log(response);
-                            console.log(positions);
-                            console.log(status_id);
+
                         }
                     });
                 }
@@ -99,9 +97,6 @@
                         }
                     });
                 });
-                $(function () {
-
-                })
                 var dialog_share = document.querySelector('#sharewithdialog');
                 document.querySelector('.sharewith').onclick = function() {
                     dialog_share.showModal();
@@ -312,7 +307,6 @@
                     success:function(data){
                         //console.log(temp.outerHTML);
                         $('.displayTask').html(data.table_data);
-                        console.log(search);
                         temp();
                     }
                 });
@@ -320,6 +314,40 @@
             //dialog share
 
             //==================
+            $('#add-task').click(function(){
+                var max = 0;
+                $('#sortable1').children().each(function () {
+                    if($(this).attr('data-position')>max){
+                        max = $(this).attr('data-position');
+                    }
+                });
+                max = Number(max);
+                $('#position_create').attr('value', max+1);
+                $('#add-task-form')[0].reset();
+                $('#button_action').val('insert');
+                $('#save1').val('Create');
+            });
+
+            $('#add-task-form').on('submit',function (event) {
+                event.preventDefault();
+                var form_data = $(this).serialize();
+                $.ajax({
+                    url : '{{ route('create_task') }}',
+                    method: "get",
+                    data:form_data,
+                    dataType: 'json',
+                    success:function(data){
+                        $('#sortable1').html($('#sortable1').html() + data.out);
+                        $('#detail-dialog').html(data.detail);
+                        $('#add-task-form')[0].reset();
+                        $('#save1').val('Create');
+                        $('#button_action').val('insert');
+                        console.log(data.out);
+
+                        temp();
+                    }
+                });
+            })
         } );
     </script>
 @else

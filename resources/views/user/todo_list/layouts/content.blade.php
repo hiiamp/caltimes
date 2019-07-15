@@ -106,16 +106,17 @@
                                 <div class="con-info">
                                     <p><span><i class="icon-location-2"></i></span> Assign </p>
                                     <select class="btn" name="assign" class="custom-select" id="create_assign">
-                                        @foreach($list_users as $userp)
-                                            <option class="showw" id="choose{{$userp->id}}" value="{{$userp->id}}">{{$userp->name}}@if($userp->id == @Auth::user()->id) (me) @endif</option>
-                                        @endforeach
+                                        <option class="showw" id="assign" value="1">Unassigned</option>
+                                    @foreach($list_users as $userp)
+                                        <option class="showw" id="assign" value="{{$userp->id}}">{{$userp->name}}@if($userp->id == @Auth::user()->id) (me) @endif</option>
+                                    @endforeach
                                     </select>
                                 </div>
                                 <div class="con-info">
                                     <input type="hidden" id="todoid" class="form-control" name="todoid" value="{{$list->id}}">
                                     <input type="hidden" id="link" class="form-control" name="link" value="{{$list->link}}">
                                     <input type="hidden" id="status" class="form-control" name="status" value="1">
-                                    <input type="hidden" id="position" class="form-control" name="position" value="0">
+                                    <input type="hidden" id="position_create" class="form-control" name="position" value="">
                                     <p><span><i class="icon-paperplane"></i></span> Status <br> To do </p>
                                 </div>
                                 <div class="con-info">
@@ -272,28 +273,5 @@
             $(".menu11").css('z-index', 101);
         }
     });
-    $('#add-task').click(function(){
-        $('#add-task-form')[0].reset();
-        $('#form_output').html('');
-        $('#button_action').val('insert');
-        $('#save1').val('Create');
-    });
-    $('#add-task-form').on('submit',function (event) {
-        event.preventDefault();
-        var form_data = $(this).serialize();
-        $.ajax({
-            url : '{{ route('create_task') }}',
-            method: "get",
-            data:form_data,
-            dataType: 'json',
-            success:function(data){
-                $('#form_output').html(data.success);
-                $('#add-task-form')[0].reset();
-                $('#save1').val('Create');
-                $('#button_action').val('insert');
-                $('.displayTask').ajax.reload();
-            }
-        });
-    })
 </script>
 @include('user.todo_list.layouts.script')
