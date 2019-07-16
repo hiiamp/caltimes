@@ -1,5 +1,5 @@
 <div class="container" style="padding-top: 15%">
-    <div id="colorlib-blog"  style="background-color: #8860d0;border-radius: 15px">
+    <div id="colorlib-blog"  style="background-color: #5fa9d0;border-radius: 15px">
         <div class="container">
             <div class="row">
                 <div class="col-md-8 col-md-push-8 animate-box ">
