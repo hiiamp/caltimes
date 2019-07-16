@@ -72,9 +72,6 @@
     document.querySelector('#create-board').onclick = function() {
         dialog.showModal();
     };
-    document.querySelector('#save').onclick = function() {
-        dialog.close();
-    };
     document.querySelector('#cancel').onclick = function() {
         dialog.close();
     };

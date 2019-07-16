@@ -83,15 +83,23 @@ Route::group(['namespace' => 'Client'], function() {
 
     Route::get('searchTask', 'TasksController@searchTask')->name('searchTask');
 
-    Route::post('edit_task', 'TasksController@editTask')->name('edit.task')->middleware('private.list');
+    Route::get('edit_task', 'TasksController@editTask')->name('edit.task')->middleware('private.list');
 
-    Route::post('delete_task', 'TasksController@deleteTask')->name('delete.task');
+    Route::get('delete_task', 'TasksController@deleteTask')->name('delete.task');
 
     Route::post('outList', 'AccessesController@outList')->name('out.list');
 
     Route::post('delete_user', 'UsersController@deleteUser')->name('delete.user')->middleware('admin');
 
-    Route::get('profile', 'UsersController@profileUser')->name('profile')->middleware('auth');
+    Route::get('profile', function () {
+        return view('user.profile.index');
+    })->name('profile')->middleware('auth');
+
+    Route::get('profile/worker', 'UsersController@profileUser')->name('worker')->middleware('auth');
+
+    Route::get('profile/recycle', 'UsersController@recycleList')->name('recycle')->middleware('auth');
+
+    Route::get('profile/favorite', 'UsersController@favoriteUser')->name('favorite')->middleware('auth');
 
     Route::get('maskAsRead', 'TodoListsController@maskRead')->name('maskRead');
 
@@ -107,3 +115,7 @@ Route::get('notification', function () {
 Route::get('test', function () {
     return view('auth.passwords.reset');
 });
+
+Route::get('abc', function () {
+    return view('user.profile.recycle');
+})->name('abc');

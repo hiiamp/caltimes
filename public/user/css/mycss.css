@@ -147,7 +147,7 @@ article {
     text-overflow: ellipsis;
 }
 .badge.is-due-past {
-    background-color: #c8796f;
+    background-color: #2669ea;
     border-radius: 4px;
     color: #fff;
 }
@@ -228,7 +228,7 @@ dialog {
 .delete_task {
     background: indianred;
     color: #fff;
-    border: 0px solid #4aca85;
+    border: 0px solid indianred;
     margin-right: 4px;
     margin-bottom: 4px;
     font-size: 14px;
@@ -252,7 +252,7 @@ dialog {
     padding: 8px;
 }
 
-#customers tr:nth-child(even){background-color: #f2f2f2;}
+#customers tr{background-color: #f2f2f2;}
 
 #customers tr:hover {background-color: #ddd;}
 
@@ -260,10 +260,29 @@ dialog {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #4aca85;
+    background-color: #8860d0;
     color: white;
 }
-
+a {
+    cursor: pointer;
+}
+li {
+    cursor: pointer;
+}
+.btn-primary {
+    background: rgba(12, 84, 185, 0.72);
+    color: #fff;
+    border: 1px solid rgba(12, 84, 185, 0.72);
+}
+.btn-primary.btn-outline {
+    background: transparent;
+    color: rgba(12, 84, 185, 0.72);
+    border: 1px solid rgba(12, 84, 185, 0.72);
+}
+#colorlib-contact1, .colorlib-blog1 {
+    padding: 0em 0;
+    width: fit-content;
+}
 .owl-theme .owl-dots .owl-dot span {
     width:30px;
     height:30px;
@@ -393,7 +412,7 @@ dialog {
     0 0 40px #99ffaf;
 }
 #page{
-    height: 980px;
+    height: available;
     background-image: url("../images/23 - i0bakoK.jpg");
     background-size: cover;
 }
@@ -478,7 +497,7 @@ dialog {
     padding-top: 20px;
     padding-left: 190px;
     width: 380px;
-    height: 250px;
+    height: 200px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     font-size: 20px;

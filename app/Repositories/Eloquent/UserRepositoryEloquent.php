@@ -103,9 +103,11 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
      * @param $search
      * @return mixed
      */
-    public function searchUser($search)
+    public function searchUser($search, $perpage = 5, $page = 1)
     {
-        return User::where('name', 'like', '%' . $search . '%')->orWhere('name', 'like', '%' . strtolower($search) . '%')->orWhere('name', 'like', '%' . ucwords($search) . '%')->get();
+        if($page == 1) $perpage++;
+        return User::where('name', 'like', '%' . $search . '%')->orWhere('name', 'like', '%' . strtolower($search) . '%')
+            ->orWhere('name', 'like', '%' . ucwords($search) . '%')->offset($perpage*($page-1))->limit($perpage)->get();
     }
 
     /**

@@ -96,9 +96,10 @@ class TodoListRepositoryEloquent extends BaseRepository implements TodoListRepos
      * @param $search
      * @return lists searched
      */
-    public function searchList($search)
+    public function searchList($search, $perpage, $page)
     {
-        return TodoList::where('name', 'like', '%' . $search . '%')->where('isDeleted', false)->get();
+        return TodoList::where('name', 'like', '%' . $search . '%')
+            ->where('isDeleted', false)->offset($perpage*($page-1))->limit($perpage)->get();
     }
 
     /**
@@ -141,6 +142,6 @@ class TodoListRepositoryEloquent extends BaseRepository implements TodoListRepos
      */
     public function findListInRecycle($user_id)
     {
-        return TodoList::where('owner_id', $user_id)->where('isDeleted', true)->get();
+        return TodoList::where('owner_id', $user_id)->where('isDeleted', true);
     }
 }

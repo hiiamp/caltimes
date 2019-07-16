@@ -45,7 +45,7 @@ interface UserRepository extends RepositoryInterface
      * @param $search
      * @return mixed
      */
-    public function searchUser($search);
+    public function searchUser($search, $perpage = 5, $page = 1);
 
     public function notiUser($todo_list_id);
 }

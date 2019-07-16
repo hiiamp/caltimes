@@ -19,7 +19,9 @@
 </div>
 </body>
 @include('user.layouts.script')
-@include('user.layouts.notification')
+<script>
+    $('#page').css('height',$(window).height());
+</script>
 @if(Auth::check())
     <script type="text/javascript">
         $(document).ready(function(){

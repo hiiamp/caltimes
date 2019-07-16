@@ -6,6 +6,7 @@ use App\Mail\UserResetPassEmail;
 use App\Repositories\AccessRepository;
 use App\Repositories\CoworkerRepository;
 use App\Repositories\TasksRepository;
+use App\Repositories\TempAccessRepository;
 use App\Repositories\TodoListRepository;
 use Illuminate\Http\Request;
 
@@ -62,12 +63,17 @@ class UsersController extends Controller
     protected $coworkerRepo;
 
     /**
+     * @var TempAccessRepository
+     */
+    protected $tempAccessRepo;
+    /**
      * UsersController constructor.
      *
      * @param UserRepository $repository
      * @param UserValidator $validator
      */
-    public function __construct(UserRepository $repository, UserValidator $validator, TasksRepository $tasksRepo, AccessRepository $accessRepo, TodoListRepository $todoListRepo, CoworkerRepository $coworkerRepo)
+    public function __construct(UserRepository $repository, UserValidator $validator, TasksRepository $tasksRepo,  AccessRepository $accessRepo,
+        TodoListRepository $todoListRepo, CoworkerRepository $coworkerRepo, TempAccessRepository $tempAccessRepo)
     {
         $this->repository = $repository;
         $this->validator  = $validator;
@@ -75,6 +81,7 @@ class UsersController extends Controller
         $this->accessRepo = $accessRepo;
         $this->todoListRepo =$todoListRepo;
         $this->coworkerRepo = $coworkerRepo;
+        $this->tempAccessRepo = $tempAccessRepo;
     }
 
     /**
@@ -315,17 +322,36 @@ class UsersController extends Controller
                 $user = $this->repository->find($list->owner_id);
                 $list->owner = $user->name;
             }
-            $favourites = $this->coworkerRepo->findFavourites(Auth::user()->id);
-            $recycleList = $this->todoListRepo->findListInRecycle(Auth::user()->id);
+            return view('user.profile.worker', [
+                'users' => $users,
+                'lists' =>$lists,
+            ]);
+        }
+        return redirect()->route('home');
+    }
+
+    public function favoriteUser()
+    {
+        if(Auth::user()->level > User::isNotActive) {
+            $favourites = $this->coworkerRepo->findFavourites(Auth::user()->id)->paginate(5);
+
+            return view('user.profile.favorite', [
+                'favourites' => $favourites,
+            ]);
+        }
+        return redirect()->route('home');
+    }
+
+    public function recycleList()
+    {
+        if(Auth::user()->level > User::isNotActive) {
+            $recycleList = $this->todoListRepo->findListInRecycle(Auth::user()->id)->paginate(5);
             if(isset($recycleList) && count($recycleList))
                 foreach ($recycleList as $list)
                 {
                     $list->numtask = count($this->tasksRepo->getTaskByIdList($list->id));
                 }
-            return view('user.profile.index', [
-                'users' => $users,
-                'lists' =>$lists,
-                'favourites' => $favourites,
+            return view('user.profile.recycle', [
                 'recycleList' => $recycleList
             ]);
         }
@@ -350,6 +376,7 @@ class UsersController extends Controller
         $this->coworkerRepo->deleteWhere(['user_id' => $user_id]);
         $this->coworkerRepo->deleteWhere(['user_co_id' => $user_id]);
         $tasks = $this->tasksRepo->findWhere(['user_id' => $user_id]);
+        if(is_array($tasks) && count($tasks))
         foreach ($tasks as $task)
         {
             $this->tasksRepo->update(['user_id' => 1], $task->id);
@@ -374,6 +401,9 @@ class UsersController extends Controller
                 }
             }
             if($onew == 0) {
+                $this->tasksRepo->deleteWhere(['todo_list_id' => $list->id]);
+                $this->accessRepo->deleteWhere(['todo_list_id' => $list->id]);
+                $this->tempAccessRepo->deleteWhere(['todo_list_id' => $list->id]);
                 $this->todoListRepo->delete($list->id);
             } else {
                 $this->todoListRepo->update(['owner_id' => $onew], $list->id);
@@ -390,48 +420,23 @@ class UsersController extends Controller
     public function searchUser(Request $request)
     {
         if ($request->ajax()) {
-            $output = '';
-            $a = '';
-            $search = $request->search;
-            if ($search != '') {
-                $data = $this->repository->searchUser($search);
+            $search = isset($request['search']) ? $request['search'] : '';
+            $page = isset($request['page']) ? $request['page'] : 1;
+            if($page < 1) $page = 1;
+            $data = $this->repository->searchUser($search, 5, $page);
+            while(!$data->count() && $page > 1) {
+                $page--;
+                $data = $this->repository->searchUser($search, 5, $page);
             }
-            else {
-                $data = $this->repository->allBuilder()->paginate(5);
-            }
-            $total_row = $data->count();
-            if ($total_row > 0) {
-                foreach ($data as $user) {
-                    if($user->id == 1) continue;
-                    if($user->level == User::isAdmin) $a = 'Admin';
-                    else if($user->level == User::isUser) $a = 'User';
-                    else $a = 'Not validate';
-                    $output .= '
-                        <tr>
-                            <td>
-                                '.$user->name.'
-                            </td>
-                            <td>
-                                '.$user->email.'
-                            </td>
-                            <td>
-                                '.$a.'
-                            </td>
-                            <td>
-                                <a data-pjax href="'.route('admin.list').'?user_id='.$user->id.'" class="btn btn-sm btn-primary" style="color: whitesmoke"> List joined </a>
-                                <a data-index="'.$user->id.'" class="btn btn-sm btn-primary delete_u" style="color: whitesmoke"> Delete </a>
-                            </td>
-                        </tr>
-                        ';
-                }
-            } else {
-                $output = '<h2>No Data Found</h2>';
-            }
-            $data = array(
-                'table_data' => $output,
-                'total_data' => $total_row
+            if(!$data->count()) {
+                $output = '<h2></h2>
+                               <img style="padding-left: 32%" src="'. asset('user/images/11.png').'">';
+            } else $output = view('user.render.user')->with(['users'=>$data])->render();
+            $data1 = array(
+                'page_current' => $page,
+                'table_data' => $output
             );
-            echo json_encode($data);
+            echo json_encode($data1);
         }
     }
 

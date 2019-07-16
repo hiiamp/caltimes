@@ -19,13 +19,13 @@
                     disable: false,
                     connectWith: ".connectedSortable",
                     update: function(event,ui){
-                        var status_task = $(this).attr('id')
+                        var status_task = $(this).attr('id');
                         $(this).children().each(function (index) {
                             if ($(this).attr('data-position') != (index+1)) {
                                 $(this).attr('data-position',(index+1)).addClass('updated')
                             }
                             $(this).addClass('updated');
-                        })
+                        });
                         saveNewPositions(status_task)
                     }
                 }).disableSelection();
@@ -44,7 +44,6 @@
                             status_id=3;
                         }
                         positions.push([$(this).attr('data-index'), $(this).attr('data-position'), status_id]);
-                        console.log(positions);
                         $(this).removeClass('updated');
                     });
                     $.ajax({
@@ -71,8 +70,11 @@
                         });
                         switch (event.which) {
                             case 1:
-                                $('#sortable1 li, #sortable2 li, #sortable3 li').parent().parent().parent().css('z-index','2');
+                                $('#sortable1, #sortable2, #sortable3').parent().parent().each(function () {
+                                    $(this).css('z-index','2');
+                                });
                                 $(this).parent().parent().parent().css('z-index','50');
+                                $(this).css('z-index','51');
                                 $(this).css({'transform':' rotate(5deg)','z-index':'100'});
                                 break;
                             case 3:
@@ -91,19 +93,21 @@
                         var container = $("#sortable1 li, #sortable2 li, #sortable3 li").children('span');
 
                         // Nếu click bên ngoài đối tượng container thì ẩn nó đi
-                        if (!container.is(e.target) && container.has(e.target).length === 0)
+                        if(!container.is(e.target) && container.has(e.target).length === 0)
                         {
                             container.hide();
                         }
+
+
                     });
                 });
                 var dialog_share = document.querySelector('#sharewithdialog');
                 document.querySelector('.sharewith').onclick = function() {
                     dialog_share.showModal();
                 };
-                document.querySelector('#share').onclick = function() {
-                    dialog_share.close();
-                };
+                //document.querySelector('#share').onclick = function() {
+                //  dialog_share.close();
+                //};
                 document.querySelector('#cancelshare').onclick = function() {
                     dialog_share.close();
                 };
@@ -160,6 +164,22 @@
                         $('#delete_task_id').attr('value',task_id);
                     });
                 });
+                $('#delete_task_submit').click(function () {
+                    dialog_delete_task.close();
+                    var task_id = $('#delete_task_id').val();
+                    $.ajax({
+                        url : '{{ route('delete.task') }}',
+                        dataType: 'json',
+                        data:{'task_id': task_id,},
+                        success:function(data){
+                            $('.has-dropdown').each(function () {
+                                if($(this).attr('data-index') === task_id) {
+                                    $(this).remove();
+                                }
+                            });
+                        }
+                    });
+                });
                 document.querySelector('#delete_task_submit').onclick = function () {
                     dialog_delete_task.close();
                 };
@@ -170,6 +190,7 @@
                 var dialog_edit = document.querySelector('#detail-dialog');
                 $( "#sortable1, #sortable2, #sortable3" ).children().each(function(index) {
                     $(this).click(function(){
+                        dialog_edit.close();
                         dialog_edit.showModal();
                         //console.log($(this).attr('data-index'));
                         var task_id = $(this).attr('data-index');
@@ -221,9 +242,6 @@
                 var dialog1 = document.querySelector('#create-task');
                 document.querySelector('#add-task').onclick = function() {
                     dialog1.showModal();
-                };
-                document.querySelector('#save1').onclick = function() {
-                    dialog1.close();
                 };
                 document.querySelector('#out1').onclick = function() {
                     dialog1.close();
@@ -297,16 +315,12 @@
                 var search = $('#search').val();
                 var todo_list_id = $('#list_id1').attr('value');
                 $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
                     url : '{{ route('searchTask') }}',
                     dataType: 'json',
                     data:{'todo_list_id': todo_list_id,
                         'search':search},
                     success:function(data){
-                        //console.log(temp.outerHTML);
-                        $('.displayTask').html(data.table_data);
+                        $('.displayTask').html(data.dataSearch);
                         temp();
                     }
                 });
@@ -327,9 +341,9 @@
                 $('#button_action').val('insert');
                 $('#save1').val('Create');
             });
-
             $('#add-task-form').on('submit',function (event) {
                 event.preventDefault();
+                document.getElementById('create-task').close();
                 var form_data = $(this).serialize();
                 $.ajax({
                     url : '{{ route('create_task') }}',
@@ -342,12 +356,44 @@
                         $('#add-task-form')[0].reset();
                         $('#save1').val('Create');
                         $('#button_action').val('insert');
-                        console.log(data.out);
+                        temp();
+                    },
+                });
+            });
 
+            //==================
+            $( "#sortable1, #sortable2, #sortable3" ).children().click(function(){
+                $('#edit_action').val('edit');
+                $('#save11').val('Save');
+            });
+
+            $('#edit-task-form').on('submit',function (event) {
+                event.preventDefault();
+                var form_data = $(this).serialize();
+                $.ajax({
+                    url : '{{ route('edit.task') }}',
+                    method: "get",
+                    data:form_data,
+                    dataType: 'json',
+                    success:function(data){
+                        console.log(data.important);
+                        if(data.important === '0') {
+                            console.log('high');
+                            $('#priority1'+data.task_id).attr('title', 'High priority');
+                            $('#priority1'+data.task_id).css('background-color', '#2669ea');
+                        } else if(data.important === '1') {
+                            $('#priority1'+data.task_id).attr('title', 'Medium priority');
+                            $('#priority1'+data.task_id).css('background-color', '#84ceeb');
+                        } else {
+                            $('#priority1'+data.task_id).attr('title', 'Low priority');
+                            $('#priority1'+data.task_id).css('background-color', '#c1c8e4');
+                        }
+                        $('#edit_action').val('edit');
+                        $('#save11').val('Save');
                         temp();
                     }
                 });
-            })
+            });
         } );
     </script>
 @else

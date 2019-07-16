@@ -6,10 +6,10 @@
     <p class="badges">
                 <span class="js-badges">
     <p class="badge js-due-date-badge is-due-past"
-       @if($task->important == 2) style="background-color: #008700" title="Low Priority"
-       @elseif($task->important == 1) style="background-color: #979107" title="Medium Priority"
-       @else title="High Priority"
-            @endif>
+        @if($task->important == 2) style="background-color: #c1c8e4" title="Low Priority"
+        @elseif($task->important == 1) style="background-color: #84ceeb" title="Medium Priority"
+        @else title="High Priority"
+        @endif>
         <span class="badge-icon icon-sm icon-clock"></span>
         <span class="badge-text js-due-date-text">{{$task->created_at}}</span>
         <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>

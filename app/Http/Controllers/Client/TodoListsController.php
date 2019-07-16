@@ -416,16 +416,21 @@ class TodoListsController extends Controller
     {
         if ($request->ajax()) {
             $output = '';
-            $search = $request->search;
-            $check_admin = false;
-            $check_admin = @$request->admin;
-            if ($search != '') {
-                $data = $this->repository->searchList($search);
+            $search = isset($request['search']) ? $request['search'] : '';
+            $page = isset($request['page']) ? $request['page'] : 1;
+            if($page < 1) $page = 1;
+            $check_admin = isset($request['admin']) ? $request['admin'] : false;
+            if($check_admin) {
+                $data = $this->repository->searchList($search, 7, $page);
+                while ($data->count() == 0 && $page > 1) {
+                    $page--;
+                    $data = $this->repository->searchList($search, 7, $page);
+                }
             } else {
-                if($check_admin) {
-                    $data = $this->repository->allBuider()->paginate(5);
-                } else if(Auth::user()->level == User::isAdmin) {
-                    $data = $this->repository->findListCanView(Auth::user()->id)->paginate(6);
+                $data = $this->repository->searchList($search, 6, $page);
+                while ($data->count() == 0 && $page > 1) {
+                    $page--;
+                    $data = $this->repository->searchList($search, 6 , $page);
                 }
             }
             $total_row = $data->count();
@@ -434,28 +439,8 @@ class TodoListsController extends Controller
                     foreach ($data as $list) {
                         $list->owner = $this->userRepo->find($list->owner_id);
                         $list->member = $this->accessRepo->findByField('todo_list_id', $list->id)->count();
-                        if ($list->is_public == 1) {
-                            $is_public = '<p class="margin_home"><span><i class="icon-globe"></i></span> Public <br></p>';
-                        } else {
-                            $is_public = '<p class="margin_home"><span><i class="icon-globe"></i></span> Private <br></p>';
-                        }
-                        $output .= '
-                    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
-                        <div class="product-entry">
-                            <div class="product-img">
-                                <article>
-                                    <h3 class="title_item_home">' . $list->name . '</h3>
-                                    <p class="admin margin_home"><span>' . $list->created_at . '</span></p>
-                                    ' . $is_public . '
-                                    <p class="margin_home"><span><i class="icon-location-2"></i></span> Created By: '.$list->owner->name.'<br></p>
-                                    <p class="margin_home"><span><i class="icon-eye2"></i></span> Member: '.$list->member.' <br></p>
-                                    <p class="margin_home"><a data-pjax href="' . route('link.board', ['code' => $list->link]) . '" class="btn btn-primary btn-outline with-arrow">See more</a></p>
-                                </article>
-                            </div>
-                        </div>
-                    </div>
-                    ';
                     }
+                    $output = view('user.render.searchlist_user')->with('lists',$data)->render();
                 } else {
                     $output = '<h2></h2>
                                <img style="padding-left: 32%" src="'. asset('user/images/11.png').'">';
@@ -463,33 +448,17 @@ class TodoListsController extends Controller
             } else {
                 if ($total_row > 0) {
                     foreach ($data as $list) {
-                        $list->owner = $this->userRepo->find($list->owner_id);
-                        $output .= '
-                            <tr>
-                                <td>
-                                    <a class="btn btn-sm btn-primary" href="'.route('link.board',['code'=>$list->link]).'">'.$list->link.'</a>
-                                </td>
-                                <td>
-                                    '.$list->name.'
-                                </td>
-                                <td>
-                                    '.$list->created_at.'
-                                </td>
-                                <td>
-                                    '.$list->owner->name.'
-                                </td>
-                                <td>
-                                    <a data-pjax href="'.route('admin.user').'?list_id='.$list->id.'" class="btn btn-sm btn-primary" style="color: whitesmoke"> Worker </a>
-                                    <a data-index="'.$list->id.'" id="Delete'.$list->id.'" class="btn btn-sm btn-primary delete_l" style="color: whitesmoke"> Delete </a>
-                                </td>
-                            </tr>
-                        ';
+                        $user = $this->userRepo->find($list->owner_id);
+                        $list->owner = $user->name;
                     }
+                    $output = view('user.render.searchlist_admin')->with('lists',$data)->render();
                 } else {
-                    $output = '<h2>No Data Found</h2>';
+                    $output = '<h2></h2>
+                               <img style="padding-left: 32%" src="'. asset('user/images/11.png').'">';
                 }
             }
             $data = array(
+                'page_current' => $page,
                 'table_data' => $output,
                 'total_data' => $total_row
             );
@@ -664,7 +633,7 @@ class TodoListsController extends Controller
             'created_at' => Carbon::now(),
         ];
         Notification::send($users,new RepliedToThread($list,$task,'change',$user));
-        return redirect()->back();
+        return redirect()->back()->with('notif', 'You have changed the status of the list successfully ');
     }
 
     public function maskRead()

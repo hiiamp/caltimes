@@ -37,12 +37,12 @@
 @endif
 <section id="home" class="video-hero" style="position: fixed; width: 100%; height: 200px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;" data-section="home">
     <div style="height: 200px;" class="overlay"></div>
-    <div style="height: 300px;" class="display-t display-t2 text-center">
+    <div style="height: 280px;" class="display-t display-t2 text-center">
         <div class="display-tc display-tc2">
             <div class="container">
                 <div class="col-md-12 col-md-offset-0">
                     <div style="line-height: 0;" class="animate-box">
-                        <p>{{$list->name}}</p>
+                        <p>{{$list->name}} @if($list->is_public)<span class="icon-unlock"></span> @else <span class="icon-lock"></span> @endif</p>
                         <h4>Create by: {{$username}}</h4>
                     </div>
                 </div>
@@ -87,32 +87,6 @@
                 <input id="delete_cancel" type="reset" value="Cancel" class="btn btn-primary">
             </div>
             </form>
-    </dialog>
-    <dialog id="activities">
-        <form method="" action="">
-            @csrf
-            <table id="customers">
-                @if(\Illuminate\Support\Facades\Auth::Check())
-                    <thead class="thead-light">
-                    <tr>
-                        <th scope="col">Acticities</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @if(auth()->user()->unreadNotifications->count())
-                        @foreach(auth()->user()->unreadNotifications as $notification)
-                        <tr>
-                            <td>
-                                {{$notification->data['user']['name']}} {{$notification->data['act']}} a task "{{$notification->data['task']['name']}}" on list "{{$notification->data['list']['name']}}" at {{$notification->data['task']['created_at']}}
-                            </td>
-                        </tr>
-                        @endforeach
-                    @endif
-                    </tbody>
-                @endif
-            </table>
-            <input id="noti_cancel" type="reset" value="Cancel" class="btn btn-primary">
-        </form>
     </dialog>
     @if(session('message1'))
         <script>

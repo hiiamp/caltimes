@@ -23,4 +23,6 @@ interface TasksRepository extends RepositoryInterface
      * @return mixed
      */
     public function searchTask($search,$todo_list_id);
+
+    public function checkName($todo_list_id,$name);
 }

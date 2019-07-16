@@ -61,6 +61,11 @@ class TasksRepositoryEloquent extends BaseRepository implements TasksRepository
      */
     public function searchTask($search,$todo_list_id)
     {
-        return Tasks::where('name', 'like', '%'.$search.'%')->get();
+        return Tasks::where('name', 'like', '%'.$search.'%')->where('todo_list_id','=',$todo_list_id)->get();
+    }
+
+    public function checkName($todo_list_id,$name)
+    {
+        return Tasks::where('todo_list_id','=',$todo_list_id)->where('name', '=', $name)->get();
     }
 }

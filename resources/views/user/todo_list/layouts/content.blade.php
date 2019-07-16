@@ -18,10 +18,10 @@
                                     <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}@if($task->assign->id == @Auth::user()->id) (me) @endif</span>
                                     <p class="badges">
                                         <span class="js-badges">
-                                            <p class="badge js-due-date-badge is-due-past"
-                                                @if($task->important == 2) style="background-color: #008700" title="Low Priority"
-                                                @elseif($task->important == 1) style="background-color: #979107" title="Medium Priority"
-                                                @else title="High Priority"
+                                            <p id="priority1{{$task->id}}" class="badge js-due-date-badge is-due-past"
+                                                @if($task->important == 2) style="background-color: #c1c8e4" title="Low Priority"
+                                                    @elseif($task->important == 1) style="background-color: #84ceeb" title="Medium Priority"
+                                                        @else title="High Priority"
                                                 @endif>
                                                 <span class="badge-icon icon-sm icon-clock"></span>
                                                 <span class="badge-text js-due-date-text">{{$task->created_at}}</span>
@@ -51,7 +51,11 @@
                                     <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}@if($task->assign->id == @Auth::user()->id) (me) @endif</span>
                                     <p class="badges">
                                         <span class="js-badges">
-                                            <p class="badge js-due-date-badge is-due-past" @if($task->important == 2) style="background-color: #008700" title="Low Priority" @elseif($task->important == 1) style="background-color: #979107" title="Medium Priority" @else title="High Priority" @endif>
+                                            <p id="priority1{{$task->id}}" class="badge js-due-date-badge is-due-past"
+                                                @if($task->important == 2) style="background-color: #c1c8e4" title="Low Priority"
+                                                    @elseif($task->important == 1) style="background-color: #84ceeb" title="Medium Priority"
+                                                        @else title="High Priority"
+                                                @endif>
                                                 <span class="badge-icon icon-sm icon-clock"></span>
                                                 <span class="badge-text js-due-date-text">{{$task->created_at}}</span>
                                                 <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
@@ -77,7 +81,11 @@
                                     <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}@if($task->assign->id == @Auth::user()->id) (me) @endif</span>
                                     <p class="badges">
                                         <span class="js-badges">
-                                            <p class="badge js-due-date-badge is-due-past" @if($task->important == 2) style="background-color: #008700" title="Low Priority" @elseif($task->important == 1) style="background-color: #979107" title="Medium Priority" @else title="High Priority" @endif>
+                                            <p id="priority1{{$task->id}}" class="badge js-due-date-badge is-due-past"
+                                                @if($task->important == 2) style="background-color: #c1c8e4" title="Low Priority"
+                                                    @elseif($task->important == 1) style="background-color: #84ceeb" title="Medium Priority"
+                                                        @else title="High Priority"
+                                                @endif>
                                                 <span class="badge-icon icon-sm icon-clock"></span>
                                                 <span class="badge-text js-due-date-text">{{$task->created_at}}</span>
                                                 <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
@@ -94,7 +102,7 @@
     </div>
 </div>
 <!--Create task-->
-<dialog id="create-task">
+<dialog id="create-task" >
     <form id="add-task-form">
         <div class="container">
             <div class="row">
@@ -122,9 +130,9 @@
                                 <div class="con-info">
                                     <p><span><i class="icon-globe"></i></span> Priority level </p>
                                     <select class="btn" name="priority" class="custom-select" id="priority">
-                                        <option value="0">High</option>
-                                        <option value="1" selected>Medium</option>
-                                        <option value="2">Low</option>
+                                        <option style="background-color: #2669ea" value="0">High</option>
+                                        <option style="background-color: #84ceeb" value="1" selected>Medium</option>
+                                        <option style="background-color: #c1c8e4" value="2">Low</option>
                                     </select>
                                 </div>
                             </div>
@@ -137,7 +145,8 @@
                         <div class="col-md-12">
                             <p></p>
                             <p>Title</p>
-                            <input id="name" class="form-control" name="name" hidden="hidden" cols="30" rows="1" class="hidden_dis">
+                            <input id="name" type="name" class="form-control" name="name" cols="30" rows="1" required autofocus class="hidden_dis">
+                            <span style="color: red" id="noti_name"></span>
                         </div>
                         <div class="col-md-12">
                             <p></p>
@@ -157,7 +166,7 @@
 </dialog>
 <!--Detail task-->
 <dialog id="detail-dialog">
-    <form data-pjax method="post" action="{{route('edit.task')}}">
+    <form id="edit-task-form">
         @csrf()
         <div class="container">
             <div class="row">
@@ -189,17 +198,17 @@
                                     @foreach($tasks as $task)
                                         <select class="btn prioty" name="priority" class="custom-select" id="priority{{$task->id}}">
                                             @if($task->important == 0)
-                                                <option id="p0" value="0" style="background-color: #0da5c0" selected>High</option>
-                                                <option id="p1" value="1" style="background-color: #00b3ee">Medium</option>
-                                                <option id="p2" value="2" style="background-color: #00f7b5">Low</option>
+                                                <option id="p0" value="0" style="background-color: #2669ea" selected>High</option>
+                                                <option id="p1" value="1" style="background-color: #84ceeb">Medium</option>
+                                                <option id="p2" value="2" style="background-color: #c1c8e4">Low</option>
                                             @elseif($task->important == 1)
-                                                <option id="p0" value="0" style="background-color: #0da5c0">High</option>
-                                                <option id="p1" value="1" style="background-color: #00b3ee" selected>Medium</option>
-                                                <option id="p2" value="2" style="background-color: #00f7b5">Low</option>
+                                                <option id="p0" value="0" style="background-color: #2669ea">High</option>
+                                                <option id="p1" value="1" style="background-color: #84ceeb" selected>Medium</option>
+                                                <option id="p2" value="2" style="background-color: #c1c8e4">Low</option>
                                             @else
-                                                <option id="p0" value="0" style="background-color: #0da5c0">High</option>
-                                                <option id="p1" value="1" style="background-color: #00b3ee">Medium</option>
-                                                <option id="p2" value="2" style="background-color: #00f7b5" selected>Low</option>
+                                                <option id="p0" value="0" style="background-color: #2669ea">High</option>
+                                                <option id="p1" value="1" style="background-color: #84ceeb">Medium</option>
+                                                <option id="p2" value="2" style="background-color: #c1c8e4" selected>Low</option>
                                             @endif
                                         </select>
                                     @endforeach
@@ -230,7 +239,8 @@
                     </div>
                     <div class="form-group">
                         @if(\Illuminate\Support\Facades\Auth::check())
-                            <input id="save11" type="submit" value="Save" class="btn btn-primary">
+                            <input type="hidden" name="edit_action" id="edit_action" value="edit" />
+                            <input id="save11" name="submit" type="submit" value="Save" class="btn btn-primary">
                         @endif
                         <input id="out11" type="reset" value="Cancel" class="btn btn-primary">
                     </div>
@@ -252,7 +262,7 @@
             </div>
         </div>
         <div class="form-group">
-            <input id="delete_task_submit" type="submit" value="Yes, I'm sure." class="btn btn-primary">
+            <input id="delete_task_submit" type="button" value="Yes, I'm sure." class="btn btn-primary">
             <input id="delete_task_cancel" type="reset" value="Cancel" class="btn btn-primary">
         </div>
     </form>

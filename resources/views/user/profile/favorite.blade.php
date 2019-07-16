@@ -6,6 +6,8 @@
 
     @include('user.profile.layouts.header')
 
-    @include('user.profile.layouts.content')
-
+    @include('user.profile.layouts.contentfavorite')
+    <script>
+        $('.container1').css('height',$(window).height());
+    </script>
 @endsection

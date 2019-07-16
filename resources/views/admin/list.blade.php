@@ -48,12 +48,15 @@
                 <div class="row">
                     <div data-pjax class="col-md-12 text-center" id="paginate-div">
                     {{$lists->links()}}
-                    <!--<ul class="pagination">
-                        <li class="disabled"><a href="#">&laquo;</a></li>
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">&raquo;</a></li>
-                    </ul>-->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center" id="paginate-search" style="display: none">
+                        <ul class="pagination">
+                            <li class="page-item" id="page-search-pre"><span class="page-link">&laquo;</span></li>
+                            <li class="page-item active"><span id="page-search-current" class="page-link">0</span></li>
+                            <li class="page-item" id="page-search-next"><span class="page-link">&raquo;</span></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -61,7 +64,7 @@
     </div>
 
 <dialog id="deletelistdialog1">
-    <form data-pjax method="post" action="{{route('delete.list')}}">
+    <form method="post" action="{{route('delete.list')}}">
         @csrf
         <div class="row form-group">
             <div class="col-md-12">
@@ -130,6 +133,7 @@
                     temp1 = $('#tbody-list').html();
                 }
                 $('#paginate-div').hide();
+                $('#paginate-search').show();
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -137,9 +141,11 @@
                     url : '{{ route('searchList') }}',
                     dataType: 'json',
                     data:{'search':search,
+                          'page': 1,
                           'admin':true},
                     success:function(data){
                         $('#tbody-list').html(data.table_data);
+                        $('#page-search-current').html(data.page_current);
                         $(document).pjax('[data-pjax] a, a[data-pjax]', '#page');
                         $(document).on('submit', 'form[data-pjax]', function(event) {
                             $.pjax.submit(event, '#page');
@@ -155,6 +161,7 @@
             else {
                 check = 0;
                 $('#paginate-div').show();
+                $('#paginate-search').hide();
                 $('#tbody-list').html(temp1);
                 $(document).pjax('[data-pjax] a, a[data-pjax]', '#page');
                 $(document).on('submit', 'form[data-pjax]', function(event) {
@@ -166,6 +173,60 @@
                 }
             }
             setNewEvent_List();
+        });
+        $('#page-search-pre').click(function () {
+            var page = Number($('#page-search-current').html());
+            if (page !== 1) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url : '{{ route('searchList') }}',
+                    dataType: 'json',
+                    data:{'search':$('#search-list').val(),
+                        'page': page - 1,
+                        'admin':true},
+                    success:function(data){
+                        $('#tbody-list').html(data.table_data);
+                        $('#page-search-current').html(data.page_current);
+                        $(document).pjax('[data-pjax] a, a[data-pjax]', '#page');
+                        $(document).on('submit', 'form[data-pjax]', function(event) {
+                            $.pjax.submit(event, '#page');
+                        });
+                        // does current browser support PJAX
+                        if ($.support.pjax) {
+                            $.pjax.defaults.timeout = 2000; // time in milliseconds
+                        }
+                        setNewEvent_List();
+                    }
+                });
+            }
+        });
+        $('#page-search-next').click(function () {
+            var page = Number($('#page-search-current').html());
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url : '{{ route('searchList') }}',
+                dataType: 'json',
+                data:{'search':$('#search-list').val(),
+                    'page': page + 1,
+                    'admin':true},
+                success:function(data){
+                    $('#tbody-list').html(data.table_data);
+                    $('#page-search-current').html(data.page_current);
+                    $(document).pjax('[data-pjax] a, a[data-pjax]', '#page');
+                    $(document).on('submit', 'form[data-pjax]', function(event) {
+                        $.pjax.submit(event, '#page');
+                    });
+                    // does current browser support PJAX
+                    if ($.support.pjax) {
+                        $.pjax.defaults.timeout = 2000; // time in milliseconds
+                    }
+                    setNewEvent_List();
+                }
+            });
         });
     } catch (e) {
 

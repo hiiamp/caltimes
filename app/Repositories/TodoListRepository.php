@@ -39,7 +39,7 @@ interface TodoListRepository extends RepositoryInterface
      * @param $search
      * @return mixed
      */
-    public function searchList($search);
+    public function searchList($search, $perpage, $page);
 
     /**
      * @param $id_list

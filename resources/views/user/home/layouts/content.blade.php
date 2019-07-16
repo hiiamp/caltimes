@@ -1,4 +1,4 @@
-<div class="colorlib-blog" style="padding-top: 250px;">
+<div class="colorlib-blog colorlib-blog1" style="padding-top: 250px;">
     <div class="container-fluid" style="position: fixed; width: 100%">
         <div class="row display">
             @foreach($lists as $list)
@@ -16,16 +16,6 @@
                                 <p class="margin_home"><span><i class="icon-location-2"></i></span> {{$list->owner->name}} <br></p>
                                 <p class="margin_home"><span><i class="icon-eye2"></i></span> Member: {{$list->member}} <br></p>
                                 <p class="margin_home"><a data-pjax href="{{route('link.board', ['code' => $list->link])}}" class="btn btn-primary btn-outline with-arrow">See more</a></p>
-                                <!--<div class="cart">
-                                    <p class="breadcrumbs" style="font-size: small">
-                                        <span>
-                                            <a class="sharewith" >Share with</a>
-                                        </span>
-                                        <span>
-                                            <a >Delete</a>
-                                        </span>
-                                    </p>
-                                </div>-->
                             </article>
                         </div>
                     </div>
@@ -34,17 +24,16 @@
         </div>
     </div>
 </div>
-<div class="gototop js-top active" style="left: 0%; width: fit-content; height: fit-content; padding: 0">
-    <div style="padding-top: 0px;" class="row">
-        <div data-pjax class="col-md-12 text-center" id="paginate-home">
-        {{$lists->links()}}
-        <!--<ul class="pagination">
-                            <li class="disabled"><a href="#">&laquo;</a></li>
-                            <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">&raquo;</a></li>
-                        </ul>-->
-        </div>
+<div style="padding-top: 425px;" class="row">
+    <div data-pjax class="col-md-12 text-center" id="paginate-home">
+    {{$lists->links()}}
+    </div>
+    <div class="col-md-12 text-center" id="paginate-search" style="display: none">
+        <ul class="pagination">
+            <li class="page-item" id="page-search-pre"><span class="page-link">&laquo;</span></li>
+            <li class="page-item active"><span id="page-search-current" class="page-link">0</span></li>
+            <li class="page-item" id="page-search-next"><span class="page-link">&raquo;</span></li>
+        </ul>
     </div>
 </div>
 <dialog id="sharewithdialog">
@@ -89,22 +78,63 @@
                 temp2 = $('.display').html();
             }
             $('#paginate-home').hide();
+            $('#paginate-search').show();
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 url : '{{ route('searchList') }}',
                 dataType: 'json',
-                data:{'search':search},
+                data:{'search':search,
+                      'page': 1},
                 success:function(data){
                     $('.display').html(data.table_data);
+                    $('#page-search-current').html(data.page_current);
                 }
             });
         } else {
             check2 = 0;
             $('.display').html(temp2);
             $('#paginate-home').show();
+            $('#paginate-search').hide();
             search_temp = '';
         }
-    })
+    });
+    $('#page-search-pre').click(function () {
+        var page = Number($('#page-search-current').html());
+        if (page !== 1) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url : '{{ route('searchList') }}',
+                dataType: 'json',
+                data:{'search':$('#search').val(),
+                    'page': page - 1},
+                success:function(data){
+                    $('.display').html(data.table_data);
+                    $('#page-search-current').html(data.page_current);
+                }
+            });
+        }
+    });
+    $('#page-search-next').click(function () {
+        var page = Number($('#page-search-current').html());
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url : '{{ route('searchList') }}',
+            dataType: 'json',
+            data:{'search':$('#search').val(),
+                'page': page + 1},
+            success:function(data){
+                $('.display').html(data.table_data);
+                $('#page-search-current').html(data.page_current);
+            }
+        });
+    });
+    if($(window).height() > 700) {
+        $('#paginate-home').show();
+    }
 </script>

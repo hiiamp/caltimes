@@ -1,4 +1,4 @@
-<form data-pjax method="post" action="{{route('edit.task')}}">
+<form id="edit-task-form">
     @csrf()
     <div class="container">
         <div class="row">

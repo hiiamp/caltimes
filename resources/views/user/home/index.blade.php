@@ -2,6 +2,7 @@
 
 @section('content')
     <title>Caltimes</title>
+    @include('user.layouts.notification')
 
     @include('user.home.layouts.header')
 

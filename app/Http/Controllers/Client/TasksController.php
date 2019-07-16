@@ -236,37 +236,29 @@ class TasksController extends Controller
         if($request->ajax()){
             $success_output ='';
             $detail = '';
+            $error = '';
             if($request->get('button_action') == "insert")
             {
-                $task1 = [
-                    'name'    =>  $request->get('name'),
-                    'content'     =>  $request->get('content'),
-                    'important' => $request->get('priority'),
-                    'status_id' => 1,
-                    'todo_list_id' => $request->get('todoid'),
-                    'user_id' => $request->get('assign'),
-                    'position' => 0,
-                ];
-                $task1 = $this->repository->create($task1);
-                $userTask = $this->userRepo->find($task1->user_id);
-                $t = $userTask->name;
-                $t = str_split($t);
-                $temp = $t[0];
-                $check = 0;
-                foreach ($t as $a)
-                {
-                    if($check == 1) {
-                        $temp.=$a;
-                        $check = 0;
-                    } else if( $a == ' ') $check = 1;
-                }
-                $userTask->character = $temp;
-                $task1->assign = $userTask;
-                $success_output = view('user.render.addtask')->with(['task'=>$task1])->render();
-                $tasks = $this->repository->getTaskByIdList($request->get('todoid'));
-                foreach ($tasks as $task)
-                {
-                    $userTask = $this->userRepo->find($task->user_id);
+                $name = $request->get('name');
+                $content = $request->get('content');
+                $important = $request->get('priority');
+                $todo_list_id= $request->get('todoid');
+                $user_id = $request->get('assign');
+                $checkName = $this->repository->checkName($todo_list_id,$name);
+                //if($checkName) {
+                //    $error = 'This name has already existed.';
+                //} else {
+                    $task1 = [
+                        'name'    =>  $name,
+                        'content'     =>  $content,
+                        'important' => $important,
+                        'status_id' => 1,
+                        'todo_list_id' => $todo_list_id,
+                        'user_id' => $user_id,
+                        'position' => 0,
+                    ];
+                    $task1 = $this->repository->create($task1);
+                    $userTask = $this->userRepo->find($task1->user_id);
                     $t = $userTask->name;
                     $t = str_split($t);
                     $temp = $t[0];
@@ -279,19 +271,39 @@ class TasksController extends Controller
                         } else if( $a == ' ') $check = 1;
                     }
                     $userTask->character = $temp;
-                    $task->assign = $userTask;
-                }
-                $list_users = $this->listRepo->findUserShared($request->get('todoid'))->get();
+                    $task1->assign = $userTask;
+                    $success_output = view('user.render.addtask')->with(['task'=>$task1])->render();
+                    $tasks = $this->repository->getTaskByIdList($todo_list_id);
+                    foreach ($tasks as $task)
+                    {
+                        $userTask = $this->userRepo->find($task->user_id);
+                        $t = $userTask->name;
+                        $t = str_split($t);
+                        $temp = $t[0];
+                        $check = 0;
+                        foreach ($t as $a)
+                        {
+                            if($check == 1) {
+                                $temp.=$a;
+                                $check = 0;
+                            } else if( $a == ' ') $check = 1;
+                        }
+                        $userTask->character = $temp;
+                        $task->assign = $userTask;
+                    }
+                    $list_users = $this->listRepo->findUserShared($todo_list_id)->get();
 
-                $detail = view('user.render.detailtask')->with(['tasks'=>$tasks,'list_users'=>$list_users])->render();
+                    $detail = view('user.render.detailtask')->with(['tasks'=>$tasks,'list_users'=>$list_users])->render();
+                //}
             }
             $user = $this->userRepo->find(Auth::user()->id);
             $list = $this->listRepo->find($request->get('todoid'));
             $users = $this->userRepo->notiUser($request->get('todoid'));
             Notification::send($users,new RepliedToThread($list,Tasks::latest('id')->first(),'create', $user));
             $output = array(
-                'out'    =>  $success_output,
+                'out'    => $success_output,
                 'detail' => $detail,
+                'error'  => $error,
             );
             echo json_encode($output);
         }
@@ -303,29 +315,36 @@ class TasksController extends Controller
      */
     public function editTask(Request $request)
     {
-        $todo_list_id = $request['todo_list_id'];
-        $task = $this->repository->find($todo_list_id);
-        $name = $request['name'];
-        if($name=='') $name=$task->name;
-        $content = $request['content'];
-        $assign = $request['assign'];
-        $id_task = $request['task_id'];
-        $important = $request['priority'];
-        if($assign=='') $assign=$task->user_id;
-        $data = [
-            'id'   => $id_task,
-            'name' => $name,
-            'content' => $content,
-            'user_id' => $assign,
-            'created_at' => Carbon::now(),
-            'important' => $important
-        ];
-        $list = $this->listRepo->find($todo_list_id);
-        $user = $this->userRepo->find(Auth::user()->id);
-        $this->repository->find($id_task)->update($data);
-        $users = $this->userRepo->notiUser($todo_list_id);
-        Notification::send($users,new RepliedToThread($list,$data,'edit', $user));
-        return redirect()->back();
+        if($request->ajax()){
+            if($request->get('edit_action') == 'edit')
+            {
+                $todo_list_id = $request->get('todo_list_id');
+                $id_task = $request->get('task_id');
+                $task = $this->repository->find($id_task);
+                $name = $request->get('name');
+                if($name=='') $name=$task->name;
+                $content = $request->get('content');
+                $assign = $request->get('assign');
+                $important = $request->get('priority');
+                if($assign=='') $assign=$task->user_id;
+                $data = [
+                    'name' => $name,
+                    'content' => $content,
+                    'user_id' => $assign,
+                    'created_at' => Carbon::now(),
+                    'important' => $important
+                ];
+                $list = $this->listRepo->find($todo_list_id);
+                $user = $this->userRepo->find(Auth::user()->id);
+                $this->repository->find($id_task)->update($data);
+                $users = $this->userRepo->notiUser($todo_list_id);
+                Notification::send($users,new RepliedToThread($list,$data,'edit', $user));
+                echo json_encode(array(
+                    'task_id' => $id_task,
+                    'important' => $important
+                ));
+            }
+        }
     }
 
     /**
@@ -334,16 +353,18 @@ class TasksController extends Controller
      */
     public function deleteTask(Request $request)
     {
-        $todo_list_id = $request['todolistid'];
-        $users = $this->userRepo->notiUser($todo_list_id);
-        $user = $this->userRepo->find(Auth::user()->id);
-        $list = $this->listRepo->find($todo_list_id);
-        $id = $request['task_id'];
-        $task = $this->repository->find($id);
-        Notification::send($users,new RepliedToThread($list,$task,'delete',$user));
-        $name = $task->name;
-        $this->repository->delete($id);
-        return redirect()->back()->with('notif', 'Delete task: \'' . $name . '\' success!');
+        if($request->ajax()) {
+            $id = $request['task_id'];
+            $todo_list_id = $this->repository->find($id)->todo_list_id;
+            $users = $this->userRepo->notiUser($todo_list_id);
+            $user = $this->userRepo->find(Auth::user()->id);
+            $list = $this->listRepo->find($todo_list_id);
+            $task = $this->repository->find($id);
+            Notification::send($users,new RepliedToThread($list,$task,'delete',$user));
+            $name = $task->name;
+            $this->repository->delete($id);
+            echo json_encode(true);
+        }
     }
 
     /**
@@ -351,8 +372,18 @@ class TasksController extends Controller
      */
     public function swapPosition(Request $request)
     {
-        if(isset($request['update'])) {
-            foreach ($request['positions'] as $position){
+        if(isset($request['update']) && isset($request['positions'])) {
+            if(is_array($request['positions']) )
+                foreach ($request['positions'] as $position){
+                    $index = $position[0];
+                    $newPosition = $position[1];
+                    $this->repository->find($index)->update([
+                        'position' => $newPosition,
+                        'status_id' => $position[2]
+                    ]);
+                }
+            else {
+                $position = $request['positions'];
                 $index = $position[0];
                 $newPosition = $position[1];
                 $this->repository->find($index)->update([
@@ -370,12 +401,6 @@ class TasksController extends Controller
     public function searchTask(Request $request)
     {
         if($request->ajax()) {
-            $error = 'No data found';
-            $output = '';
-            $todo = '';
-            $inprocess = '';
-            $done = '';
-            $low = '';
             $search = $request->search;
             $todo_list_id = $request->todo_list_id;
             if($search != '') {
@@ -399,118 +424,17 @@ class TasksController extends Controller
                     }
                     $userTask->character = $temp;
                     $task->assign = $userTask;
-                    if ($task->todo_list_id != $todo_list_id) continue;
-                    if($task-> status_id == 1)
-                        $todo .= '<li data-index="'.$task->id.'" data-position="'.$task->position.'" data-status="'.$task->todo_list_id.' " class="has-dropdown">
-                                    <p>
-                                        <a style="color: black;" >'.$task->name.'</a>
-                                    </p>
-                                    <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>'.$task->assign->name.'</span>
-                                    <p class="badges">
-                                        <span class="js-badges">
-                                            <p class="badge js-due-date-badge is-due-past" >
-                                                <span class="badge-icon icon-sm icon-clock"></span>
-                                                <span class="badge-text js-due-date-text">'.$task->created_at.'</span>
-                                                <span class="badge-text2 js-due-date-text" title="'.$task->assign->name.'" aria-label="'.$task->assign->name.'">'.$task->assign->character.'</span>
-                                            </p>
-                                        </span>
-                                    </p>
-                                </li>';
-                    else if($task-> status_id == 2)
-                        $inprocess .= '<li data-index="'.$task->id.'" data-position="'.$task->position.'" data-status="'.$task->todo_list_id.' " class="has-dropdown">
-                                    <p>
-                                        <a style="color: black;" >'.$task->name.'</a>
-                                    </p>
-                                    <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>'.$task->assign->name.'</span>
-                                    <p class="badges">
-                                        <span class="js-badges">
-                                            <p class="badge js-due-date-badge is-due-past" title="This card is past due.">
-                                                <span class="badge-icon icon-sm icon-clock"></span>
-                                                <span class="badge-text js-due-date-text">'.$task->created_at.'</span>
-                                                <span class="badge-text2 js-due-date-text" title="'.$task->assign->name.'" aria-label="'.$task->assign->name.'">'.$task->assign->character.'</span>
-                                            </p>
-                                        </span>
-                                    </p>
-                                </li>';
-                    else if($task-> status_id == 3)
-                            $done .= '<li data-index="'.$task->id.'" data-position="'.$task->position.'" data-status="'.$task->todo_list_id.' " class="has-dropdown">
-                                    <p>
-                                        <a style="color: black;" >'.$task->name.'</a>
-                                    </p>
-                                    <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>'.$task->assign->name.'</span>
-                                    <p class="badges">
-                                        <span class="js-badges">
-                                            <p class="badge js-due-date-badge is-due-past" title="This card is past due.">
-                                                <span class="badge-icon icon-sm icon-clock"></span>
-                                                <span class="badge-text js-due-date-text">'.$task->created_at.'</span>
-                                                <span class="badge-text2 js-due-date-text" title="'.$task->assign->name.'" aria-label="'.$task->assign->name.'">'.$task->assign->character.'</span>
-                                            </p>
-                                        </span>
-                                    </p>
-                                </li>';
-
                 }
-                $output .= '
-                    <div class="col-md-4" id="todolist">
-                        <article class="model">
-                            <h2 class="art-h2">To do</h2>
-                            <ul id="sortable1" type="status1" class="connectedSortable detail-task1">
-                                '.$todo.'
-                            </ul>
-                            <button id="add-task" type="submit" class="btn btn-primary">Add task</button>
-                        </article>
-                    </div>
-                    <div class="col-md-4" id="inprocesslist">
-                        <article class="model">
-                            <h2 class="art-h2">In process</h2>
-                            <ul id="sortable2" type="status2" class="connectedSortable detail-task2">
-                                '.$inprocess.'
-                            </ul>
-                        </article>
-                    </div>
-                    <div class="col-md-4" id="donelist">
-                        <article class="model">
-                            <h2 class="art-h2">Done</h2>
-                            <ul id="sortable3" type="status3" class="connectedSortable detail-task3">
-                                '.$done.'
-                            </ul>
-                        </article>
-                    </div>
-                    ';
+                $output = view('user.render.searchtask')->with('tasks',$data)->render();
             } else {
-                $output .= '
-                    <div class="col-md-4">
-                        <article class="model">
-                            <h2>To do</h2>
-                            <ul id="sortable1" class="connectedSortable detail-task1">
-                                '.$error.'
-                            </ul>
-                            <button id="add-task" type="submit" class="btn btn-primary">Add task</button>
-                        </article>
-                    </div>
-                    <div class="col-md-4">
-                        <article class="model">
-                            <h2>In process</h2>
-                            <ul id="sortable2" class="connectedSortable detail-task2">
-                                '.$error.'
-                            </ul>
-                        </article>
-                    </div>
-                    <div class="col-md-4">
-                        <article class="model">
-                            <h2>Done</h2>
-                            <ul id="sortable3" class="connectedSortable detail-task3">
-                                '.$error.'
-                            </ul>
-                        </article>
-                    </div>
-                    ';
+                $output = '<h2></h2>
+                           <img style="padding-left: 32%" src="'. asset('user/images/11.png').'">';
             }
-            $data = array(
-                'table_data'  => $output,
+            $out1 = array(
+                'dataSearch'  => $output,
                 'total_data'  => $total_row
             );
-            echo json_encode($data);
+            echo json_encode($out1);
         }
     }
 }
