@@ -6,7 +6,7 @@
                 <div class="col-md-12 col-md-offset-0">
                     <div class="animate-box">
                         <p id="titlehome">Take on your biggest projects and goals</p>
-                        <p id="create-board"><a class="btn btn-primary btn-lg btn-custom">Create new board</a></p>
+                        <p ><a id="create-board" class="btn btn-primary btn-lg btn-custom">Create new board</a></p>
                     </div>
                 </div>
             </div>
