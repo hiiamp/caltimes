@@ -29,7 +29,8 @@
                 <form class="form-inline qbstp-header-subscribe">
                     <div class="col-three-forth">
                         <div class="form-group">
-                            <input id="search" style="text-align: left" name="search" type="text" class="btn" placeholder=" Enter what you want to find">
+                            <input id="search" style="text-align: left" name="search" type="text" class="btn" placeholder=" Enter name's list you want to find">
+                            <input id="searchTask" style="text-align: left" name="searchTask" type="text" class="btn" placeholder=" Enter name's task you want to find">
                         </div>
                     </div>
                 </form>

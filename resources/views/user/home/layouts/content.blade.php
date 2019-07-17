@@ -65,6 +65,10 @@
 </script>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        $('#searchTask').hide();
+        $('#search').show();
+    });
     var check2 = 0;
     var temp2 = '';
     var search_temp = '';

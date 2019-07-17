@@ -246,7 +246,9 @@ dialog {
     border-collapse: collapse;
     width: 100%;
 }
-
+#sidenav-main {
+    background: linear-gradient(87deg, #825ee4 0, #5e72e4 100%) !important;;
+}
 #customers td, #customers th {
     border: 1px solid #ddd;
     padding: 8px;

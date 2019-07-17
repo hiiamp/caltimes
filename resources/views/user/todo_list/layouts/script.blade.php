@@ -7,6 +7,10 @@
 </script>
 @if(\Illuminate\Support\Facades\Auth::check())
     <script type="text/javascript">
+        $(document).ready(function () {
+            $('#search').hide();
+            $('#searchTask').show();
+        });
         $( function function1() {
             function temp(){
                 $( "#sortable1, #sortable2, #sortable3" ).sortable({
@@ -311,14 +315,15 @@
                 });
             }
             temp();
-            $('#search').on('keyup',function(){
-                var search = $('#search').val();
+            $('#searchTask').on('keyup',function(){
+                var search = $('#searchTask').val();
                 var todo_list_id = $('#list_id1').attr('value');
                 $.ajax({
                     url : '{{ route('searchTask') }}',
                     dataType: 'json',
                     data:{'todo_list_id': todo_list_id,
                         'search':search},
+                    async: true,
                     success:function(data){
                         $('.displayTask').html(data.dataSearch);
                         temp();
@@ -398,6 +403,10 @@
     </script>
 @else
     <script type="text/javascript">
+        $(document).ready(function () {
+            $('#search').hide();
+            $('#searchTask').hide();
+        });
         $( function function1() {
             function temp(){
                 $( "#sortable1, #sortable2, #sortable3" ).sortable({
@@ -448,8 +457,11 @@
                         });
                         switch (event.which) {
                             case 1:
-                                $('#sortable1 li, #sortable2 li, #sortable3 li').parent().parent().parent().css('z-index','2');
+                                $('#sortable1, #sortable2, #sortable3').parent().parent().each(function () {
+                                    $(this).css('z-index','2');
+                                });
                                 $(this).parent().parent().parent().css('z-index','50');
+                                $(this).css('z-index','51');
                                 $(this).css({'transform':' rotate(5deg)','z-index':'100'});
                                 break;
                             case 3:
@@ -562,6 +574,7 @@
                     },
                     url : '{{ route('searchTask') }}',
                     dataType: 'json',
+                    async: true,
                     data:{'todo_list_id': todo_list_id,
                         'search':search},
                     success:function(data){

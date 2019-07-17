@@ -214,9 +214,11 @@
                                     @endforeach
                                 </div>
                                 <div class="con-info">
-                                    @foreach($tasks as $task)
-                                        <input class="delete_task" data-index="{{$task->id}}" id="deletetask{{$task->id}}" type="button" value="Delete this task">
-                                    @endforeach
+                                    @if(Auth::check())
+                                        @foreach($tasks as $task)
+                                            <input class="delete_task" data-index="{{$task->id}}" id="deletetask{{$task->id}}" type="button" value="Delete this task">
+                                        @endforeach
+                                    @endif
                                 </div>
                             </div>
                         </div>

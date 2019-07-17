@@ -21,6 +21,19 @@
 @include('user.layouts.script')
 <script>
     $('#page').css('height',$(window).height());
+    //auto turn off dialog
+    document.addEventListener('click', function (e)
+    {
+        $('dialog').each(function () {
+            var id = $(this).attr('id');
+            if($(this).is(e.target)) {
+                document.getElementById(id).close();
+            } else {
+                //console.log($(this));
+            }
+        });
+    }, true);
+    ///
 </script>
 @if(Auth::check())
     <script type="text/javascript">
