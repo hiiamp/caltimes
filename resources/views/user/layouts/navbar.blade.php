@@ -12,7 +12,7 @@
                             @if(Auth::user()->level==2)
                                 <li style="font-size: medium"><a href="{{route('admin.list')}}">Admin page</a></li>
                                 @else
-                                <li style="font-size: medium"><a id="donate_1">Donate</a></li>
+                                <li style="font-size: medium"><a id="donate_1">@if(Auth::user()->isVip) Donate @else Upgrade me @endif</a></li>
                                 <script>
                                     $('#donate_1').click(function () {
                                         document.getElementById('how_donate_dialog').showModal();

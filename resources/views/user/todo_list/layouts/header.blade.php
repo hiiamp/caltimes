@@ -20,8 +20,8 @@
             <span class="alert alert-warning help-block" >
                 <strong>
                     You need a vip account change this list to private<br>
-                    Donate us to become a vip user: <br>
-                    <input type="button" id="how_donate3" class="btn btn-primary" value="How to donate">
+                    Upgrade account to use: <br>
+                    <input type="button" id="how_donate3" class="btn btn-primary" value="How to upgrade">
                 </strong>
             </span>
         <input id="cancel13" type="reset" value="Later" class="btn btn-primary">

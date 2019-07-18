@@ -37,8 +37,8 @@
                     <span class="alert alert-warning help-block" id="donate_pri" style="display: none;">
                         <strong>
                             You need a vip account to create private list <br>
-                            Donate us to become a vip user: <br>
-                            <input type="button" id="how_donate1" class="btn btn-primary" value="How to donate">
+                            Upgrade account to use: <br>
+                            <input type="button" id="how_donate1" class="btn btn-primary" value="How to upgrade">
                         </strong>
                     </span>
                 </div>
@@ -55,8 +55,8 @@
             <span class="alert alert-warning help-block" >
                 <strong>
                     You need a vip account to create more than 10 list and private list<br>
-                    Donate us to become a vip user: <br>
-                    <input type="button" id="how_donate2" class="btn btn-primary" value="How to donate">
+                    Upgrade account to use: <br>
+                    <input type="button" id="how_donate2" class="btn btn-primary" value="How to upgrade">
                 </strong>
             </span>
         <input id="cancel12" type="reset" value="Later" class="btn btn-primary">
