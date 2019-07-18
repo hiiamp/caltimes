@@ -19,6 +19,7 @@ use App\Http\Requests\TasksCreateRequest;
 use App\Http\Requests\TasksUpdateRequest;
 use App\Repositories\TasksRepository;
 use App\Validators\TasksValidator;
+use Laracsv\Export;
 use App\Http\Controllers\Controller;
 
 /**
@@ -454,7 +455,7 @@ class TasksController extends Controller
             return redirect()->back();
         }
         $tasks = $this->repository->getTaskByIdList($todo_list_id);
-        $csv = new \Laracsv\Export();
+        $csv = new Export();
         $csv->beforeEach(function ($task) {
             $task->assign = $task->user->name;
             $task->status = $task->status->name;
