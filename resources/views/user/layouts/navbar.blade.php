@@ -18,7 +18,7 @@
                             <a>{{Auth::user()->name}} @if(Auth::user()->isVip) <img src="{{asset('user/images/ic_VIP_new.png')}}"> @endif </a>
                             <ul class="dropdown">
                                 <li><a data-pjax href="{{route('profile')}}">Profile</a></li>
-                                <li><a id="donate_1"> @if(Auth::user()->isVip === 0) Become Vip/ @endif Donate</a></li>
+                                <li><a id="donate_1"> @if(!Auth::user()->isVip) Become Vip/ @endif Donate</a></li>
                                 <li><a href="{{route('logout')}}">Logout</a></li>
                             </ul>
                         </li>
