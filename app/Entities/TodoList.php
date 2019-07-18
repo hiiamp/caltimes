@@ -15,7 +15,7 @@ class TodoList extends Model implements Transformable
 {
     use TransformableTrait;
 
-    protected $table='todo_list';
+    protected $table = 'todo_list';
     /**
      * The attributes that are mass assignable.
      *
@@ -40,7 +40,7 @@ class TodoList extends Model implements Transformable
 
     public function tasks()
     {
-        return $this->hasMany('App\Entities\Tasks','todo_list_id','id');
+        return $this->hasMany('App\Entities\Tasks', 'todo_list_id', 'id');
     }
 
 }

@@ -17,9 +17,28 @@
 <div id="page">
     @yield('content')
 </div>
+<dialog id="how_donate_dialog">
+    <span class="alert alert-info help-block" >
+        <strong>
+            Come to my donate page and donate with your account's email ( >= 100.000 VND / 5USD) <br>
+            <a target="_blank" href="https://unghotoi.com/1563348843jqrl4">Donate page</a><br>
+            And notification us on email: phi.td@neo-lab.vn
+        </strong>
+    </span>
+    <span style="padding-left: 10%">
+        <img src="{{asset('user/images/donate.png')}}">
+    </span>
+    <br>
+    <span style="padding-right: 10%">
+        <input id="cancel19" type="reset" value="Cancel" class="btn btn-primary">
+    </span>
+</dialog>
 </body>
 @include('user.layouts.script')
 <script>
+    $('#cancel19').click(function () {
+        document.getElementById('how_donate_dialog').close();
+    });
     $('#page').css('height',$(window).height());
     //auto turn off dialog
     document.addEventListener('click', function (e)
@@ -58,5 +77,4 @@
         });
     </script>
 @endif
-
 </html>

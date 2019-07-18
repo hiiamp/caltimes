@@ -256,6 +256,9 @@ class TodoListsController extends Controller
     {
         $name = $request['name'];
         $is_public = $request['is_public'];
+        if(!Auth::user()->isVip && $this->repository->findByField('owner_id', Auth::user()->id)->count() >= 10) {
+            return redirect()->back()->with('max_list', true);
+        }
         $user_id = Auth::user()->id;
         $link = str_random(8);
         while($this->repository->findByField('link', $link)->first())
@@ -301,8 +304,12 @@ class TodoListsController extends Controller
      * @param $code
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function viewList($code)
+    public function viewList($code, Request $request)
     {
+        $noti_id = isset($request['noti']) ? $request['noti'] : '';
+        if($noti_id != '') {
+            $this->repository->maskAsReadNoti($noti_id);
+        }
         $todoList = $this->repository->findByField('link',$code)->first();
         $user = $this->userRepo->find($todoList->owner_id);
         $username = $user->name;
@@ -310,6 +317,8 @@ class TodoListsController extends Controller
         $tasks = $this->tasksRepo->getTaskByIdList($todoList->id);
         foreach ($tasks as $task)
         {
+            $tt = new Carbon($task->created_at);
+            $task->created = $tt->toFormattedDateString();
             $userTask = $this->userRepo->find($task->user_id);
             $t = $userTask->name;
             $t = str_split($t);
@@ -400,6 +409,7 @@ class TodoListsController extends Controller
         $lists = $this->repository->findListCanView(Auth::user()->id)->paginate(6);
         foreach ($lists as $list)
         {
+            $list->created = (new Carbon($list->created_at))->toFormattedDateString();
             $list->owner = $this->userRepo->find($list->owner_id);
             $list->member = $this->accessRepo->findByField('todo_list_id', $list->id)->count();
         }
@@ -443,7 +453,7 @@ class TodoListsController extends Controller
                     $output = view('user.render.searchlist_user')->with('lists',$data)->render();
                 } else {
                     $output = '<h2></h2>
-                               <img style="padding-left: 32%" src="'. asset('user/images/11.png').'">';
+                               <img style="margin-left: 35%; width: 600px;height: 380px " src="'. asset('user/images/11.png').'">';
                 }
             } else {
                 if ($total_row > 0) {
@@ -454,7 +464,7 @@ class TodoListsController extends Controller
                     $output = view('user.render.searchlist_admin')->with('lists',$data)->render();
                 } else {
                     $output = '<h2></h2>
-                               <img style="padding-left: 32%" src="'. asset('user/images/11.png').'">';
+                               <img style="margin-left: 35%; width: 600px;height: 380px " src="'. asset('user/images/12.png').'">';
                 }
             }
             $data = array(

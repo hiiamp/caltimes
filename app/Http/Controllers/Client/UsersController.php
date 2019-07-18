@@ -430,7 +430,7 @@ class UsersController extends Controller
             }
             if(!$data->count()) {
                 $output = '<h2></h2>
-                               <img style="padding-left: 32%" src="'. asset('user/images/11.png').'">';
+                               <img style="margin-left: 35%; width: 600px;height: 380px " src="'. asset('user/images/12.png').'">';
             } else $output = view('user.render.user')->with(['users'=>$data])->render();
             $data1 = array(
                 'page_current' => $page,
@@ -533,6 +533,21 @@ class UsersController extends Controller
                 'password' => Hash::make($pass)
             ], $user->id);
             echo json_encode(array('success' => true, 'name' => $user->name, 'email' => $user->email));
+        }
+    }
+
+    public function toggleVip(Request $request)
+    {
+        if($request->ajax()) {
+            $user_id = isset($request['user_id']) ? $request['user_id'] : 0;
+            if($user_id == 0) {
+                return json_encode(array('success' => false, 'vip' => 0));
+            }
+            $user = $this->repository->find($user_id);
+            $temp = ($user->isVip) ? false : true;
+            $this->repository->update(['isVip' => $temp], $user->id);
+            $user = $this->repository->find($user_id);
+            return json_encode(array('success' => true, 'vip' => $user->isVip));
         }
     }
 }

@@ -15,12 +15,18 @@
                             <!--<task v-bind:tasks="tasks"></task>-->
                                 <li style="font-size: medium"><a data-pjax href="{{route('notification')}}">Activity</a></li>
                         <li class="has-dropdown" style="font-size: medium">
-                            <a href="#">{{Auth::user()->name}}</a>
+                            <a>{{Auth::user()->name}} @if(Auth::user()->isVip) <img src="{{asset('user/images/ic_VIP_new.png')}}"> @endif </a>
                             <ul class="dropdown">
                                 <li><a data-pjax href="{{route('profile')}}">Profile</a></li>
+                                <li><a id="donate_1"> @if(Auth::user()->isVip === 0) Become Vip/ @endif Donate</a></li>
                                 <li><a href="{{route('logout')}}">Logout</a></li>
                             </ul>
                         </li>
+                        <script>
+                            $('#donate_1').click(function () {
+                                document.getElementById('how_donate_dialog').showModal();
+                            });
+                        </script>
                         @endif
                     @endauth
                 </ul>

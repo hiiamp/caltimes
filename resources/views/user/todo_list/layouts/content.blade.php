@@ -11,7 +11,7 @@
                     <ul id="sortable1" type="status1" class="connectedSortable detail-task1">
                         @foreach($tasks as $task)
                             @if($task->status_id==1)
-                                <li data-index="{{$task->id}}" data-position="{{$task->position}}" data-status="{{$task->todo_list_id}} " class="has-dropdown">
+                                <li data-name="{{$task->name}}" data-index="{{$task->id}}" data-position="{{$task->position}}" data-status="{{$task->todo_list_id}} " class="has-dropdown">
                                     <p>
                                         <a style="color: black;" >{{$task->name}}</a>
                                     </p>
@@ -24,7 +24,7 @@
                                                         @else title="High Priority"
                                                 @endif>
                                                 <span class="badge-icon icon-sm icon-clock"></span>
-                                                <span class="badge-text js-due-date-text">{{$task->created_at}}</span>
+                                                <span class="badge-text js-due-date-text">{{$task->created}}</span>
                                                 <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
                                             </p>
                                         </span>
@@ -44,7 +44,7 @@
                     <ul id="sortable2" type="status2" class="connectedSortable detail-task2">
                         @foreach($tasks as $task)
                             @if($task->status_id==2)
-                                <li data-index="{{$task->id}}" data-position="{{$task->position}}" data-status="{{$task->todo_list_id}} " class="has-dropdown">
+                                <li data-name="{{$task->name}}" data-index="{{$task->id}}" data-position="{{$task->position}}" data-status="{{$task->todo_list_id}} " class="has-dropdown">
                                     <p>
                                         <a style="color: black;" >{{$task->name}}</a>
                                     </p>
@@ -57,7 +57,7 @@
                                                         @else title="High Priority"
                                                 @endif>
                                                 <span class="badge-icon icon-sm icon-clock"></span>
-                                                <span class="badge-text js-due-date-text">{{$task->created_at}}</span>
+                                                <span class="badge-text js-due-date-text">{{$task->created}}</span>
                                                 <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
                                             </p>
                                         </span>
@@ -74,7 +74,7 @@
                     <ul id="sortable3" type="status3" class="connectedSortable detail-task3">
                         @foreach($tasks as $task)
                             @if($task->status_id==3)
-                                <li data-index="{{$task->id}}" data-position="{{$task->position}}" data-status="{{$task->todo_list_id}} " class="has-dropdown">
+                                <li data-name="{{$task->name}}" data-index="{{$task->id}}" data-position="{{$task->position}}" data-status="{{$task->todo_list_id}} " class="has-dropdown">
                                     <p>
                                         <a style="color: black;" >{{$task->name}}</a>
                                     </p>
@@ -87,7 +87,7 @@
                                                         @else title="High Priority"
                                                 @endif>
                                                 <span class="badge-icon icon-sm icon-clock"></span>
-                                                <span class="badge-text js-due-date-text">{{$task->created_at}}</span>
+                                                <span class="badge-text js-due-date-text">{{$task->created}}</span>
                                                 <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
                                             </p>
                                         </span>

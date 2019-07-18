@@ -104,6 +104,8 @@ Route::group(['namespace' => 'Client'], function() {
     Route::get('maskAsRead', 'TodoListsController@maskRead')->name('maskRead');
 
     Route::get('delete_noti', 'TodoListsController@deleteNoti')->name('delete_noti');
+
+    Route::get('export', 'TasksController@export_csv')->name('export');
 });
 
 Route::get('searchUser', 'Client\UsersController@searchUser')->name('searchUser');

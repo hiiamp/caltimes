@@ -26,3 +26,6 @@
 <script src="{{ asset('user/js/jquery.pjax.js')}}"></script>
 
 <link rel="stylesheet" href="{{asset('user/css/mycss.css')}}">
+<script type="text/javascript">
+    $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+</script>

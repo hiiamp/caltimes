@@ -64,4 +64,10 @@ interface TodoListRepository extends RepositoryInterface
      * @return mixed
      */
     public function findListInRecycle($user_id);
+
+    /**
+     * @param $noti_id
+     * @return mixed
+     */
+    public function maskAsReadNoti($noti_id);
 }

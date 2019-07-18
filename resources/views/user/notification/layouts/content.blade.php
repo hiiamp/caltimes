@@ -9,7 +9,7 @@
                                 @foreach(auth()->user()->notifications()->limit(15)->get() as $notification)
                                     @if($notification->read_at == '')
                                         <h3 style="color: grey; padding: 10px; border: 1px solid green; background-color: lightskyblue">
-                                            <a id="noti" data-pjax href="{{route('link.board',['code'=>$notification->data['list']['link']])}}" style="color: grey" class="icon"><i class="icon-lightbulb"></i>
+                                            <a id="noti" data-pjax href="{{route('link.board',['code'=>$notification->data['list']['link']]).'?noti='.$notification->id}}" style="color: grey" class="icon"><i class="icon-lightbulb"></i>
                                                 @if($notification->data['act'] == "share")
                                                     {{$notification->data['user']['name']}} {{$notification->data['act']}} a list "{{$notification->data['list']['name']}}" at {{$notification->data['list']['created_at']}}
                                                 @elseif($notification->data['act'] == "change")

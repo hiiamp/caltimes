@@ -15,7 +15,7 @@ class TempAccess extends Model implements Transformable
 {
     use TransformableTrait;
 
-    protected $table='temp_accesses';
+    protected $table = 'temp_accesses';
     /**
      * The attributes that are mass assignable.
      *

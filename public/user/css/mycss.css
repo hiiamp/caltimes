@@ -100,7 +100,17 @@ article {
   padding: 5px 0 0 0;
   float: left;
   border-radius: 10px;
-  overflow: auto;
+  overflow-y:scroll;
+}
+#sortable1::-webkit-scrollbar, #sortable2::-webkit-scrollbar, #sortable3::-webkit-scrollbar {
+    width: 3px;
+    background-color: black;
+}
+#sortable1::-webkit-scrollbar-thumb, #sortable2::-webkit-scrollbar-thumb, #sortable3::-webkit-scrollbar-thumb {
+    background-color: #1b4b72;
+}
+#sortable1::-webkit-scrollbar-track, #sortable2::-webkit-scrollbar-track, #sortable3::-webkit-scrollbar-track {
+    background-color: rgb(193, 200, 228);;
 }
 #sortable1 li:hover, #sortable2 li:hover, #sortable3 li:hover {
   background-color: #d0dae2;
@@ -110,7 +120,7 @@ article {
   margin: 0 5px 5px 5px;
   padding: 5px;
   font-size: 1.2em;
-  width: 340px;
+  width: 350px;
   border: 1px solid #eee;
   border-radius: 6px;
   transition: all 0.2s;

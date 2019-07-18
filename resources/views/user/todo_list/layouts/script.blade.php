@@ -253,9 +253,13 @@
 
                 //header, xu ly coworker
                 var dialog_out = document.querySelector('#out_list_dialog');
-                document.querySelector('#outlist').onclick = function () {
-                    dialog_out.showModal();
-                };
+                try {
+                    document.querySelector('#outlist').onclick = function () {
+                        dialog_out.showModal();
+                    };
+                } catch (e) {
+                    
+                }
                 document.querySelector('#delete_access_cancel').onclick = function () {
                     dialog_out.close();
                 };
@@ -317,17 +321,18 @@
             temp();
             $('#searchTask').on('keyup',function(){
                 var search = $('#searchTask').val();
-                var todo_list_id = $('#list_id1').attr('value');
-                $.ajax({
-                    url : '{{ route('searchTask') }}',
-                    dataType: 'json',
-                    data:{'todo_list_id': todo_list_id,
-                        'search':search},
-                    async: true,
-                    success:function(data){
-                        $('.displayTask').html(data.dataSearch);
-                        temp();
+                $( "#sortable1 li, #sortable2 li, #sortable3 li" ).each(function () {
+                    var name = $(this).attr('data-name');
+                    try {
+                        if(name.indexOf(search) > -1 || search === '') {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    } catch (e) {
+                        
                     }
+                    
                 });
             });
             //dialog share
@@ -381,9 +386,7 @@
                     data:form_data,
                     dataType: 'json',
                     success:function(data){
-                        console.log(data.important);
                         if(data.important === '0') {
-                            console.log('high');
                             $('#priority1'+data.task_id).attr('title', 'High priority');
                             $('#priority1'+data.task_id).css('background-color', '#2669ea');
                         } else if(data.important === '1') {
@@ -444,7 +447,6 @@
                             status_id=3;
                         }
                         positions.push([$(this).attr('data-index'), $(this).attr('data-position'), status_id]);
-                        console.log(positions);
                         $(this).removeClass('updated');
                     });
 
@@ -565,23 +567,20 @@
                 });
             }
             temp();
-            $('#search').on('keyup',function(){
-                var search = $('#search').val();
-                var todo_list_id = $('#list_id1').attr('value');
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url : '{{ route('searchTask') }}',
-                    dataType: 'json',
-                    async: true,
-                    data:{'todo_list_id': todo_list_id,
-                        'search':search},
-                    success:function(data){
-                        //console.log(temp.outerHTML);
-                        $('.displayTask').html(data.table_data);
-                        temp();
+            $('#searchTask').on('keyup',function(){
+                var search = $('#searchTask').val();
+                $( "#sortable1 li, #sortable2 li, #sortable3 li" ).each(function () {
+                    var name = $(this).attr('data-name');
+                    try {
+                        if(name.indexOf(search) > -1 || search === '') {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    } catch (e) {
+
                     }
+
                 });
             });
 

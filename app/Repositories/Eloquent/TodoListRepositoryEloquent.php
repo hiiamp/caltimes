@@ -4,7 +4,9 @@ namespace App\Repositories\Eloquent;
 
 use App\Entities\Access;
 use App\Entities\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\TodoListRepository;
@@ -143,5 +145,14 @@ class TodoListRepositoryEloquent extends BaseRepository implements TodoListRepos
     public function findListInRecycle($user_id)
     {
         return TodoList::where('owner_id', $user_id)->where('isDeleted', true);
+    }
+
+    /**
+     * @param $noti_id
+     * @return mixed|void
+     */
+    public function maskAsReadNoti($noti_id)
+    {
+        $notification = DB::table('notifications')->where(['id' => $noti_id])->update(['read_at' => Carbon::now()]);
     }
 }

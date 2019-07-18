@@ -8,4 +8,10 @@
 
     @include('user.profile.layouts.content')
 
+    <script>
+        $(document).ready(function () {
+            $('#search').hide();
+            $('#searchTask').hide();
+        });
+    </script>
 @endsection

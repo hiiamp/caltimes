@@ -1,4 +1,4 @@
-<li data-index="{{$task->id}}" data-position="{{$task->position}}" data-status="{{$task->todo_list_id}} " class="has-dropdown">
+<li data-name="{{$task->name}}" data-index="{{$task->id}}" data-position="{{$task->position}}" data-status="{{$task->todo_list_id}} " class="has-dropdown">
     <p>
         <a style="color: black;" >{{$task->name}}</a>
     </p>
@@ -11,7 +11,7 @@
         @else title="High Priority"
         @endif>
         <span class="badge-icon icon-sm icon-clock"></span>
-        <span class="badge-text js-due-date-text">{{$task->created_at}}</span>
+        <span class="badge-text js-due-date-text">{{$task->created}}</span>
         <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
     </p>
     </span>

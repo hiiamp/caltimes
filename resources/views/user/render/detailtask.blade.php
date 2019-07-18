@@ -74,7 +74,7 @@
                 </div>
                 <div class="form-group">
                     @if(\Illuminate\Support\Facades\Auth::check())
-                        <input id="save11" type="submit" value="Save" class="btn btn-primary">
+                        <input id="save11" type="button" value="Save" class="btn btn-primary">
                     @endif
                     <input id="out11" type="reset" value="Cancel" class="btn btn-primary">
                 </div>

@@ -2,11 +2,8 @@
 
 namespace App\Entities;
 
-use Carbon\Carbon;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use phpDocumentor\Reflection\Types\Integer;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -30,7 +27,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'level', 'remember_token', 'create_at', 'provider', 'provider_id'
+        'name', 'email', 'password', 'level', 'remember_token', 'create_at', 'provider', 'provider_id', 'isVip'
     ];
 
     /**
@@ -42,4 +39,8 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function tasks()
+    {
+        return $this->hasMany('App\Entities\Tasks');
+    }
 }

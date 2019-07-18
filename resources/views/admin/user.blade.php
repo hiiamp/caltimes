@@ -42,6 +42,7 @@
                             @endif
                             <td>
                                 <a data-pjax href="{{route('admin.list').'?user_id='.$user->id}}" class="btn btn-sm btn-primary" style="color: whitesmoke"> List joined </a>
+                                <input id="vip{{$user->id}}" data-index="{{$user->id}}" type="button" class="btn btn-sm btn-primary vip_user" style="color: whitesmoke" @if($user->isVip) value="Remove Vip" @else value="Add Vip" @endif>
                                 @if($user->level != 2)
                                     <a data-index="{{$user->id}}" class="btn btn-sm btn-primary delete_u" style="color: whitesmoke"> Delete </a>
                                 @endif
@@ -87,6 +88,25 @@
 </dialog>
 
 <script>
+    $('.vip_user').each(function () {
+        $(this).click(function () {
+            var user_id = $(this).attr('data-index');
+            $.ajax({
+                url : '{{ route('toggle.vip') }}',
+                dataType: 'json',
+                data:{'user_id':user_id},
+                success:function(data){
+                    var temp = '#vip' + user_id;
+                    if(data.success)
+                        if(data.vip) {
+                            $(temp).attr('value', 'Remove Vip');
+                        } else {
+                            $(temp).attr('value', 'Add Vip');
+                        }
+                }
+            });
+        });
+    });
     $('#search-list').hide();
     $('#search-user').show();
     $(function(){

@@ -15,7 +15,7 @@ class Access extends Model implements Transformable
 {
     use TransformableTrait;
 
-    protected $table='access';
+    protected $table = 'access';
     /**
      * The attributes that are mass assignable.
      *

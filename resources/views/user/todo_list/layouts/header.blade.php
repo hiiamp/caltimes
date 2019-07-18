@@ -6,16 +6,37 @@
             <span class="hamburger hamburger-2"></span>
             <span class="hamburger hamburger-3"></span>
         </label>
-        <a title="Back" data-pjax href="{{route('home')}}" class="menu-item"> <i class="fa fa-share"></i> </a>
+        <a title="Export csv" href="{{route('export').'?list_id='.$list->id}}" class="menu-item exportcsv"> <i class="fa fa-share"></i> </a>
         <a title="Delete" id="delete_list"class="menu-item"> <i class="icon-trash2"></i> </a>
         @if($list->is_public == 0)
             <a title="Change to public" data-pjax href="{{route('private.list').'?list_id='.$list->id}}" class="menu-item"> <i class="icon-tools"></i> </a>
         @else
-            <a title="Change to private" data-pjax href="{{route('private.list').'?list_id='.$list->id}}" class="menu-item"> <i class="icon-tools"></i> </a>
+            <a title="Change to private" @if(Auth::user()->isVip === 1) data-pjax href="{{route('private.list').'?list_id='.$list->id}}" @else onclick="changePrivate()" @endif class="menu-item"> <i class="icon-tools"></i> </a>
         @endif
         <a title="Share with" class="menu-item sharewith"> <i class="icon-share3"></i></a>
         <a title="Worker joined" class="menu-item worker_joined"> <i class="icon-user2"></i></a>
     </nav>
+    <dialog id="need_vip">
+            <span class="alert alert-warning help-block" >
+                <strong>
+                    You need a vip account change this list to private<br>
+                    Donate us to become a vip user: <br>
+                    <input type="button" id="how_donate3" class="btn btn-primary" value="How to donate">
+                </strong>
+            </span>
+        <input id="cancel13" type="reset" value="Later" class="btn btn-primary">
+    </dialog>
+    <script>
+        function changePrivate() {
+            document.getElementById('need_vip').showModal();
+        }
+        $('#cancel13').click(function () {
+            document.getElementById('need_vip').close();
+        });
+        $('#how_donate3').click(function () {
+            document.getElementById('how_donate_dialog').showModal();
+        });
+    </script>
 @else
     <nav style="z-index:101; top: 150px;position: fixed" class="menu menu11">
         <input type="checkbox" href="#" class="menu-open" name="menu-open" id="menu-open"/>
@@ -24,12 +45,12 @@
             <span class="hamburger hamburger-2"></span>
             <span class="hamburger hamburger-3"></span>
         </label>
-        <a title="Back" data-pjax href="{{route('home')}}"  class="menu-item"> <i class="fa fa-share"></i> </a>
+        <a title="Export csv" data-pjax href="{{route('home')}}"  class="menu-item"> <i class="fa fa-share"></i> </a>
         <a style="color: red; pointer-events: none;" title="Delete" id="delete_list"class="menu-item"> <i class="icon-trash2"></i> </a>
         @if($list->is_public == 0)
-            <a style="color: red; pointer-events: none;" title="Change to public" data-pjax class="menu-item"> <i class="icon-tools"></i> </a>
+            <a style="color: red; pointer-events: none;" title="Change to public" class="menu-item"> <i class="icon-tools"></i> </a>
         @else
-            <a style="color: red; pointer-events: none;" title="Change to private" data-pjax class="menu-item"> <i class="icon-tools"></i> </a>
+            <a style="color: red; pointer-events: none;" title="Change to private" class="menu-item"> <i class="icon-tools"></i> </a>
         @endif
         <a style="color: red; pointer-events: none;" title="Share with" class="menu-item sharewith"> <i class="icon-share3"></i></a>
         <a title="Worker joined" class="menu-item worker_joined"> <i class="icon-user2"></i></a>

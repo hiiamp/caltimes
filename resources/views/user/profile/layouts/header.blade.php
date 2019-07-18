@@ -25,9 +25,3 @@
         </div>
     </div>
 </section>
-<script>
-    $(document).ready(function () {
-        $('#search').hide();
-        $('#searchTask').hide();
-    });
-</script>

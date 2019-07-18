@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Entities\TodoList;
+use App\Entities\User;
 use App\Entities\Tasks;
 use App\Notifications\RepliedToThread;
 use App\Repositories\TodoListRepository;
@@ -272,6 +274,7 @@ class TasksController extends Controller
                     }
                     $userTask->character = $temp;
                     $task1->assign = $userTask;
+                    $task1->created = (new Carbon($task1->created_at))->toFormattedDateString();
                     $success_output = view('user.render.addtask')->with(['task'=>$task1])->render();
                     $tasks = $this->repository->getTaskByIdList($todo_list_id);
                     foreach ($tasks as $task)
@@ -424,11 +427,12 @@ class TasksController extends Controller
                     }
                     $userTask->character = $temp;
                     $task->assign = $userTask;
+                    $task->created = (new Carbon($task->created_at))->toFormattedDateString();
                 }
                 $output = view('user.render.searchtask')->with('tasks',$data)->render();
             } else {
                 $output = '<h2></h2>
-                           <img style="padding-left: 32%" src="'. asset('user/images/11.png').'">';
+                           <img style="margin-left: 40%; width: 600px;height: 380px " src="'. asset('user/images/11.png').'">';
             }
             $out1 = array(
                 'dataSearch'  => $output,
@@ -436,5 +440,31 @@ class TasksController extends Controller
             );
             echo json_encode($out1);
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+
+    public function export_csv(Request $request)
+    {
+        $todo_list_id = $request->get('list_id');
+        if($todo_list_id == ''){
+            return redirect()->back();
+        }
+        $tasks = $this->repository->getTaskByIdList($todo_list_id);
+        $csv = new \Laracsv\Export();
+        $csv->beforeEach(function ($task) {
+            $task->assign = $task->user->name;
+            $task->status = $task->status->name;
+            $task->important = $task->important;
+            if($task->important == 0) $task->important = 'High';
+            else if($task->important == 1) $task->important = 'Medium';
+            else if($task->important == 2) $task->important = 'Low';
+            $task->create = $task->created_at;
+        });
+        $csv->build($tasks, ['name', 'content','assign','status','important','create' ]);
+        $csv->download('task.csv');
     }
 }

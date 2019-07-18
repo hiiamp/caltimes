@@ -22,7 +22,7 @@ class Status extends Model implements Transformable
     const isInProcess = 2;
     const isDone = 3;
 
-    protected $table='status';
+    protected $table = 'status';
     /**
      * The attributes that are mass assignable.
      *
@@ -31,7 +31,9 @@ class Status extends Model implements Transformable
     protected $fillable = [
         'name',
     ];
-    public function tasks(){
-        return $this->hasMany('App\Entities\Tasks','status_id','id');
+
+    public function tasks()
+    {
+        return $this->hasMany('App\Entities\Tasks', 'status_id', 'id');
     }
 }

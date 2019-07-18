@@ -30,21 +30,49 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="inputGroupSelect01">Options</label>
                     </div>
-                    <select class="btn" name="is_public" class="custom-select" id="is_public">
+                    <select @if(Auth::user()->isVip === 0) onchange="publicChanged(this)" @endif class="btn" name="is_public" class="custom-select" id="is_public">
                         <option value="1">Public</option>
                         <option value="0">Private</option>
                     </select>
+                    <span class="alert alert-warning help-block" id="donate_pri" style="display: none;">
+                        <strong>
+                            You need a vip account to create private list <br>
+                            Donate us to become a vip user: <br>
+                            <input type="button" id="how_donate1" class="btn btn-primary" value="How to donate">
+                        </strong>
+                    </span>
                 </div>
             </div>
         </div>
         <div class="form-group">
-            <input id="save" type="submit" value="Create" class="btn btn-primary">
+            <input id="save_create_list" type="submit" value="Create" class="btn btn-primary">
             <input id="cancel" type="reset" value="Cancel" class="btn btn-primary">
         </div>
     </form>
 </dialog>
+@if(session('max_list'))
+    <dialog id="max_list_dialog">
+            <span class="alert alert-warning help-block" >
+                <strong>
+                    You need a vip account to create more than 10 list and private list<br>
+                    Donate us to become a vip user: <br>
+                    <input type="button" id="how_donate2" class="btn btn-primary" value="How to donate">
+                </strong>
+            </span>
+        <input id="cancel12" type="reset" value="Later" class="btn btn-primary">
+    </dialog>
+    <script>
+        $('#how_donate2').click(function () {
+            document.getElementById('how_donate_dialog').showModal();
+        });
+        var dialog22 = document.querySelector('#max_list_dialog');
+        dialog22.showModal();
+        document.querySelector('#cancel12').onclick = function() {
+            dialog22.close();
+        };
+    </script>
+@endif
 @if(session('deleted_list'))
-
     <dialog id="delete_dialog">
             <span class="alert alert-warning help-block">
                 <strong>{{session('deleted_list')}}</strong>
@@ -68,6 +96,18 @@
 @endif
 
 <script>
+    function publicChanged(obj) {
+        var value = obj.value;
+        console.log(value);
+        if(value === '1') {
+            $('#donate_pri').hide();
+        } else {
+            $('#donate_pri').show();
+        }
+    }
+    $('#how_donate1').click(function () {
+        document.getElementById('how_donate_dialog').showModal();
+    });
     var dialog = document.querySelector('#addlist');
     document.querySelector('#create-board').onclick = function() {
         dialog.showModal();
