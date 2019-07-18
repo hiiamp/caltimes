@@ -60,7 +60,7 @@
     <div style="height: 200px;" class="overlay"></div>
     <div style="height: 280px;" class="display-t display-t2 text-center">
         <div class="display-tc display-tc2">
-            <div class="container">
+            <div class="container" style="width: fit-content">
                 <div class="col-md-12 col-md-offset-0">
                     <div style="line-height: 0;" class="animate-box">
                         <p>{{$list->name}} @if($list->is_public)<span class="icon-unlock"></span> @else <span class="icon-lock"></span> @endif</p>

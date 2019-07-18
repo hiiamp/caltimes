@@ -11,6 +11,13 @@
                         @if(Auth::check())
                             @if(Auth::user()->level==2)
                                 <li style="font-size: medium"><a href="{{route('admin.list')}}">Admin page</a></li>
+                                @else
+                                <li style="font-size: medium"><a id="donate_1">Donate</a></li>
+                                <script>
+                                    $('#donate_1').click(function () {
+                                        document.getElementById('how_donate_dialog').showModal();
+                                    });
+                                </script>
                             @endif
                             <!--<task v-bind:tasks="tasks"></task>-->
                                 <li style="font-size: medium"><a data-pjax href="{{route('notification')}}">Activity</a></li>
@@ -18,15 +25,9 @@
                             <a>{{Auth::user()->name}} @if(Auth::user()->isVip) <img src="{{asset('user/images/ic_VIP_new.png')}}"> @endif </a>
                             <ul class="dropdown">
                                 <li><a data-pjax href="{{route('profile')}}">Profile</a></li>
-                                <li><a id="donate_1"> @if(!Auth::user()->isVip) Become Vip/ @endif Donate</a></li>
                                 <li><a href="{{route('logout')}}">Logout</a></li>
                             </ul>
                         </li>
-                        <script>
-                            $('#donate_1').click(function () {
-                                document.getElementById('how_donate_dialog').showModal();
-                            });
-                        </script>
                         @endif
                     @endauth
                 </ul>
