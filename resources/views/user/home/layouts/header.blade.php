@@ -30,7 +30,7 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="inputGroupSelect01">Options</label>
                     </div>
-                    <select @if(Auth::user()->isVip === 0) onchange="publicChanged(this)" @endif class="btn" name="is_public" class="custom-select" id="is_public">
+                    <select @if(Auth::user()->isVip === 0 || Auth::user()->isVip === '0') onchange="publicChanged(this)" @endif class="btn" name="is_public" class="custom-select" id="is_public">
                         <option value="1">Public</option>
                         <option value="0">Private</option>
                     </select>
