@@ -455,7 +455,7 @@ class TasksController extends Controller
             return redirect()->back();
         }
         $tasks = $this->repository->getTaskByIdList($todo_list_id);
-        $csv = new Export();
+        $csv = new \Laracsv\Export();
         $csv->beforeEach(function ($task) {
             $task->assign = $task->user->name;
             $task->status = $task->status->name;
