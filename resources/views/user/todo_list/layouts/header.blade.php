@@ -45,7 +45,7 @@
             <span class="hamburger hamburger-2"></span>
             <span class="hamburger hamburger-3"></span>
         </label>
-        <a title="Export csv" data-pjax href="{{route('home')}}"  class="menu-item"> <i class="fa fa-share"></i> </a>
+        <a title="Export csv" href="{{route('export').'?list_id='.$list->id}}" class="menu-item exportcsv"> <i class="fa fa-share"></i> </a>
         <a style="color: red; pointer-events: none;" title="Delete" id="delete_list"class="menu-item"> <i class="icon-trash2"></i> </a>
         @if($list->is_public == 0)
             <a style="color: red; pointer-events: none;" title="Change to public" class="menu-item"> <i class="icon-tools"></i> </a>

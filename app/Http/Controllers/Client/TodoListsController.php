@@ -256,7 +256,7 @@ class TodoListsController extends Controller
     {
         $name = $request['name'];
         $is_public = $request['is_public'];
-        if((!Auth::user()->isVip || Auth::user()->isVip == '0') && $this->repository->findByField('owner_id', Auth::user()->id)->count() >= 10) {
+        if(!Auth::user()->isVip || $this->repository->findByField('owner_id', Auth::user()->id)->count() >= 10) {
             return redirect()->back()->with('max_list', true);
         }
         $user_id = Auth::user()->id;
