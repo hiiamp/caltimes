@@ -316,20 +316,9 @@ class TodoListsController extends Controller
         } else {
             return redirect()->back()->with('notif', 'There was an error when you delete a list.');
         }
-        $users = $this->userRepo->notiUser($todo_list_id);
-        $user = $this->userRepo->find(Auth::user()->id);
-        $task = [
-            'id' => '0',
-            'name' => 'null',
-            'content' => 'null',
-            'user_id' => 'null',
-            'created_at' => Carbon::now(),
-        ];
         $list = $this->repository->find($request['todo_list_id']);
-        Notification::send($users, new RepliedToThread($list, $task, 'delete a list', $user));
         $name = $list->name;
         $this->tasksRepo->deleteWhere([
-            'todo_list_id' => $todo_list_id
         ]);
         $this->accessRepo->deleteWhere([
             'todo_list_id' => $todo_list_id
