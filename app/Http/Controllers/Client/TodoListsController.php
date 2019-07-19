@@ -196,7 +196,7 @@ class TodoListsController extends Controller
             ]);
         }
         if ($user->id != Auth::user()->id) $check_own = false;
-        $favourites = $this->coworkerRepo->findFavourites(Auth::user()->id);
+        $favourites = $this->coworkerRepo->findFavourites(Auth::user()->id)->get();
         foreach ($favourites as $u) {
             $u->shared = $this->accessRepo->findWhere([
                 'todo_list_id' => $todoList->id,
