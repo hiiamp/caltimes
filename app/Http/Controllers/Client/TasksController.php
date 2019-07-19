@@ -331,12 +331,26 @@ class TasksController extends Controller
                 $assign = $request->get('assign');
                 $important = $request->get('priority');
                 if($assign=='') $assign=$task->user_id;
+                $userTask = $this->userRepo->find($task->user_id);
+                $t = $userTask->name;
+                $t = str_split($t);
+                $temp = $t[0];
+                $check = 0;
+                foreach ($t as $a)
+                {
+                    if($check == 1) {
+                        $temp.=$a;
+                        $check = 0;
+                    } else if( $a == ' ') $check = 1;
+                }
+                $userTask->character = $temp;
+                $task->assign = $userTask;
                 $data = [
-                    'name' => $name,
-                    'content' => $content,
-                    'user_id' => $assign,
-                    'created_at' => Carbon::now(),
-                    'important' => $important
+                'name' => $name,
+                'content' => $content,
+                'user_id' => $assign,
+                'created_at' => Carbon::now(),
+                'important' => $important
                 ];
                 $list = $this->listRepo->find($todo_list_id);
                 $user = $this->userRepo->find(Auth::user()->id);

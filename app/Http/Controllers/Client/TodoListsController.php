@@ -632,6 +632,9 @@ class TodoListsController extends Controller
         if($list->owner_id != Auth::user()->id){
             return redirect()->route('home');
         }
+        if($list->is_public && !(Auth::user()->isVip)) {
+            return redirect()->back()->with('notif', 'There was an error when you change status of a list.');
+        }
         $this->repository->changeIsPublicList($id);
         $users = $this->userRepo->notiUser($id);
         $user = $this->userRepo->find(Auth::user()->id);
