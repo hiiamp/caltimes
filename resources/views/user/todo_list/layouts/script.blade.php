@@ -367,7 +367,6 @@
                 });
             });
             //dialog share
-
             //==================
             $('#add-task').click(function () {
                 var max = 0;
@@ -397,6 +396,8 @@
                         $('#add-task-form')[0].reset();
                         $('#save1').val('Create');
                         $('#button_action').val('insert');
+                        var objDiv = document.getElementById("sortable1");
+                        objDiv.scrollTop = objDiv.scrollHeight;
                         temp();
                     },
                 });
