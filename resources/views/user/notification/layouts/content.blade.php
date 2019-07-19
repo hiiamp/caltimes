@@ -18,6 +18,8 @@
                                                     {{$notification->data['user']['name']}} {{$notification->data['act']}} "{{$notification->data['list']['name']}}" to recycle at {{$notification->data['list']['created_at']}}
                                                 @elseif($notification->data['act'] == "recover a list")
                                                     {{$notification->data['user']['name']}} {{$notification->data['act']}} "{{$notification->data['list']['name']}}" at {{$notification->data['list']['created_at']}}
+                                                @else
+                                                    {{$notification->data['user']['name']}} {{$notification->data['act']}} a task "{{$notification->data['list']['name']}}" at {{$notification->data['task']['created_at']}}
                                                 @endif
                                             </div>
                                         </a>
@@ -32,6 +34,8 @@
                                                 {{$notification->data['user']['name']}} {{$notification->data['act']}} "{{$notification->data['list']['name']}}"  to recycle at {{$notification->data['list']['created_at']}}
                                             @elseif($notification->data['act'] == "recover a list")
                                                 {{$notification->data['user']['name']}} {{$notification->data['act']}} "{{$notification->data['list']['name']}}" at {{$notification->data['list']['created_at']}}
+                                            @else
+                                                {{$notification->data['user']['name']}} {{$notification->data['act']}} a task "{{$notification->data['list']['name']}}" at {{$notification->data['task']['created_at']}}
                                             @endif
                                         </div>
                                     </a>
