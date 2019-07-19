@@ -20,9 +20,11 @@
 <dialog id="how_donate_dialog">
     <span class="alert alert-info help-block" style="min-width: 700px">
         <strong>
+            @if(Auth::check())
             Come to @if(Auth::user()->isVip) my donate page: @else tranfer money page and give me >= 100.000 VND / 5USD @endif  <br>
             <a target="_blank" href="https://unghotoi.com/1563348843jqrl4">@if(Auth::user()->isVip) Donate @else Tranfer money @endif page</a><br>
             And notificate us on email: phi.td@neo-lab.vn / 0354856546
+            @endif
         </strong>
     </span>
     <span style="padding-left: 10%">

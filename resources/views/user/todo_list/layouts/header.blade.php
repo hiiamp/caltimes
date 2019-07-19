@@ -11,7 +11,7 @@
         @if($list->is_public == 0)
             <a title="Change to public" data-pjax href="{{route('private.list').'?list_id='.$list->id}}" class="menu-item"> <i class="icon-tools"></i> </a>
         @else
-            <a title="Change to private" @if(Auth::user()->isVip === 1) data-pjax href="{{route('private.list').'?list_id='.$list->id}}" @else onclick="changePrivate()" @endif class="menu-item"> <i class="icon-tools"></i> </a>
+            <a title="Change to private" @if(Auth::user()->isVip) data-pjax href="{{route('private.list').'?list_id='.$list->id}}" @else onclick="changePrivate()" @endif class="menu-item"> <i class="icon-tools"></i> </a>
         @endif
         <a title="Share with" class="menu-item sharewith"> <i class="icon-share3"></i></a>
         <a title="Worker joined" class="menu-item worker_joined"> <i class="icon-user2"></i></a>
