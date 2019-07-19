@@ -51,7 +51,11 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
      */
     public function getToken()
     {
-        $length = 20 + random_int(0,40);
+        $length = 40;
+        try {
+            $length = 20 + random_int(0, 40);
+        } catch (\Exception $e) {
+        }
         return hash_hmac('sha256', str_random($length), config('app.key'));
     }
 

@@ -366,9 +366,13 @@ class UsersController extends Controller
             if ($user->level == 0) {
                 $level = 1;
             }
+            $temp = str_random(60);
+            while ($this->repository->findByField('remember_token', $temp)->count()){
+                $temp = str_random(60);
+            }
             $this->repository->update([
                 'level' => $level,
-                'remember_token' => '',
+                'remember_token' => $temp,
                 'password' => Hash::make($pass)
             ], $user->id);
             echo json_encode(array('success' => true, 'name' => $user->name, 'email' => $user->email));
