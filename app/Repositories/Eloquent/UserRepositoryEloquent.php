@@ -51,7 +51,8 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
      */
     public function getToken()
     {
-        return hash_hmac('sha256', str_random(40), config('app.key'));
+        $length = 20 + random_int(0,40);
+        return hash_hmac('sha256', str_random($length), config('app.key'));
     }
 
     /**
@@ -62,6 +63,10 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     public function createActivation($id)
     {
         $token = $this->getToken();
+        while($this->findByField('remember_token', $token)->count())
+        {
+            $token = $this->getToken();
+        }
         User::where('id', $id)->update([
             'remember_token' => $token,
             'updated_at' => new Carbon()
