@@ -317,6 +317,37 @@
                         });
                     });
                 });
+                $( "#sortable1, #sortable2, #sortable3" ).children().click(function(){
+                    $('#edit_action').val('edit');
+                    $('#save11').val('Save');
+                });
+                $('#edit-task-form').on('submit',function (event) {
+                    event.preventDefault();
+                    var form_data = $(this).serialize();
+                    $.ajax({
+                        url : '{{ route('edit.task') }}',
+                        method: "get",
+                        data:form_data,
+                        dataType: 'json',
+                        success:function(data){
+                            if(data.important === '0') {
+                                $('#priority1'+data.task_id).attr('title', 'High priority');
+                                $('#priority1'+data.task_id).css('background-color', '#2669ea');
+                            } else if(data.important === '1') {
+                                $('#priority1'+data.task_id).attr('title', 'Medium priority');
+                                $('#priority1'+data.task_id).css('background-color', '#84ceeb');
+                            } else {
+                                $('#priority1'+data.task_id).attr('title', 'Low priority');
+                                $('#priority1'+data.task_id).css('background-color', '#c1c8e4');
+                            }
+                            $('#name_taskp'+data.task_id).parent().html('<a id="name_taskp'+ data.task_id +'" style="color: black;" >'+data.name+'</a>');
+                            $('#character' + data.task_id).text(data.character);
+                            $('#edit_action').val('edit');
+                            $('#save11').val('Save');
+                            //temp();
+                        }
+                    });
+                });
             }
             temp();
             $('#searchTask').on('keyup',function(){
@@ -372,36 +403,6 @@
             });
 
             //==================
-            $( "#sortable1, #sortable2, #sortable3" ).children().click(function(){
-                $('#edit_action').val('edit');
-                $('#save11').val('Save');
-            });
-
-            $('#edit-task-form').on('submit',function (event) {
-                event.preventDefault();
-                var form_data = $(this).serialize();
-                $.ajax({
-                    url : '{{ route('edit.task') }}',
-                    method: "get",
-                    data:form_data,
-                    dataType: 'json',
-                    success:function(data){
-                        if(data.important === '0') {
-                            $('#priority1'+data.task_id).attr('title', 'High priority');
-                            $('#priority1'+data.task_id).css('background-color', '#2669ea');
-                        } else if(data.important === '1') {
-                            $('#priority1'+data.task_id).attr('title', 'Medium priority');
-                            $('#priority1'+data.task_id).css('background-color', '#84ceeb');
-                        } else {
-                            $('#priority1'+data.task_id).attr('title', 'Low priority');
-                            $('#priority1'+data.task_id).css('background-color', '#c1c8e4');
-                        }
-                        $('#edit_action').val('edit');
-                        $('#save11').val('Save');
-                        temp();
-                    }
-                });
-            });
         } );
     </script>
 @else

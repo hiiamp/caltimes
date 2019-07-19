@@ -9,10 +9,7 @@
                         <div class="contact-info-wrap-flex">
                             <div class="con-info">
                                 <p><span><i class="icon-location-2"></i></span> Assign </p>
-                                @foreach($tasks as $task)
-                                <input type="hidden" id="todo_list_id" class="form-control" name="todo_list_id" value="{{$task->todo_list_id}}">
-                                @break
-                                @endforeach
+                                <input type="hidden" id="todo_list_id" class="form-control" name="todo_list_id" value="{{$list_id}}">
                                 <input hidden="hidden" value="" id="task_edit_id" name="task_id" >
                                 <select class="btn" name="assign" class="custom-select" id="assign">
                                     @foreach($tasks as $task)
@@ -33,25 +30,27 @@
                                 @foreach($tasks as $task)
                                     <select class="btn prioty" name="priority" class="custom-select" id="priority{{$task->id}}">
                                         @if($task->important == 0)
-                                            <option id="p0" value="0" style="background-color: #0da5c0" selected>High</option>
-                                            <option id="p1" value="1" style="background-color: #00b3ee">Medium</option>
-                                            <option id="p2" value="2" style="background-color: #00f7b5">Low</option>
+                                            <option id="p0" value="0" style="background-color: #2669ea" selected>High</option>
+                                            <option id="p1" value="1" style="background-color: #84ceeb">Medium</option>
+                                            <option id="p2" value="2" style="background-color: #c1c8e4">Low</option>
                                         @elseif($task->important == 1)
-                                            <option id="p0" value="0" style="background-color: #0da5c0">High</option>
-                                            <option id="p1" value="1" style="background-color: #00b3ee" selected>Medium</option>
-                                            <option id="p2" value="2" style="background-color: #00f7b5">Low</option>
+                                            <option id="p0" value="0" style="background-color: #2669ea">High</option>
+                                            <option id="p1" value="1" style="background-color: #84ceeb" selected>Medium</option>
+                                            <option id="p2" value="2" style="background-color: #c1c8e4">Low</option>
                                         @else
-                                            <option id="p0" value="0" style="background-color: #0da5c0">High</option>
-                                            <option id="p1" value="1" style="background-color: #00b3ee">Medium</option>
-                                            <option id="p2" value="2" style="background-color: #00f7b5" selected>Low</option>
+                                            <option id="p0" value="0" style="background-color: #2669ea">High</option>
+                                            <option id="p1" value="1" style="background-color: #84ceeb">Medium</option>
+                                            <option id="p2" value="2" style="background-color: #c1c8e4" selected>Low</option>
                                         @endif
                                     </select>
                                 @endforeach
                             </div>
                             <div class="con-info">
-                                @foreach($tasks as $task)
-                                    <input class="delete_task" data-index="{{$task->id}}" id="deletetask{{$task->id}}" type="button" value="Delete this task">
-                                @endforeach
+                                @if(Auth::check())
+                                    @foreach($tasks as $task)
+                                        <input class="delete_task" data-index="{{$task->id}}" id="deletetask{{$task->id}}" type="button" value="Delete this task">
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -74,7 +73,8 @@
                 </div>
                 <div class="form-group">
                     @if(\Illuminate\Support\Facades\Auth::check())
-                        <input id="save11" type="button" value="Save" class="btn btn-primary">
+                        <input type="hidden" name="edit_action" id="edit_action" value="edit" />
+                        <input id="save11" name="submit" type="submit" value="Save" class="btn btn-primary">
                     @endif
                     <input id="out11" type="reset" value="Cancel" class="btn btn-primary">
                 </div>

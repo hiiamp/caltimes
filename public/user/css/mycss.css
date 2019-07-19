@@ -148,7 +148,6 @@ article {
     cursor: default;
     display: inline-block;
     margin: 0 4px 4px 0;
-    max-width: 70%;
     min-height: 30px;
     overflow: hidden;
     position: relative;
@@ -172,8 +171,7 @@ article {
     font-size: 15px;
     font-weight: 900;
     vertical-align: top;
-    white-space: nowrap;
-    border-radius: 4px;
+    border-radius: 6px;
     color: #FFFFFF;
 }
 .member-initials {

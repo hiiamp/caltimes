@@ -13,7 +13,7 @@
                             @if($task->status_id==1)
                                 <li data-name="{{$task->name}}" data-index="{{$task->id}}" data-position="{{$task->position}}" data-status="{{$task->todo_list_id}} " class="has-dropdown">
                                     <p>
-                                        <a style="color: black;" >{{$task->name}}</a>
+                                        <a id="name_taskp{{$task->id}}" style="color: black;" >{{$task->name}}</a>
                                     </p>
                                     <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}@if($task->assign->id == @Auth::user()->id) (me) @endif</span>
                                     <p class="badges">
@@ -25,7 +25,7 @@
                                                 @endif>
                                                 <span class="badge-icon icon-sm icon-clock"></span>
                                                 <span class="badge-text js-due-date-text">{{$task->created}}</span>
-                                                <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
+                                                <span id="character{{$task->id}}" class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
                                             </p>
                                         </span>
                                     </p>
@@ -46,7 +46,7 @@
                             @if($task->status_id==2)
                                 <li data-name="{{$task->name}}" data-index="{{$task->id}}" data-position="{{$task->position}}" data-status="{{$task->todo_list_id}} " class="has-dropdown">
                                     <p>
-                                        <a style="color: black;" >{{$task->name}}</a>
+                                        <a id="name_taskp{{$task->id}}" style="color: black;" >{{$task->name}}</a>
                                     </p>
                                     <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}@if($task->assign->id == @Auth::user()->id) (me) @endif</span>
                                     <p class="badges">
@@ -58,7 +58,7 @@
                                                 @endif>
                                                 <span class="badge-icon icon-sm icon-clock"></span>
                                                 <span class="badge-text js-due-date-text">{{$task->created}}</span>
-                                                <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
+                                                <span id="character{{$task->id}}" class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
                                             </p>
                                         </span>
                                     </p>
@@ -76,7 +76,7 @@
                             @if($task->status_id==3)
                                 <li data-name="{{$task->name}}" data-index="{{$task->id}}" data-position="{{$task->position}}" data-status="{{$task->todo_list_id}} " class="has-dropdown">
                                     <p>
-                                        <a style="color: black;" >{{$task->name}}</a>
+                                        <a id="name_taskp{{$task->id}}" style="color: black;" >{{$task->name}}</a>
                                     </p>
                                     <span id="ats" class="ats"><span><i class="icon-location-2"></i></span>{{$task->assign->name}}@if($task->assign->id == @Auth::user()->id) (me) @endif</span>
                                     <p class="badges">
@@ -88,7 +88,7 @@
                                                 @endif>
                                                 <span class="badge-icon icon-sm icon-clock"></span>
                                                 <span class="badge-text js-due-date-text">{{$task->created}}</span>
-                                                <span class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
+                                                <span id="character{{$task->id}}" class="badge-text2 js-due-date-text" title="{{$task->assign->name}}" aria-label="{{$task->assign->name}}">{{$task->assign->character}}</span>
                                             </p>
                                         </span>
                                     </p>

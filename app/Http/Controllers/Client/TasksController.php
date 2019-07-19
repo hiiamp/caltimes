@@ -297,7 +297,7 @@ class TasksController extends Controller
                     }
                     $list_users = $this->listRepo->findUserShared($todo_list_id)->get();
 
-                    $detail = view('user.render.detailtask')->with(['tasks'=>$tasks,'list_users'=>$list_users])->render();
+                    $detail = view('user.render.detailtask')->with(['tasks'=>$tasks,'list_users'=>$list_users, 'list_id' => $todo_list_id])->render();
                 //}
             }
             $user = $this->userRepo->find(Auth::user()->id);
@@ -343,9 +343,21 @@ class TasksController extends Controller
                 $this->repository->find($id_task)->update($data);
                 $users = $this->userRepo->notiUser($todo_list_id);
                 Notification::send($users,new RepliedToThread($list,$data,'edit', $user));
+                $t = str_split(($this->userRepo->find($assign))->name);
+                $temp = $t[0];
+                $check = 0;
+                foreach ($t as $a)
+                {
+                    if($check == 1) {
+                        $temp.=$a;
+                        $check = 0;
+                    } else if( $a == ' ') $check = 1;
+                }
                 echo json_encode(array(
                     'task_id' => $id_task,
-                    'important' => $important
+                    'important' => $important,
+                    'name' => $name,
+                    'character' => $temp
                 ));
             }
         }
