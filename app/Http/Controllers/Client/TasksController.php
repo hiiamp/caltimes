@@ -466,6 +466,7 @@ class TasksController extends Controller
         if($todo_list_id == ''){
             return redirect()->back();
         }
+        $list = $this->listRepo->find($todo_list_id);
         $tasks = $this->repository->getTaskByIdList($todo_list_id);
         $csv = new Export();
         $csv->beforeEach(function ($task) {
@@ -478,6 +479,6 @@ class TasksController extends Controller
             $task->create = $task->created_at;
         });
         $csv->build($tasks, ['name', 'content','assign','status','important','create' ]);
-        $csv->download('task.csv');
+        $csv->download(($list->name).'.csv');
     }
 }
