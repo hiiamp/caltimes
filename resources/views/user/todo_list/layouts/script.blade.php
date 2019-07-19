@@ -11,9 +11,9 @@
             $('#search').hide();
             $('#searchTask').show();
         });
-        $( function function1() {
-            function temp(){
-                $( "#sortable1, #sortable2, #sortable3" ).sortable({
+        $(function function1() {
+            function temp() {
+                $("#sortable1, #sortable2, #sortable3").sortable({
                     scroll: true,
                     axis: "x,y",
                     zIndex: 999999,
@@ -22,30 +22,28 @@
                     helper: "clone",
                     disable: false,
                     connectWith: ".connectedSortable",
-                    update: function(event,ui){
+                    update: function (event, ui) {
                         var status_task = $(this).attr('id');
                         $(this).children().each(function (index) {
-                            if ($(this).attr('data-position') != (index+1)) {
-                                $(this).attr('data-position',(index+1)).addClass('updated')
+                            if ($(this).attr('data-position') != (index + 1)) {
+                                $(this).attr('data-position', (index + 1)).addClass('updated')
                             }
                             $(this).addClass('updated');
                         });
                         saveNewPositions(status_task)
                     }
                 }).disableSelection();
-                function saveNewPositions(status_task)
-                {
+
+                function saveNewPositions(status_task) {
                     var positions = [];
                     var status_id;
                     $('.updated').each(function () {
                         if (status_task == 'sortable1') {
-                            status_id=1;
-                        }
-                        else if (status_task == 'sortable2') {
-                            status_id=2;
-                        }
-                        else if (status_task == 'sortable3') {
-                            status_id=3;
+                            status_id = 1;
+                        } else if (status_task == 'sortable2') {
+                            status_id = 2;
+                        } else if (status_task == 'sortable3') {
+                            status_id = 3;
                         }
                         positions.push([$(this).attr('data-index'), $(this).attr('data-position'), status_id]);
                         $(this).removeClass('updated');
@@ -66,20 +64,21 @@
                         }
                     });
                 }
+
                 $('.ats').hide();
-                $(function(){
-                    $('#sortable1 li, #sortable2 li, #sortable3 li').mousedown(function(event){
-                        $(this).bind("contextmenu",function(e){
+                $(function () {
+                    $('#sortable1 li, #sortable2 li, #sortable3 li').mousedown(function (event) {
+                        $(this).bind("contextmenu", function (e) {
                             e.preventDefault();
                         });
                         switch (event.which) {
                             case 1:
                                 $('#sortable1, #sortable2, #sortable3').parent().parent().each(function () {
-                                    $(this).css('z-index','2');
+                                    $(this).css('z-index', '2');
                                 });
-                                $(this).parent().parent().parent().css('z-index','50');
-                                $(this).css('z-index','51');
-                                $(this).css({'transform':' rotate(5deg)','z-index':'100'});
+                                $(this).parent().parent().parent().css('z-index', '50');
+                                $(this).css('z-index', '51');
+                                $(this).css({'transform': ' rotate(5deg)', 'z-index': '100'});
                                 break;
                             case 3:
                                 $(this).children('span').toggle();
@@ -88,17 +87,15 @@
                                 break;
                         }
                     });
-                    $('#sortable1 li, #sortable2 li, #sortable3 li').mouseleave(function(event){
-                        $(this).css({'transform':' rotate(0deg)'});
+                    $('#sortable1 li, #sortable2 li, #sortable3 li').mouseleave(function (event) {
+                        $(this).css({'transform': ' rotate(0deg)'});
                     });
-                    $(document).click(function (e)
-                    {
+                    $(document).click(function (e) {
                         // Đối tượng container chứa popup
                         var container = $("#sortable1 li, #sortable2 li, #sortable3 li").children('span');
 
                         // Nếu click bên ngoài đối tượng container thì ẩn nó đi
-                        if(!container.is(e.target) && container.has(e.target).length === 0)
-                        {
+                        if (!container.is(e.target) && container.has(e.target).length === 0) {
                             container.hide();
                         }
 
@@ -106,17 +103,17 @@
                     });
                 });
                 var dialog_share = document.querySelector('#sharewithdialog');
-                document.querySelector('.sharewith').onclick = function() {
+                document.querySelector('.sharewith').onclick = function () {
                     dialog_share.showModal();
                 };
                 //document.querySelector('#share').onclick = function() {
                 //  dialog_share.close();
                 //};
-                document.querySelector('#cancelshare').onclick = function() {
+                document.querySelector('#cancelshare').onclick = function () {
                     dialog_share.close();
                 };
                 var dialog_favourite = document.querySelector('#myfavourite_dialog');
-                document.querySelector('#myfavourite').onclick = function() {
+                document.querySelector('#myfavourite').onclick = function () {
                     dialog_share.close();
                     dialog_favourite.showModal();
                 };
@@ -125,8 +122,8 @@
                         var user_id = $(this).attr('data-id');
                         var todo_list_id = $(this).attr('list-id');
                         var check = true;
-                        if($(this).attr('data-fv') === 'no') check = false;
-                        if(check){
+                        if ($(this).attr('data-fv') === 'no') check = false;
+                        if (check) {
                             $(this).attr('data-fv', 'no');
                             $(this).attr('value', 'Share this list');
                         } else {
@@ -134,18 +131,19 @@
                             $(this).attr('value', 'UnShare');
                         }
                         $.ajax({
-                            url : '{{ route('toggleShareList') }}',
+                            url: '{{ route('toggleShareList') }}',
                             dataType: 'json',
-                            data:{'user_id': user_id,
+                            data: {
+                                'user_id': user_id,
                                 'todo_list_id': todo_list_id
                             },
-                            success:function(data){
+                            success: function (data) {
 
                             }
                         });
                     });
                 });
-                document.querySelector('#fvdialogcancel').onclick = function() {
+                document.querySelector('#fvdialogcancel').onclick = function () {
                     dialog_favourite.close();
                 };
                 //===============
@@ -165,19 +163,19 @@
                         document.querySelector('#detail-dialog').close();
                         dialog_delete_task.showModal();
                         var task_id = $(this).attr('data-index');
-                        $('#delete_task_id').attr('value',task_id);
+                        $('#delete_task_id').attr('value', task_id);
                     });
                 });
                 $('#delete_task_submit').click(function () {
                     dialog_delete_task.close();
                     var task_id = $('#delete_task_id').val();
                     $.ajax({
-                        url : '{{ route('delete.task') }}',
+                        url: '{{ route('delete.task') }}',
                         dataType: 'json',
-                        data:{'task_id': task_id,},
-                        success:function(data){
+                        data: {'task_id': task_id,},
+                        success: function (data) {
                             $('.has-dropdown').each(function () {
-                                if($(this).attr('data-index') === task_id) {
+                                if ($(this).attr('data-index') === task_id) {
                                     $(this).remove();
                                 }
                             });
@@ -192,19 +190,19 @@
                 };
 
                 var dialog_edit = document.querySelector('#detail-dialog');
-                $( "#sortable1, #sortable2, #sortable3" ).children().each(function(index) {
-                    $(this).click(function(){
+                $("#sortable1, #sortable2, #sortable3").children().each(function (index) {
+                    $(this).click(function () {
                         dialog_edit.close();
                         dialog_edit.showModal();
                         //console.log($(this).attr('data-index'));
                         var task_id = $(this).attr('data-index');
-                        $('#task_edit_id').attr('value',task_id);
+                        $('#task_edit_id').attr('value', task_id);
                         $('.delete_task').hide().attr('disabled', '');
-                        $('.prioty').hide().attr('disabled','');
-                        $('#priority'+task_id).show();
+                        $('.prioty').hide().attr('disabled', '');
+                        $('#priority' + task_id).show();
                         var t_id = task_id;
-                        $('#deletetask'+task_id).show();
-                        $('#deletetask'+task_id).removeAttr('disabled');
+                        $('#deletetask' + task_id).show();
+                        $('#deletetask' + task_id).removeAttr('disabled');
                         var name_id = 'name' + task_id;
                         var content_id = 'content' + task_id;
                         task_id = 'assign' + task_id;
@@ -213,7 +211,7 @@
                         document.getElementById(task_id).attributes.removeNamedItem('hidden');
                         document.getElementById('priority' + t_id).attributes.removeNamedItem('disabled');
                         var user_id = document.getElementById(task_id).getAttribute('value');
-                        if(user_id !== '1') {
+                        if (user_id !== '1') {
                             user_id = 'choose' + user_id;
                             var hidden = document.createAttribute('hidden');
                             hidden.value = 'hidden';
@@ -230,24 +228,24 @@
                         $(".hidden_dis").attr('hidden', 'hidden').attr('disabled', '').parent().hide();
                         document.getElementById(name_id).attributes.removeNamedItem('disabled');
                         document.getElementById(name_id).attributes.removeNamedItem('hidden');
-                        $('#'+name_id).parent().show();
+                        $('#' + name_id).parent().show();
                         document.getElementById(content_id).attributes.removeNamedItem('disabled');
                         document.getElementById(content_id).attributes.removeNamedItem('hidden');
-                        $('#'+content_id).parent().show();
+                        $('#' + content_id).parent().show();
                     });
                 });
-                document.querySelector('#save11').onclick = function() {
+                document.querySelector('#save11').onclick = function () {
                     dialog_edit.close();
                 };
-                document.querySelector('#out11').onclick = function() {
+                document.querySelector('#out11').onclick = function () {
                     dialog_edit.close();
                 };
                 //add task dialog
                 var dialog1 = document.querySelector('#create-task');
-                document.querySelector('#add-task').onclick = function() {
+                document.querySelector('#add-task').onclick = function () {
                     dialog1.showModal();
                 };
-                document.querySelector('#out1').onclick = function() {
+                document.querySelector('#out1').onclick = function () {
                     dialog1.close();
                 };
 
@@ -258,13 +256,13 @@
                         dialog_out.showModal();
                     };
                 } catch (e) {
-                    
+
                 }
                 document.querySelector('#delete_access_cancel').onclick = function () {
                     dialog_out.close();
                 };
                 var dialog4 = document.querySelector('#dialogjoined');
-                document.querySelector('.worker_joined').onclick = function() {
+                document.querySelector('.worker_joined').onclick = function () {
                     dialog4.showModal();
                 };
                 document.querySelector('#joinedcancel').onclick = function () {
@@ -274,8 +272,8 @@
                     $(this).click(function () {
                         var user_co_id = $(this).attr('data-id');
                         var check = true;
-                        if($(this).attr('data-wk') === 'no') check = false;
-                        if(check){
+                        if ($(this).attr('data-wk') === 'no') check = false;
+                        if (check) {
                             $(this).attr('data-wk', 'no');
                             $(this).attr('value', 'Add favorite');
                         } else {
@@ -283,10 +281,10 @@
                             $(this).attr('value', 'Remove favorite');
                         }
                         $.ajax({
-                            url : '{{ route('toggleCoWorker') }}',
+                            url: '{{ route('toggleCoWorker') }}',
                             dataType: 'json',
-                            data:{'user_co_id': user_co_id},
-                            success:function(data){
+                            data: {'user_co_id': user_co_id},
+                            success: function (data) {
 
                             }
                         });
@@ -297,8 +295,8 @@
                         var user_id = $(this).attr('data-id');
                         var todo_list_id = $(this).attr('list-id');
                         var check = true;
-                        if($(this).attr('data-wk') === 'no') check = false;
-                        if(check){
+                        if ($(this).attr('data-wk') === 'no') check = false;
+                        if (check) {
                             $(this).attr('data-wk', 'no');
                             $(this).attr('value', 'Approve join');
                         } else {
@@ -306,41 +304,42 @@
                             $(this).attr('value', 'Kick out?');
                         }
                         $.ajax({
-                            url : '{{ route('toggleShareList') }}',
+                            url: '{{ route('toggleShareList') }}',
                             dataType: 'json',
-                            data:{'user_id': user_id,
+                            data: {
+                                'user_id': user_id,
                                 'todo_list_id': todo_list_id
                             },
-                            success:function(data){
+                            success: function (data) {
 
                             }
                         });
                     });
                 });
-                $( "#sortable1, #sortable2, #sortable3" ).children().click(function(){
+                $("#sortable1, #sortable2, #sortable3").children().click(function () {
                     $('#edit_action').val('edit');
                     $('#save11').val('Save');
                 });
-                $('#edit-task-form').on('submit',function (event) {
+                $('#edit-task-form').on('submit', function (event) {
                     event.preventDefault();
                     var form_data = $(this).serialize();
                     $.ajax({
-                        url : '{{ route('edit.task') }}',
+                        url: '{{ route('edit.task') }}',
                         method: "get",
-                        data:form_data,
+                        data: form_data,
                         dataType: 'json',
-                        success:function(data){
-                            if(data.important === '0') {
-                                $('#priority1'+data.task_id).attr('title', 'High priority');
-                                $('#priority1'+data.task_id).css('background-color', '#2669ea');
-                            } else if(data.important === '1') {
-                                $('#priority1'+data.task_id).attr('title', 'Medium priority');
-                                $('#priority1'+data.task_id).css('background-color', '#84ceeb');
+                        success: function (data) {
+                            if (data.important === '0') {
+                                $('#priority1' + data.task_id).attr('title', 'High priority');
+                                $('#priority1' + data.task_id).css('background-color', '#2669ea');
+                            } else if (data.important === '1') {
+                                $('#priority1' + data.task_id).attr('title', 'Medium priority');
+                                $('#priority1' + data.task_id).css('background-color', '#84ceeb');
                             } else {
-                                $('#priority1'+data.task_id).attr('title', 'Low priority');
-                                $('#priority1'+data.task_id).css('background-color', '#c1c8e4');
+                                $('#priority1' + data.task_id).attr('title', 'Low priority');
+                                $('#priority1' + data.task_id).css('background-color', '#c1c8e4');
                             }
-                            $('#name_taskp'+data.task_id).parent().html('<a id="name_taskp'+ data.task_id +'" style="color: black;" >'+data.name+'</a>');
+                            $('#name_taskp' + data.task_id).parent().html('<a id="name_taskp' + data.task_id + '" style="color: black;" >' + data.name + '</a>');
                             $('#character' + data.task_id).text(data.character);
                             $('#edit_action').val('edit');
                             $('#save11').val('Save');
@@ -349,49 +348,50 @@
                     });
                 });
             }
+
             temp();
-            $('#searchTask').on('keyup',function(){
+            $('#searchTask').on('keyup', function () {
                 var search = $('#searchTask').val();
-                $( "#sortable1 li, #sortable2 li, #sortable3 li" ).each(function () {
+                $("#sortable1 li, #sortable2 li, #sortable3 li").each(function () {
                     var name = $(this).attr('data-name');
                     try {
-                        if(name.indexOf(search) > -1 || search === '') {
+                        if (name.indexOf(search) > -1 || search === '') {
                             $(this).show();
                         } else {
                             $(this).hide();
                         }
                     } catch (e) {
-                        
+
                     }
-                    
+
                 });
             });
             //dialog share
 
             //==================
-            $('#add-task').click(function(){
+            $('#add-task').click(function () {
                 var max = 0;
                 $('#sortable1').children().each(function () {
-                    if($(this).attr('data-position')>max){
+                    if ($(this).attr('data-position') > max) {
                         max = $(this).attr('data-position');
                     }
                 });
                 max = Number(max);
-                $('#position_create').attr('value', max+1);
+                $('#position_create').attr('value', max + 1);
                 $('#add-task-form')[0].reset();
                 $('#button_action').val('insert');
                 $('#save1').val('Create');
             });
-            $('#add-task-form').on('submit',function (event) {
+            $('#add-task-form').on('submit', function (event) {
                 event.preventDefault();
                 document.getElementById('create-task').close();
                 var form_data = $(this).serialize();
                 $.ajax({
-                    url : '{{ route('create_task') }}',
+                    url: '{{ route('create_task') }}',
                     method: "get",
-                    data:form_data,
+                    data: form_data,
                     dataType: 'json',
-                    success:function(data){
+                    success: function (data) {
                         $('#sortable1').html($('#sortable1').html() + data.out);
                         $('#detail-dialog').html(data.detail);
                         $('#add-task-form')[0].reset();
@@ -403,7 +403,7 @@
             });
 
             //==================
-        } );
+        });
     </script>
 @else
     <script type="text/javascript">
@@ -411,9 +411,9 @@
             $('#search').hide();
             $('#searchTask').hide();
         });
-        $( function function1() {
-            function temp(){
-                $( "#sortable1, #sortable2, #sortable3" ).sortable({
+        $(function function1() {
+            function temp() {
+                $("#sortable1, #sortable2, #sortable3").sortable({
                     scroll: true,
                     axis: "x,y",
                     zIndex: 999999,
@@ -422,50 +422,49 @@
                     helper: "clone",
                     disable: false,
                     connectWith: ".connectedSortable",
-                    update: function(event,ui){
-                        var status_task = $(this).attr('id')
+                    update: function (event, ui) {
+                        var status_task = $(this).attr('id');
                         $(this).children().each(function (index) {
-                            if ($(this).attr('data-position') != (index+1)) {
-                                $(this).attr('data-position',(index+1)).addClass('updated')
+                            if ($(this).attr('data-position') != (index + 1)) {
+                                $(this).attr('data-position', (index + 1)).addClass('updated')
                             }
                             $(this).addClass('updated');
-                        })
+                        });
                         saveNewPositions(status_task)
                     }
                 }).disableSelection();
-                function saveNewPositions(status_task)
-                {
+
+                function saveNewPositions(status_task) {
                     var positions = [];
                     var status_id;
                     $('.updated').each(function () {
                         if (status_task == 'sortable1') {
-                            status_id=1;
-                        }
-                        else if (status_task == 'sortable2') {
-                            status_id=2;
-                        }
-                        else if (status_task == 'sortable3') {
-                            status_id=3;
+                            status_id = 1;
+                        } else if (status_task == 'sortable2') {
+                            status_id = 2;
+                        } else if (status_task == 'sortable3') {
+                            status_id = 3;
                         }
                         positions.push([$(this).attr('data-index'), $(this).attr('data-position'), status_id]);
                         $(this).removeClass('updated');
                     });
 
                 }
+
                 $('.ats').hide();
-                $(function(){
-                    $('#sortable1 li, #sortable2 li, #sortable3 li').mousedown(function(event){
-                        $(this).bind("contextmenu",function(e){
+                $(function () {
+                    $('#sortable1 li, #sortable2 li, #sortable3 li').mousedown(function (event) {
+                        $(this).bind("contextmenu", function (e) {
                             e.preventDefault();
                         });
                         switch (event.which) {
                             case 1:
                                 $('#sortable1, #sortable2, #sortable3').parent().parent().each(function () {
-                                    $(this).css('z-index','2');
+                                    $(this).css('z-index', '2');
                                 });
-                                $(this).parent().parent().parent().css('z-index','50');
-                                $(this).css('z-index','51');
-                                $(this).css({'transform':' rotate(5deg)','z-index':'100'});
+                                $(this).parent().parent().parent().css('z-index', '50');
+                                $(this).css('z-index', '51');
+                                $(this).css({'transform': ' rotate(5deg)', 'z-index': '100'});
                                 break;
                             case 3:
                                 $(this).children('span').toggle();
@@ -474,33 +473,31 @@
                                 break;
                         }
                     });
-                    $('#sortable1 li, #sortable2 li, #sortable3 li').mouseleave(function(event){
-                        $(this).css({'transform':' rotate(0deg)'});
+                    $('#sortable1 li, #sortable2 li, #sortable3 li').mouseleave(function (event) {
+                        $(this).css({'transform': ' rotate(0deg)'});
                     });
-                    $(document).click(function (e)
-                    {
+                    $(document).click(function (e) {
                         // Đối tượng container chứa popup
                         var container = $("#sortable1 li, #sortable2 li, #sortable3 li").children('span');
 
                         // Nếu click bên ngoài đối tượng container thì ẩn nó đi
-                        if (!container.is(e.target) && container.has(e.target).length === 0)
-                        {
+                        if (!container.is(e.target) && container.has(e.target).length === 0) {
                             container.hide();
                         }
                     });
                 });
                 var dialog_edit = document.querySelector('#detail-dialog');
-                $( "#sortable1, #sortable2, #sortable3" ).children().each(function(index) {
-                    $(this).click(function(){
+                $("#sortable1, #sortable2, #sortable3").children().each(function (index) {
+                    $(this).click(function () {
                         dialog_edit.showModal();
                         //console.log($(this).attr('data-index'));
                         var task_id = $(this).attr('data-index');
-                        $('#task_edit_id').attr('value',task_id);
+                        $('#task_edit_id').attr('value', task_id);
                         $('.delete_task').hide().attr('disabled', '');
-                        $('.prioty').hide().attr('disabled','');
-                        $('#priority'+task_id).show();
+                        $('.prioty').hide().attr('disabled', '');
+                        $('#priority' + task_id).show();
                         var t_id = task_id;
-                        $('#deletetask'+task_id).show();
+                        $('#deletetask' + task_id).show();
                         var name_id = 'name' + task_id;
                         var content_id = 'content' + task_id;
                         task_id = 'assign' + task_id;
@@ -509,7 +506,7 @@
                         document.getElementById(task_id).attributes.removeNamedItem('hidden');
                         document.getElementById('priority' + t_id).attributes.removeNamedItem('disabled');
                         var user_id = document.getElementById(task_id).getAttribute('value');
-                        if(user_id !== '1') {
+                        if (user_id !== '1') {
                             user_id = 'choose' + user_id;
                             var hidden = document.createAttribute('hidden');
                             hidden.value = 'hidden';
@@ -526,19 +523,19 @@
                         $(".hidden_dis").attr('hidden', 'hidden').attr('disabled', '').parent().hide();
                         document.getElementById(name_id).attributes.removeNamedItem('disabled');
                         document.getElementById(name_id).attributes.removeNamedItem('hidden');
-                        $('#'+name_id).parent().show();
+                        $('#' + name_id).parent().show();
                         document.getElementById(content_id).attributes.removeNamedItem('disabled');
                         document.getElementById(content_id).attributes.removeNamedItem('hidden');
-                        $('#'+content_id).parent().show();
+                        $('#' + content_id).parent().show();
                     });
                 });
-                document.querySelector('#out11').onclick = function() {
+                document.querySelector('#out11').onclick = function () {
                     dialog_edit.close();
                 };
 
                 //header, xu ly coworker
                 var dialog4 = document.querySelector('#dialogjoined');
-                document.querySelector('.worker_joined').onclick = function() {
+                document.querySelector('.worker_joined').onclick = function () {
                     dialog4.showModal();
                 };
                 document.querySelector('#joinedcancel').onclick = function () {
@@ -548,8 +545,8 @@
                     $(this).click(function () {
                         var user_co_id = $(this).attr('data-id');
                         var check = true;
-                        if($(this).attr('data-wk') === 'no') check = false;
-                        if(check){
+                        if ($(this).attr('data-wk') === 'no') check = false;
+                        if (check) {
                             $(this).attr('data-wk', 'no');
                             $(this).attr('value', 'Add favorite');
                         } else {
@@ -557,23 +554,24 @@
                             $(this).attr('value', 'Remove favorite');
                         }
                         $.ajax({
-                            url : '{{ route('toggleCoWorker') }}',
+                            url: '{{ route('toggleCoWorker') }}',
                             dataType: 'json',
-                            data:{'user_co_id': user_co_id},
-                            success:function(data){
+                            data: {'user_co_id': user_co_id},
+                            success: function (data) {
 
                             }
                         });
                     });
                 });
             }
+
             temp();
-            $('#searchTask').on('keyup',function(){
+            $('#searchTask').on('keyup', function () {
                 var search = $('#searchTask').val();
-                $( "#sortable1 li, #sortable2 li, #sortable3 li" ).each(function () {
+                $("#sortable1 li, #sortable2 li, #sortable3 li").each(function () {
                     var name = $(this).attr('data-name');
                     try {
-                        if(name.indexOf(search) > -1 || search === '') {
+                        if (name.indexOf(search) > -1 || search === '') {
                             $(this).show();
                         } else {
                             $(this).hide();
@@ -588,6 +586,6 @@
             //===============
 
             //==================
-        } );
+        });
     </script>
 @endif

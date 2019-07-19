@@ -24,7 +24,8 @@
                                     {{$u->email}}
                                 </td>
                                 <td>
-                                    <input data-wk="yes" type="reset" class="listfv btn btn-sm btn-primary" data-id="{{$u->id}}" value="Remove favourite">
+                                    <input data-wk="yes" type="reset" class="listfv btn btn-sm btn-primary"
+                                           data-id="{{$u->id}}" value="Remove favourite">
                                 </td>
                             </tr>
                         @endforeach
@@ -48,8 +49,8 @@
         $(this).click(function () {
             var user_co_id = $(this).attr('data-id');
             var check = true;
-            if($(this).attr('data-wk') === 'no') check = false;
-            if(check){
+            if ($(this).attr('data-wk') === 'no') check = false;
+            if (check) {
                 $(this).attr('data-wk', 'no');
                 $(this).attr('value', 'Add favorite');
             } else {
@@ -57,10 +58,10 @@
                 $(this).attr('value', 'Remove favorite');
             }
             $.ajax({
-                url : '{{ route('toggleCoWorker') }}',
+                url: '{{ route('toggleCoWorker') }}',
                 dataType: 'json',
-                data:{'user_co_id': user_co_id},
-                success:function(data){
+                data: {'user_co_id': user_co_id},
+                success: function (data) {
 
                 }
             });
@@ -70,11 +71,11 @@
 <script>
     var owl = $('.owl-carousel');
     owl.owlCarousel({
-        items:1,
-        loop:true,
-        autoplay:false,
-        autoplayTimeout:1000,
-        autoplayHoverPause:true
+        items: 1,
+        loop: true,
+        autoplay: false,
+        autoplayTimeout: 1000,
+        autoplayHoverPause: true
     });
     owl.trigger('stop.owl.autoplay');
 </script>

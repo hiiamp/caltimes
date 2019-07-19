@@ -12,7 +12,8 @@
                     @endif
                     <p class="margin_home"><span><i class="icon-location-2"></i></span> {{$list->owner->name}} <br></p>
                     <p class="margin_home"><span><i class="icon-eye2"></i></span> Member: {{$list->member}} <br></p>
-                    <p class="margin_home"><a data-pjax href="{{route('link.board', ['code' => $list->link])}}" class="btn btn-primary btn-outline with-arrow">See more</a></p>
+                    <p class="margin_home"><a data-pjax href="{{route('link.board', ['code' => $list->link])}}"
+                                              class="btn btn-primary btn-outline with-arrow">See more</a></p>
                 </article>
             </div>
         </div>

@@ -13,9 +13,13 @@
                                 @else
                                     <p class="margin_home"><span><i class="icon-globe"></i></span> Private <br></p>
                                 @endif
-                                <p class="margin_home"><span><i class="icon-location-2"></i></span> {{$list->owner->name}} <br></p>
-                                <p class="margin_home"><span><i class="icon-eye2"></i></span> Member: {{$list->member}} <br></p>
-                                <p class="margin_home"><a data-pjax href="{{route('link.board', ['code' => $list->link])}}" class="btn btn-primary btn-outline">See more</a></p>
+                                <p class="margin_home"><span><i
+                                                class="icon-location-2"></i></span> {{$list->owner->name}} <br></p>
+                                <p class="margin_home"><span><i class="icon-eye2"></i></span> Member: {{$list->member}}
+                                    <br></p>
+                                <p class="margin_home"><a data-pjax
+                                                          href="{{route('link.board', ['code' => $list->link])}}"
+                                                          class="btn btn-primary btn-outline">See more</a></p>
                             </article>
                         </div>
                     </div>
@@ -26,7 +30,7 @@
 </div>
 <div style="padding-top: 425px;" class="row">
     <div data-pjax class="col-md-12 text-center" id="paginate-home">
-    {{$lists->links()}}
+        {{$lists->links()}}
     </div>
     <div class="col-md-12 text-center" id="paginate-search" style="display: none">
         <ul class="pagination">
@@ -42,7 +46,8 @@
         <div class="row form-group">
             <div class="col-md-12">
                 <p>Input email of user that you want to share</p>
-                <input id="email" type="email" class="form-control" name="email" required autofocus placeholder="Email you want to share">
+                <input id="email" type="email" class="form-control" name="email" required autofocus
+                       placeholder="Email you want to share">
             </div>
         </div>
         <div class="form-group">
@@ -72,13 +77,13 @@
     var check2 = 0;
     var temp2 = '';
     var search_temp = '';
-    $('#search').on('keyup',function(){
+    $('#search').on('keyup', function () {
         let search = $('#search').val();
-        if(search !== '') {
-            if(search_temp === search) return;
+        if (search !== '') {
+            if (search_temp === search) return;
             search_temp = search;
             check2++;
-            if(check2 === 1) {
+            if (check2 === 1) {
                 temp2 = $('.display').html();
             }
             $('#paginate-home').hide();
@@ -86,12 +91,14 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url : '{{ route('searchList') }}',
+                url: '{{ route('searchList') }}',
                 dataType: 'json',
-                data:{'search':search,
-                      'page': 1},
-                success:function(data){
-                    if(data.total_data === '0' || data.total_data === 0) $('#paginate-search').hide();
+                data: {
+                    'search': search,
+                    'page': 1
+                },
+                success: function (data) {
+                    if (data.total_data === '0' || data.total_data === 0) $('#paginate-search').hide();
                     else $('#paginate-search').show();
                     $('.display').html(data.table_data);
                     $('#page-search-current').html(data.page_current);
@@ -112,11 +119,13 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url : '{{ route('searchList') }}',
+                url: '{{ route('searchList') }}',
                 dataType: 'json',
-                data:{'search':$('#search').val(),
-                    'page': page - 1},
-                success:function(data){
+                data: {
+                    'search': $('#search').val(),
+                    'page': page - 1
+                },
+                success: function (data) {
                     $('.display').html(data.table_data);
                     $('#page-search-current').html(data.page_current);
                 }
@@ -129,17 +138,19 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            url : '{{ route('searchList') }}',
+            url: '{{ route('searchList') }}',
             dataType: 'json',
-            data:{'search':$('#search').val(),
-                'page': page + 1},
-            success:function(data){
+            data: {
+                'search': $('#search').val(),
+                'page': page + 1
+            },
+            success: function (data) {
                 $('.display').html(data.table_data);
                 $('#page-search-current').html(data.page_current);
             }
         });
     });
-    if($(window).height() > 700) {
+    if ($(window).height() > 700) {
         $('#paginate-home').show();
     }
 </script>

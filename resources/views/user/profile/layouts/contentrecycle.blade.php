@@ -28,8 +28,10 @@
                                     {{$list->created_at}}
                                 </td>
                                 <td>
-                                    <a data-pjax class="btn btn-sm btn-primary" href="{{route('list.recover',['code'=>$list->link])}}">Recover List</a>
-                                    <a data-pjax data-index="{{$list->id}}" id="Delete{{$list->id}}" class="btn btn-sm btn-primary delete_l" style="color: whitesmoke"> Delete </a>
+                                    <a data-pjax class="btn btn-sm btn-primary"
+                                       href="{{route('list.recover',['code'=>$list->link])}}">Recover List</a>
+                                    <a data-pjax data-index="{{$list->id}}" id="Delete{{$list->id}}"
+                                       class="btn btn-sm btn-primary delete_l" style="color: whitesmoke"> Delete </a>
                                 </td>
                             </tr>
                         @endforeach
@@ -67,7 +69,7 @@
 </dialog>
 
 <script>
-    $(function(){
+    $(function () {
         var dialog_delete = document.querySelector('#deletelistdialog1');
         dialog_delete.close();
         $(".delete_l").each(function (index) {

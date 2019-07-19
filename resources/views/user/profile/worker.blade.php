@@ -8,6 +8,6 @@
 
     @include('user.profile.layouts.contentworker')
     <script>
-        $('.container1').css('height',$(window).height());
+        $('.container1').css('height', $(window).height());
     </script>
 @endsection

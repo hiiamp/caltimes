@@ -13,7 +13,7 @@
         <div class="top-menu">
             <div class="container">
                 <div class="col-md-4 animate-box">
-                    <div style="font-size: x-large"  id="colorlib-logo"><a href="{{route('home')}}">Caltimes</a></div>
+                    <div style="font-size: x-large" id="colorlib-logo"><a href="{{route('home')}}">Caltimes</a></div>
                 </div>
                 <div class="col-md-4 animate-box"></div>
                 <div class="col-md-4 animate-box">
@@ -28,7 +28,9 @@
         </div>
     </nav>
 
-    <section id="home" class="video-hero" style="height: 200px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;" data-section="home">
+    <section id="home" class="video-hero"
+             style="height: 200px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;"
+             data-section="home">
         <div class="overlay"></div>
         <div style="height: 250px;" class="display-t display-t2 text-center">
             <div class="display-tc display-tc2">
@@ -55,7 +57,8 @@
                                     <p><span><i class="icon-location-2"></i></span> 344 2/9 Street, <br> Da Nang</p>
                                 </div>
                                 <div class="con-info">
-                                    <p><span><i class="icon-phone3"></i></span> <a href="tel://1234567920">123 456 789</a></p>
+                                    <p><span><i class="icon-phone3"></i></span> <a href="tel://1234567920">123 456
+                                            789</a></p>
                                 </div>
                                 <div class="con-info">
                                     <p><span><i class="icon-globe"></i></span> <a href="#">yourwebsite.com</a></p>
@@ -70,10 +73,12 @@
                         @csrf
                         <div class="row form-group">
                             <div class="col-md-12">
-                                <input type="text" id="name" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Enter your name" required autocomplete="name" autofocus>
+                                <input type="text" id="name" class="form-control @error('name') is-invalid @enderror"
+                                       name="name" value="{{ old('name') }}" placeholder="Enter your name" required
+                                       autocomplete="name" autofocus>
 
                                 @error('name')
-                                    <span class="invalid-feedback" role="alert">
+                                <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -83,10 +88,12 @@
 
                         <div class="row form-group">
                             <div class="col-md-12">
-                                <input type="email" id="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Enter your email address">
+                                <input type="email" id="email" class="form-control @error('email') is-invalid @enderror"
+                                       name="email" value="{{ old('email') }}" required autocomplete="email"
+                                       placeholder="Enter your email address">
 
                                 @error('email')
-                                    <span class="invalid-feedback" role="alert">
+                                <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -96,10 +103,12 @@
 
                         <div class="row form-group">
                             <div class="col-md-12">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password" placeholder="Enter your password">
+                                <input id="password" type="password"
+                                       class="form-control @error('password') is-invalid @enderror" name="password"
+                                       required autocomplete="new-password" placeholder="Enter your password">
 
                                 @error('password')
-                                    <span class="invalid-feedback" role="alert">
+                                <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -109,7 +118,9 @@
 
                         <div class="row form-group">
                             <div class="col-md-12">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password" placeholder="Enter your re-password">
+                                <input id="password-confirm" type="password" class="form-control"
+                                       name="password_confirmation" required autocomplete="new-password"
+                                       placeholder="Enter your re-password">
                             </div>
                         </div>
                         <div class="form-group">

@@ -34,7 +34,9 @@
         </div>
     </nav>
 
-    <section id="home" class="video-hero" style="height: 200px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;" data-section="home">
+    <section id="home" class="video-hero"
+             style="height: 200px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;"
+             data-section="home">
         <div class="overlay"></div>
         <div style="height: 250px;" class="display-t display-t2 text-center">
             <div class="display-tc display-tc2">
@@ -61,7 +63,8 @@
                                     <p><span><i class="icon-location-2"></i></span> 344 2/9 Street, <br> Da Nang</p>
                                 </div>
                                 <div class="con-info">
-                                    <p><span><i class="icon-phone3"></i></span> <a href="tel://1234567920">123 456 789</a></p>
+                                    <p><span><i class="icon-phone3"></i></span> <a href="tel://1234567920">123 456
+                                            789</a></p>
                                 </div>
                                 <div class="con-info">
                                     <p><span><i class="icon-globe"></i></span> <a href="#">yourwebsite.com</a></p>
@@ -82,13 +85,15 @@
                         <div class="features">
                             <span class="icon"><i class="icon-circle-compass"></i></span>
                             <div class="f-desc">
-                                <p>Caltimes’s boards, lists, and cards enable you to organize and prioritize your projects in a fun, flexible, and rewarding way.</p>
+                                <p>Caltimes’s boards, lists, and cards enable you to organize and prioritize your
+                                    projects in a fun, flexible, and rewarding way.</p>
                             </div>
                         </div>
                         <div class="features">
                             <span class="icon"><i class="icon-beaker"></i></span>
                             <div class="f-desc">
-                                <p>Whether it’s for work, a side project or even the next family vacation, Trello helps your team stay organized.</p>
+                                <p>Whether it’s for work, a side project or even the next family vacation, Trello helps
+                                    your team stay organized.</p>
                             </div>
                         </div>
                     </div>
@@ -99,26 +104,26 @@
 </div>
 @if(session('status'))
     <dialog id="notif">
-            <div class="row form-group">
+        <div class="row form-group">
                 <span class="alert alert-warning help-block">
                     <strong>{{ session('status') }}</strong>
                 </span>
-            </div>
-            <div class="form-group">
-                <input id="ok" type="submit" value="Ok" style="width: 100px" class="btn btn-primary">
-            </div>
+        </div>
+        <div class="form-group">
+            <input id="ok" type="submit" value="Ok" style="width: 100px" class="btn btn-primary">
+        </div>
     </dialog>
     <script>
         var dialog11 = document.querySelector('#notif');
-            dialog11.showModal();
-        document.querySelector('#ok').onclick = function() {
+        dialog11.showModal();
+        document.querySelector('#ok').onclick = function () {
             dialog11.close();
         };
-        document.querySelector('#cancel').onclick = function() {
+        document.querySelector('#cancel').onclick = function () {
             dialog11.close();
         };
     </script>
-        @endif
+@endif
 @include('user.layouts.script')
 </body>
 </html>

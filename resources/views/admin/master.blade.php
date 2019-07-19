@@ -6,7 +6,8 @@
 </head>
 <body>
 <!-- Sidenav -->
-<nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white bg-gradient-primary" id="sidenav-main">
+<nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white bg-gradient-primary"
+     id="sidenav-main">
     <div class="container-fluid">
         <!-- Toggler -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenav-collapse-main"
@@ -73,20 +74,20 @@
 @if(Auth::check())
     <script type="text/javascript">
         $('#spinner-li').hide();
-        $(document).ready(function(){
+        $(document).ready(function () {
             $(document).pjax('[data-pjax] a, a[data-pjax]', '#page');
-            $(document).on('submit', 'form[data-pjax]', function(event) {
+            $(document).on('submit', 'form[data-pjax]', function (event) {
                 $('#spinner-li').show();
                 $.pjax.submit(event, '#page');
             });
             // does current browser support PJAX
             if ($.support.pjax) {
                 $.pjax.defaults.timeout = 3000; // time in milliseconds
-                $(document).on('click', '[data-pjax] a, a[data-pjax]', function(event) {
+                $(document).on('click', '[data-pjax] a, a[data-pjax]', function (event) {
                     $('#spinner-li').show();
                 });
             }
-            $(document).on('pjax:complete', function() {
+            $(document).on('pjax:complete', function () {
                 $('#spinner-li').hide();
             });
 

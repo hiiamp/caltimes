@@ -27,7 +27,8 @@
                                     {{$user->email}}
                                 </td>
                                 <td>
-                                    <a data-pjax class="btn btn-sm btn-primary" href="{{route('link.board',['code'=>$user->list_code])}}">{{$user->list_name}}</a>
+                                    <a data-pjax class="btn btn-sm btn-primary"
+                                       href="{{route('link.board',['code'=>$user->list_code])}}">{{$user->list_name}}</a>
                                 </td>
                                 @if(\Illuminate\Support\Facades\Auth::user()->level== 2)
                                     <td>
@@ -59,8 +60,8 @@
         $(this).click(function () {
             var user_co_id = $(this).attr('data-id');
             var check = true;
-            if($(this).attr('data-wk') === 'no') check = false;
-            if(check){
+            if ($(this).attr('data-wk') === 'no') check = false;
+            if (check) {
                 $(this).attr('data-wk', 'no');
                 $(this).attr('value', 'Add favorite');
             } else {
@@ -68,10 +69,10 @@
                 $(this).attr('value', 'Remove favorite');
             }
             $.ajax({
-                url : '{{ route('toggleCoWorker') }}',
+                url: '{{ route('toggleCoWorker') }}',
                 dataType: 'json',
-                data:{'user_co_id': user_co_id},
-                success:function(data){
+                data: {'user_co_id': user_co_id},
+                success: function (data) {
 
                 }
             });
@@ -81,11 +82,11 @@
 <script>
     var owl = $('.owl-carousel');
     owl.owlCarousel({
-        items:1,
-        loop:true,
-        autoplay:false,
-        autoplayTimeout:1000,
-        autoplayHoverPause:true
+        items: 1,
+        loop: true,
+        autoplay: false,
+        autoplayTimeout: 1000,
+        autoplayHoverPause: true
     });
     owl.trigger('stop.owl.autoplay');
 </script>

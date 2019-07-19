@@ -1,5 +1,5 @@
 <div class="container" style="padding-top: 15%">
-    <div id="colorlib-blog"  style="background-color: #5fa9d0;border-radius: 15px">
+    <div id="colorlib-blog" style="background-color: #5fa9d0;border-radius: 15px">
         <div class="container">
             <div class="row">
                 <div class="col-md-8 col-md-push-8 animate-box ">
@@ -12,7 +12,8 @@
                     <form data-pjax method="get" action="#">
                         <div class="form-group">
                             <p style="color: black;">Current password</p>
-                            <input type="password" name="opass" value="" id="opass" cols="20" rows="1" autocomplete="current-password">
+                            <input type="password" name="opass" value="" id="opass" cols="20" rows="1"
+                                   autocomplete="current-password">
                             <div>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="noti-opass"></strong>
@@ -21,7 +22,8 @@
                         </div>
                         <div class="form-group">
                             <p style="color: black;">New password</p>
-                            <input type="password" name="npass" value="" id="npass" cols="20" rows="1" autocomplete="new-password">
+                            <input type="password" name="npass" value="" id="npass" cols="20" rows="1"
+                                   autocomplete="new-password">
                             <div>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="noti-npass"></strong>
@@ -29,8 +31,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <p  style="color: black;">Re-input password</p>
-                            <input type="password" name="rpass" value="" id="rpass" cols="20" rows="1" autocomplete="new-password">
+                            <p style="color: black;">Re-input password</p>
+                            <input type="password" name="rpass" value="" id="rpass" cols="20" rows="1"
+                                   autocomplete="new-password">
                             <div>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="noti-rpass"></strong>
@@ -54,10 +57,12 @@
                                     <p><span><i class="icon-user2"></i></span> Username <br> {{Auth::user()->name}}</p>
                                 </div>
                                 <div class="con-info">
-                                    <p><span><i class="icon-location-2"></i></span> Email <br> {{Auth::user()->email}}</p>
+                                    <p><span><i class="icon-location-2"></i></span> Email <br> {{Auth::user()->email}}
+                                    </p>
                                 </div>
                                 <div class="con-info">
-                                    <p><span><i class="icon-globe"></i></span> Date join <br> {{Auth::user()->created_at}}</p>
+                                    <p><span><i class="icon-globe"></i></span> Date join
+                                        <br> {{Auth::user()->created_at}}</p>
                                 </div>
                             </div>
                         </div>
@@ -79,31 +84,33 @@
         npass = $('#npass').val();
         var rpass = '';
         rpass = $('#rpass').val();
-        if(opass === '') {
+        if (opass === '') {
             document.getElementById('noti-opass').innerHTML = "Please input your old password!";
             return;
         }
-        if(npass === '') {
+        if (npass === '') {
             document.getElementById('noti-npass').innerHTML = "Please input your new password!";
             return;
-        } else if(npass.length < 6) {
+        } else if (npass.length < 6) {
             document.getElementById('noti-npass').innerHTML = "Password must be at least 6 character!";
             return;
         }
-        if(npass === opass) {
+        if (npass === opass) {
             ocument.getElementById('noti-npass').innerHTML = "Your old and new password match?";
         }
-        if(rpass !== npass) {
+        if (rpass !== npass) {
             document.getElementById('noti-rpass').innerHTML = "Password don\'t match!";
             return;
         }
         $.ajax({
-            url : '{{ route('changePassword') }}',
+            url: '{{ route('changePassword') }}',
             dataType: 'json',
-            data:{'opass': opass,
-                  'npass': npass},
-            success:function(data){
-                if(data.success === true) {
+            data: {
+                'opass': opass,
+                'npass': npass
+            },
+            success: function (data) {
+                if (data.success === true) {
                     document.getElementById('noti-cpass').innerHTML = "Changed password success!";
                 } else {
                     document.getElementById('noti-opass').innerHTML = "Wrong password!";

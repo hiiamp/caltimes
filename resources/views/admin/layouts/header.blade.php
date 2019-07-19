@@ -27,5 +27,5 @@
 
 <link rel="stylesheet" href="{{asset('user/css/mycss.css')}}">
 <script type="text/javascript">
-    $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+    $.ajaxSetup({headers: {'csrftoken': '{{ csrf_token() }}'}});
 </script>

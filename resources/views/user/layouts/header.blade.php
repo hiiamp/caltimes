@@ -2,9 +2,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Caltimes</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="" />
-<meta name="keywords" content="" />
-<meta name="author" content="" />
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<meta name="author" content=""/>
 
 <!-- Facebook and Twitter integration -->
 <meta property="og:title" content=""/>
@@ -12,10 +12,10 @@
 <meta property="og:url" content=""/>
 <meta property="og:site_name" content=""/>
 <meta property="og:description" content=""/>
-<meta name="twitter:title" content="" />
-<meta name="twitter:image" content="" />
-<meta name="twitter:url" content="" />
-<meta name="twitter:card" content="" />
+<meta name="twitter:title" content=""/>
+<meta name="twitter:image" content=""/>
+<meta name="twitter:url" content=""/>
+<meta name="twitter:card" content=""/>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -72,7 +72,7 @@
 
 <script src="{{ asset('user/js/respond.min.js')}}"></script>
 
-<link rel="stylesheet"  src="{{ asset('css/app.css')}}">
+<link rel="stylesheet" src="{{ asset('css/app.css')}}">
 
 <script language="JavaScript" type="text/javascript" src="{{ asset('user/js/jquery-ui.js')}}"></script>
 
@@ -83,5 +83,5 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <script type="text/javascript">
-    $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+    $.ajaxSetup({headers: {'csrftoken': '{{ csrf_token() }}'}});
 </script>

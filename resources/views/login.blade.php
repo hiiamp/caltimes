@@ -13,7 +13,7 @@
         <div class="top-menu">
             <div class="container">
                 <div class="col-md-4 animate-box">
-                    <div style="font-size: x-large"  id="colorlib-logo"><a href="{{route('home')}}">Caltimes</a></div>
+                    <div style="font-size: x-large" id="colorlib-logo"><a href="{{route('home')}}">Caltimes</a></div>
                 </div>
                 <div class="col-md-4 animate-box"></div>
                 <div class="col-md-4 animate-box">
@@ -30,7 +30,9 @@
         </div>
     </nav>
 
-    <section id="home" class="video-hero" style="height: 200px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;" data-section="home">
+    <section id="home" class="video-hero"
+             style="height: 200px; background-image: url({{asset('user/images/cover_img_1.jpg')}});  background-size:cover; background-position: center center;background-attachment:fixed;"
+             data-section="home">
         <div class="overlay"></div>
         <div style="height: 250px;" class="display-t display-t2 text-center">
             <div class="display-tc display-tc2">
@@ -57,7 +59,8 @@
                                     <p><span><i class="icon-location-2"></i></span> 344 2/9 Street, <br> Da Nang</p>
                                 </div>
                                 <div class="con-info">
-                                    <p><span><i class="icon-phone3"></i></span> <a href="tel://1234567920">123 456 789</a></p>
+                                    <p><span><i class="icon-phone3"></i></span> <a href="tel://1234567920">123 456
+                                            789</a></p>
                                 </div>
                                 <div class="con-info">
                                     <p><span><i class="icon-globe"></i></span> <a href="#">yourwebsite.com</a></p>
@@ -82,7 +85,9 @@
                         @endif
                         <div class="row form-group">
                             <div class="col-md-12">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Your email address">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                                       name="email" value="{{ old('email') }}" required autocomplete="email" autofocus
+                                       placeholder="Your email address">
 
                                 @error('email')
                                 <span class="invalid-feedback" role="alert">
@@ -95,10 +100,12 @@
 
                         <div class="row form-group">
                             <div class="col-md-12">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Your password">
+                                <input id="password" type="password"
+                                       class="form-control @error('password') is-invalid @enderror" name="password"
+                                       required autocomplete="current-password" placeholder="Your password">
 
                                 @error('password')
-                                    <span class="invalid-feedback" role="alert">
+                                <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
@@ -114,8 +121,8 @@
                                 <a style="cursor: pointer;" id="forgot-pass">Forgot password?</a>
                             </div>
                             <div class="col-md-3">
-                                <!--<a href="{{route('facebook.login')}}">Login with Facebook</a>-->
-                                <a style="cursor: pointer;" class = "developing">Login with Facebook</a>
+                            <!--<a href="{{route('facebook.login')}}">Login with Facebook</a>-->
+                                <a style="cursor: pointer;" class="developing">Login with Facebook</a>
                             </div>
                             <div class="col-md-3">
                                 <a href="{{route('register')}}">Register</a>
@@ -133,7 +140,8 @@
 </dialog>
 <dialog id="forgot-password-dialog">
     <h3>Forgot password</h3>
-    <input id="email-forgot" type="email" class="form-control" required autocomplete="email" placeholder="Your email address">
+    <input id="email-forgot" type="email" class="form-control" required autocomplete="email"
+           placeholder="Your email address">
     <div>
         <span class="alert-warning" role="alert">
             <strong id="noti-forgot-pass"></strong>
@@ -159,35 +167,35 @@
 </dialog>
 <script>
     var dialog_deve = document.querySelector('#develop');
-    document.querySelector('.developing').onclick = function() {
+    document.querySelector('.developing').onclick = function () {
         dialog_deve.showModal();
     };
-    document.querySelector('#deve_cancel').onclick = function() {
+    document.querySelector('#deve_cancel').onclick = function () {
         dialog_deve.close();
     };
     var dialog_send = document.querySelector('#send-email-dialog');
     var dialog_forgot = document.querySelector('#forgot-password-dialog');
-    document.querySelector('#forgot-pass').onclick = function() {
+    document.querySelector('#forgot-pass').onclick = function () {
         document.getElementById('noti-forgot-pass').innerHTML = "";
         dialog_forgot.showModal();
     };
-    document.querySelector('#forgot_cancel').onclick = function() {
+    document.querySelector('#forgot_cancel').onclick = function () {
         dialog_forgot.close();
     };
     $('#forgot_ok').click(function () {
         document.getElementById('noti-forgot-pass').innerHTML = "";
         var email = '';
         email = $('#email-forgot').val();
-        if(email === '') {
+        if (email === '') {
             document.getElementById('noti-forgot-pass').innerHTML = "Please input your email!";
             return;
         }
         $.ajax({
-            url : '{{ route('checkEmail') }}',
+            url: '{{ route('checkEmail') }}',
             dataType: 'json',
-            data:{'email': email},
-            success:function(data){
-                if(data.success) {
+            data: {'email': email},
+            success: function (data) {
+                if (data.success) {
                     document.getElementById('noti-send-email').innerHTML = "We will send an email to " + data.name + " (" + data.email + ") . It's you?";
                     dialog_forgot.close();
                     $('#email-send').attr('value', email);
@@ -260,27 +268,29 @@
             npass = $('#npass').val();
             var rpass = '';
             rpass = $('#rpass').val();
-            if(npass === '') {
+            if (npass === '') {
                 document.getElementById('noti-npass').innerHTML = "Please input your new password!";
                 return;
-            } else if(npass.length < 6) {
+            } else if (npass.length < 6) {
                 document.getElementById('noti-npass').innerHTML = "Password must be at least 6 character!";
                 return;
             }
-            if(rpass !== npass) {
+            if (rpass !== npass) {
                 document.getElementById('noti-rpass').innerHTML = "Password don\'t match!";
                 return;
             }
             var token = '';
             token = $('#token1').val();
             $.ajax({
-                url : '{{ route('resetPass') }}',
+                url: '{{ route('resetPass') }}',
                 dataType: 'json',
-                data:{'npass': npass,
-                      'token': token},
-                success:function(data){
+                data: {
+                    'npass': npass,
+                    'token': token
+                },
+                success: function (data) {
                     dialog_reset.close();
-                    if(data.success === true) {
+                    if (data.success === true) {
                         dialog_success.showModal();
                     } else {
                         dialog_failed.showModal();
