@@ -96,6 +96,9 @@ class TodoListsController extends Controller
         if (!Auth::user()->isVip && $this->repository->findByField('owner_id', Auth::user()->id)->count() >= 10) {
             return redirect()->back()->with('max_list', true);
         }
+        if(!Auth::user()->isVip && ($is_public==0||$is_public=='0')) {
+            return redirect()->back()->with('max_list', true);
+        }
         $user_id = Auth::user()->id;
         $link = str_random(8);
         while ($this->repository->findByField('link', $link)->first()) {
