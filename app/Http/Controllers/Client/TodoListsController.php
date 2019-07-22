@@ -319,6 +319,7 @@ class TodoListsController extends Controller
         $list = $this->repository->find($request['todo_list_id']);
         $name = $list->name;
         $this->tasksRepo->deleteWhere([
+            'todo_list_id' => $todo_list_id
         ]);
         $this->accessRepo->deleteWhere([
             'todo_list_id' => $todo_list_id

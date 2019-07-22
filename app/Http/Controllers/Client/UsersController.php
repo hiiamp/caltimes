@@ -397,4 +397,16 @@ class UsersController extends Controller
             return json_encode(array('success' => true, 'vip' => $user->isVip));
         }
     }
+
+    public function updateNoti(Request $request)
+    {
+        if($request->ajax()) {
+            $count = isset($request['count']) ? $request['count'] : 0;
+            $temp = $this->repository->countNoti(Auth::user()->id);
+            if($count != $temp) {
+                return json_encode(array('check' => true, 'count' => $temp));
+            }
+            return json_encode(array('check' => false, ' count' => $count));
+        }
+    }
 }
