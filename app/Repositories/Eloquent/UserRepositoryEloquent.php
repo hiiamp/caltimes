@@ -3,6 +3,8 @@
 namespace App\Repositories\Eloquent;
 
 use Carbon\Carbon;
+use function foo\func;
+use Illuminate\Support\Facades\DB;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\UserRepository;
@@ -94,9 +96,11 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
      */
     public function findCoWorker($id)
     {
-        return User::select('todo_list.id', 'users.name', 'email', 'level')->join('access', 'users.id', '=', 'user_id')
-            ->join('todo_list', 'access.todo_list_id', '=', 'todo_list.id')
-            ->where('todo_list.owner_id', $id)->where('users.id', '!=', $id);
+        $tempTable =  User::select('todo_list.id', 'users.name', 'email', 'level')->join('access', 'users.id', '=', 'user_id')
+            ->join('todo_list', 'access.todo_list_id', '=', 'todo_list.id')->where('users.id', '!=', $id);
+        return DB::table('access')->joinSub($tempTable, 'temp', function ($join) {
+            $join->on('access.todo_list_id', '=', 'temp.id');
+        })->where('access.user_id', $id);
     }
 
     /**
@@ -128,5 +132,14 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
         $users = User::select('users.id','users.name')->join('access', 'users.id', '=', 'user_id')
             ->where('access.todo_list_id', $todo_list_id)->get();
         return $users;
+    }
+
+    /**
+     * @param $user_id
+     * @return int|mixed
+     */
+    public function countNoti($user_id)
+    {
+        return (DB::table('notifications')->where(['notifiable_id' => $user_id, 'read_at' => null])->get())->count();
     }
 }
