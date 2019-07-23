@@ -58,7 +58,7 @@
                     <div class="col-md-12 text-center" id="paginate-search" style="display: none">
                         <ul class="pagination">
                             <li class="page-item" id="page-search-pre"><span class="page-link">&laquo;</span></li>
-                            <li class="page-item active"><span id="page-search-current" class="page-link">0</span></li>
+                            <li class="page-item active"><span id="page-search-current" class="page-link">1</span></li>
                             <li class="page-item" id="page-search-next"><span class="page-link">&raquo;</span></li>
                         </ul>
                     </div>
