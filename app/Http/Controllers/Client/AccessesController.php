@@ -171,7 +171,7 @@ class AccessesController extends Controller
         } else {
             return redirect()->back()->with('notif', 'There was an error when you leave the list.');
         }
-        $name = $this->todolistRepo->find($todo_list_id)->name;
+        $name = $this->listRepo->find($todo_list_id)->name;
         $acs = $this->repository->findWhere([
             'todo_list_id' => $todo_list_id,
             'user_id' => Auth::user()->id
