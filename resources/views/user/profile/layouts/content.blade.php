@@ -96,7 +96,7 @@
             return;
         }
         if (npass === opass) {
-            ocument.getElementById('noti-npass').innerHTML = "Your old and new password match?";
+            document.getElementById('noti-npass').innerHTML = "Your old and new password match?";
         }
         if (rpass !== npass) {
             document.getElementById('noti-rpass').innerHTML = "Password don\'t match!";
